@@ -52,4 +52,20 @@ Todas essas metodologias ajudam a entregar o melhor produto possível, fornecend
 - **XAMPP:** acrônimo para X (multiplataforma), A (Apache), M (MariaDB/MySQL), P (PHP) e P (Perl). Serve para rodar sistemas direto na máquina, simulando um servidor real e criando um ambiente controlado para rodar códigos e testar banco de dados, sem precisar colocar o site no ar.
 - **Banco de Dados:** funciona como a biblioteca do projeto, armazenando todos os dados cadastrados. Utilizando SQL, serão criados os bancos de dados e suas tabelas; com a conexão feita pelo PHP e o servidor local do XAMPP, as telas funcionarão e o projeto será concluído.
 
-**Conclusão:** todas as metodologias e novas ferramentas utilizadas trabalharão juntas para a conclusão do projeto.
+**Conclusão:** todas as metodologias e novas ferramentas utilizadas trabalharão juntas para a conclusão do projeto.\
+
+## Requisitos Funcionais
+
+| ID | Requisito Funcional |
+| :--- | :--- |
+| **RF01** | O sistema deve permitir o cadastro de usuários. |
+| **RF02** | O sistema deve permitir login de usuários. |
+| **RF03** | O sistema deve validar e-mail e senha. |
+| **RF04** | O sistema deve permitir recuperação de senha. |
+| **RF05** | O sistema deve permitir logout seguro. |
+| **RF06** | O sistema deve permitir diferentes níveis de acesso (administrador e operador). |
+| **RF07** | O sistema deve exibir lista de sensores cadastrados. |
+| **RF08** | O sistema deve cadastrar novos sensores. |
+| **RF09** | O sistema deve editar informações de sensores. |
+| **RF10** | O sistema deve excluir sensores. |
+| **RF11** | O sistema deve impedir exclusão de sensores com dados associados. |
