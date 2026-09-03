@@ -78,3 +78,16 @@ Todas essas metodologias ajudam a entregar o melhor produto possível, fornecend
 | **RF18** | O sistema deve atualizar automaticamente os dados sem recarregar a página. |
 | **RF19** | O sistema deve apresentar dashboard com indicadores principais. |
 | **RF20** | O sistema deve exibir gráficos de desempenho. |
+| **RF21** | O sistema deve permitir filtros por período (dia, semana e mês). |
+| **RF22** | O sistema deve destacar alertas críticos no dashboard. |
+| **RF23** | O sistema deve gerar alertas automáticos em caso de falhas. |
+| **RF24** | O sistema deve notificar usuários sobre eventos críticos. |
+| **RF25** | O sistema deve registrar histórico de falhas. |
+| **RF26** | O sistema deve apoiar manutenção preditiva. |
+| **RF27** | O sistema deve gerar relatórios operacionais. |
+| **RF28** | O sistema deve permitir visualizar relatórios. |
+| **RF29** | O sistema deve exportar relatórios (PDF ou CSV). |
+| **RF30** | O sistema deve permitir agendamento de relatórios automáticos. |
+| **RF31** | O sistema deve integrar com dispositivos IoT. |
+| **RF32** | O sistema deve permitir comunicação com banco de dados central. |
+| **RF33** | O sistema deve disponibilizar API para integração com outros sistemas. |
