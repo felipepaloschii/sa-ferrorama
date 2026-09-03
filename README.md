@@ -57,40 +57,40 @@ Todas essas metodologias ajudam a entregar o melhor produto possível, fornecend
 ## Requisitos Funcionais
 
 | ID | Requisito Funcional |
-| :--- | :--- |
-| **RF01** | O sistema deve permitir o cadastro de usuários. |
-| **RF02** | O sistema deve permitir login de usuários. |
-| **RF03** | O sistema deve validar e-mail e senha. |
-| **RF04** | O sistema deve permitir recuperação de senha. |
-| **RF05** | O sistema deve permitir logout seguro. |
-| **RF06** | O sistema deve permitir diferentes níveis de acesso (administrador e operador). |
-| **RF07** | O sistema deve exibir lista de sensores cadastrados. |
-| **RF08** | O sistema deve cadastrar novos sensores. |
-| **RF09** | O sistema deve editar informações de sensores. |
-| **RF10** | O sistema deve excluir sensores. |
-| **RF11** | O sistema deve impedir exclusão de sensores com dados associados. |
-| **RF12** | O sistema deve exibir o status dos sensores (ativo, inativo, com falha). |
-| **RF13** | O sistema deve receber dados em tempo real dos sensores IoT. |
-| **RF14** | O sistema deve exibir dados de velocidade do trem. |
-| **RF15** | O sistema deve exibir localização do trem em tempo real. |
-| **RF16** | O sistema deve exibir consumo de energia. |
-| **RF17** | O sistema deve identificar e exibir falhas detectadas. |
-| **RF18** | O sistema deve atualizar automaticamente os dados sem recarregar a página. |
-| **RF19** | O sistema deve apresentar dashboard com indicadores principais. |
-| **RF20** | O sistema deve exibir gráficos de desempenho. |
-| **RF21** | O sistema deve permitir filtros por período (dia, semana e mês). |
-| **RF22** | O sistema deve destacar alertas críticos no dashboard. |
-| **RF23** | O sistema deve gerar alertas automáticos em caso de falhas. |
-| **RF24** | O sistema deve notificar usuários sobre eventos críticos. |
-| **RF25** | O sistema deve registrar histórico de falhas. |
-| **RF26** | O sistema deve apoiar manutenção preditiva. |
-| **RF27** | O sistema deve gerar relatórios operacionais. |
-| **RF28** | O sistema deve permitir visualizar relatórios. |
-| **RF29** | O sistema deve exportar relatórios (PDF ou CSV). |
-| **RF30** | O sistema deve permitir agendamento de relatórios automáticos. |
-| **RF31** | O sistema deve integrar com dispositivos IoT. |
-| **RF32** | O sistema deve permitir comunicação com banco de dados central. |
-| **RF33** | O sistema deve disponibilizar API para integração com outros sistemas. |
+|---|---|
+| RF01 | O sistema deve permitir o cadastro de um novo administrador com nome, e-mail e senha. |
+| RF02 | O sistema deve impedir o cadastro de dois administradores utilizando o mesmo e-mail. |
+| RF03 | O sistema deve disponibilizar uma tela de login com campos de e-mail e senha. |
+| RF04 | O sistema deve autenticar o administrador validando as credenciais informadas. |
+| RF05 | Somente usuários cadastrados como administradores poderão acessar o sistema. |
+| RF06 | O sistema deve bloquear temporariamente o acesso após cinco tentativas de login incorretas. |
+| RF07 | O sistema deve exibir uma mensagem de erro quando as credenciais informadas forem inválidas. |
+| RF08 | O sistema deve permitir o cadastro de um novo trem com código de identificação, modelo e status. |
+| RF09 | O sistema não deve permitir o cadastro de dois trens com o mesmo código de identificação. |
+| RF10 | O sistema deve verificar se o código informado já está cadastrado antes de concluir o cadastro. |
+| RF11 | O sistema deve permitir definir o status do trem como: em operação, parado, em manutenção ou inativo. |
+| RF12 | O sistema deve exibir, na tela de trens, todos os trens cadastrados e seus respectivos status. |
+| RF13 | O sistema deve permitir a edição dos dados de um trem já cadastrado. |
+| RF14 | O sistema deve permitir a exclusão ou inativação de um trem somente mediante confirmação do administrador. |
+| RF15 | O sistema deve restringir o acesso à tela de cadastro de trens apenas a administradores autenticados. |
+| RF16 | O sistema deve permitir que o administrador autenticado cadastre um novo sensor. |
+| RF17 | O sistema deve exigir a seleção do trem ao qual o sensor será vinculado durante o cadastro. |
+| RF18 | O sistema deve exigir a seleção do tipo de sensor entre temperatura, velocidade, vibração ou localização. |
+| RF19 | O sistema deve gerar automaticamente um identificador único para cada sensor cadastrado. |
+| RF20 | O sistema deve permitir que um mesmo trem possua múltiplos sensores associados. |
+| RF21 | O sistema deve exibir, na tela "Sensores", todos os sensores cadastrados. |
+| RF22 | O sistema deve exibir o status de cada sensor, podendo ser ativo ou inativo. |
+| RF23 | O sistema deve permitir a exclusão ou inativação de um sensor somente mediante confirmação do administrador. |
+| RF24 | O sistema deve exibir os dados de temperatura captados pelos sensores em graus Celsius (°C). |
+| RF25 | O sistema deve exibir os dados de velocidade captados pelos sensores em quilômetros por hora (km/h). |
+| RF26 | O sistema deve exibir os dados de vibração captados pelos sensores em Hz ou m/s². |
+| RF27 | O sistema deve exibir, em um mapa, a localização do trem com base nos dados do sensor de localização/GPS. |
+| RF28 | O sistema deve atualizar a posição do trem no mapa em tempo real ou near real-time, com base nos dados do sensor de localização. |
+| RF29 | O sistema deve emitir um alerta visual quando a temperatura ultrapassar o limite configurado. |
+| RF30 | O sistema deve emitir um alerta visual quando a velocidade ultrapassar o limite configurado. |
+| RF31 | O sistema deve emitir um alerta visual quando a vibração ultrapassar o limite configurado. |
+| RF32 | O sistema deve registrar automaticamente a data e hora do cadastro de sensores e trens. |
+| RF33 | O sistema deve armazenar o histórico dos dados coletados pelos sensores para consulta posterior. |
 
 ## Tecnologias Utilizadas
 
