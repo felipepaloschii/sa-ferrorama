@@ -15,3 +15,13 @@ Desenvolver um sistema capaz de gerenciar operações ferroviárias, incluindo:
 - Gestão de estações
 - Integração com sensores
 - Simulação de soluções de mobilidade urbana
+
+## Tecnologias e Conceitos Envolvidos
+
+O projeto envolve diversas áreas do desenvolvimento de sistemas:
+
+- 🧠 **Back-end:** Regras de negócio e processamento de dados
+- 🎨 **Front-end:** Interface para interação com o usuário
+- 🗄️ **Banco de Dados:** Armazenamento e gerenciamento das informações
+- 📡 **Sensores:** Coleta de dados em tempo real (simulada ou real)
+- 🔗 **Integração de Sistemas**
