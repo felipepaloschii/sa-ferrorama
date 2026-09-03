@@ -35,4 +35,13 @@ O projeto envolve diversas áreas do desenvolvimento de sistemas:
 - Alertas e notificações
 - Relatórios operacionais
 
-- 
+  ## Status do Projeto
+
+Nessa nova etapa do projeto, o objetivo é pegar o código já criado nas fases anteriores — desenvolvido usando apenas HTML, CSS e JavaScript — e começar a usar a linguagem PHP, alterando grande parte dos códigos. Também será implementado o banco de dados, usando a linguagem SQL, e o XAMPP passará a ser utilizado como servidor web local.
+
+Agora o foco do projeto é outro: alterar os códigos e melhorar as funcionalidades, de maneira organizada, utilizando novas metodologias de desenvolvimento, como:
+
+- **SCRUM:** metodologia ágil usada principalmente no desenvolvimento de software, que ajuda equipes a trabalharem de forma organizada, colaborativa e adaptável.
+- **Kanban:** sistema visual de gestão de trabalho que usa cartões e colunas em um quadro para controlar o fluxo de tarefas de forma ágil e eficiente.
+
+Todas essas metodologias ajudam a entregar o melhor produto possível, fornecendo organização, qualidade e produtividade.
