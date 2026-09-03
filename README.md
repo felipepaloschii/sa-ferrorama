@@ -91,3 +91,11 @@ Todas essas metodologias ajudam a entregar o melhor produto possível, fornecend
 | **RF31** | O sistema deve integrar com dispositivos IoT. |
 | **RF32** | O sistema deve permitir comunicação com banco de dados central. |
 | **RF33** | O sistema deve disponibilizar API para integração com outros sistemas. |
+
+## Tecnologias Utilizadas
+
+- **Back-end:** PHP
+- **Banco de Dados:** SQL (MySQL/MariaDB)
+- **Servidor Local:** XAMPP
+- **Front-end:** HTML, CSS, JavaScript
+- **Metodologias:** SCRUM, Kanban
