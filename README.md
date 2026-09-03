@@ -69,3 +69,12 @@ Todas essas metodologias ajudam a entregar o melhor produto possível, fornecend
 | **RF09** | O sistema deve editar informações de sensores. |
 | **RF10** | O sistema deve excluir sensores. |
 | **RF11** | O sistema deve impedir exclusão de sensores com dados associados. |
+| **RF12** | O sistema deve exibir o status dos sensores (ativo, inativo, com falha). |
+| **RF13** | O sistema deve receber dados em tempo real dos sensores IoT. |
+| **RF14** | O sistema deve exibir dados de velocidade do trem. |
+| **RF15** | O sistema deve exibir localização do trem em tempo real. |
+| **RF16** | O sistema deve exibir consumo de energia. |
+| **RF17** | O sistema deve identificar e exibir falhas detectadas. |
+| **RF18** | O sistema deve atualizar automaticamente os dados sem recarregar a página. |
+| **RF19** | O sistema deve apresentar dashboard com indicadores principais. |
+| **RF20** | O sistema deve exibir gráficos de desempenho. |
