@@ -25,3 +25,14 @@ O projeto envolve diversas áreas do desenvolvimento de sistemas:
 - 🗄️ **Banco de Dados:** Armazenamento e gerenciamento das informações
 - 📡 **Sensores:** Coleta de dados em tempo real (simulada ou real)
 - 🔗 **Integração de Sistemas**
+
+## Funcionalidades Esperadas
+
+- Cadastro e gerenciamento de trens
+- Controle de horários e itinerários
+- Monitoramento em tempo real
+- Simulação de tráfego ferroviário
+- Alertas e notificações
+- Relatórios operacionais
+
+- 
