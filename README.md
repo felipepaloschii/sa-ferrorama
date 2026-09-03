@@ -45,3 +45,11 @@ Agora o foco do projeto é outro: alterar os códigos e melhorar as funcionalida
 - **Kanban:** sistema visual de gestão de trabalho que usa cartões e colunas em um quadro para controlar o fluxo de tarefas de forma ágil e eficiente.
 
 Todas essas metodologias ajudam a entregar o melhor produto possível, fornecendo organização, qualidade e produtividade.
+
+## Novas ferramentas
+
+- **PHP:** após a parte em HTML das telas estar bem encaminhada, a linguagem PHP será implementada nos códigos, com destaque para as operações de CRUD (Create, Read, Update, Delete). Nesta etapa será implementado o back-end do projeto, contemplando cadastro e administração de entidades como usuários, sensores, entre outras.
+- **XAMPP:** acrônimo para X (multiplataforma), A (Apache), M (MariaDB/MySQL), P (PHP) e P (Perl). Serve para rodar sistemas direto na máquina, simulando um servidor real e criando um ambiente controlado para rodar códigos e testar banco de dados, sem precisar colocar o site no ar.
+- **Banco de Dados:** funciona como a biblioteca do projeto, armazenando todos os dados cadastrados. Utilizando SQL, serão criados os bancos de dados e suas tabelas; com a conexão feita pelo PHP e o servidor local do XAMPP, as telas funcionarão e o projeto será concluído.
+
+**Conclusão:** todas as metodologias e novas ferramentas utilizadas trabalharão juntas para a conclusão do projeto.
