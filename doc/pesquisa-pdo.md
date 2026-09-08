@@ -8,6 +8,13 @@ Pesquisa – PDO (PHP Data Objects)
 
 3. Como funciona uma conexão utilizando PDO?
  Funciona através da classe nativa PDO, assim utilizando um DSN para definir o driver, host e o nome do DB junto as credenciais de acesso.
+
+4. Quais são suas principais características.
+ Pode trabalhar com diferentes sistemas de anco de dados, entre eles: MySQL, oracle.
+ Interface padrão.
+ Permite configurar diferentes formas de tratamento de erros.
+
+
  
 
 
