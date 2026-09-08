@@ -11,10 +11,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status_inicial = $_POST['status_inicial'];
     $descricao = $_POST['status_inicial'];
 
-    $sql = "INSERT INTO cliente (nome_sensor, tipo_sensor, localizacao, unidade_medida, limite_alerta, status_inicial, descricao) VALUES ('$nome_sensor', '$tipo_sensor', '$localizacao', '$unidade_medida', '$limite_alerta', '$status_inicial', '$descricao')";
+    $sql = "INSERT INTO sensor (nome_sensor, tipo_sensor, localizacao, unidade_medida, limite_alerta, status_inicial, descricao) VALUES ('$nome_sensor', '$tipo_sensor', '$localizacao', '$unidade_medida', '$limite_alerta', '$status_inicial', '$descricao')";
 
     if ($conexao->query($sql) === TRUE) {
-        echo "Novo cliente adicionado com sucesso!";
+        echo "Novo sensor cadastrado com sucesso!";
     } else {
         echo "Erro: " . $sql . "<br>" . $conexao->error;
     }
