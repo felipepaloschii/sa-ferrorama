@@ -14,6 +14,12 @@ Pesquisa – PDO (PHP Data Objects)
  Interface padrão.
  Permite configurar diferentes formas de tratamento de erros.
 
+5. Diferenças entre PDO e MySQLi.
+ PDO aceita diversos bancos através de drivers, ja o MySQLi apenas o MySQL.
+ Portabilidade do PDO é maior que a MySQLi.
+ Sintaxe do PDO é padronizada para diferentes bancos ja a MySQLi é específica para MySQL.
+
+
 
  
 
