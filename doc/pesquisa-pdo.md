@@ -1,4 +1,4 @@
-Pesquisa – PDO (PHP Data Objects)
+## Pesquisa – PDO (PHP Data Objects)
 
 1. O que é o PDO?
  É uma extensão do PHP que fornece uma interface leve e consistente para o acesso ao banco de dados.
@@ -18,6 +18,10 @@ Pesquisa – PDO (PHP Data Objects)
  PDO aceita diversos bancos através de drivers, ja o MySQLi apenas o MySQL.
  Portabilidade do PDO é maior que a MySQLi.
  Sintaxe do PDO é padronizada para diferentes bancos ja a MySQLi é específica para MySQL.
+
+6. Vantagens e desvantagens de utilizar PDO.
+ O PDO é mais versátil e tendo uma interface mais padronizada porém, ele tem uma complexidade maior para quem está iniciando.
+ 
 
 
 
