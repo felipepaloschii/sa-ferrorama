@@ -23,16 +23,79 @@
  O PDO é mais versátil e tendo uma interface mais padronizada porém, ele tem uma complexidade maior para quem está iniciando.
 
 7. O que são Prepared Statements e por que são importantes.
- É uma forma mais segura de fazer uma inserção ao banco de dados, sendo importante para a prevenção de ataques como o SQL Injection.
+ É uma forma mais segura de fazer uma inserção ao banco de dados, sendo importante para a prevenção de ataques como o SQL Injection
+ 
+ 
 
-8. Em quais situações o PDO pode ser uma boa escolha.
- Projetos que utilizem database diferentes.
- Aplicações que necessitam de de maior portabildade.
- Projetos que priorizam o uso de Prepared Statement.
+
+
  
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 https://www.php.net/manual/pt_BR/book.pdo.php
 https://www.php.net/manual/pt_BR/pdo.connections.php
 https://www.devmedia.com.br/introducao-ao-php-data-objects-pdo/25318
 https://www.treinaweb.com.br/blog/o-que-e-pdo-no-php
-https://www.guj.com.br/t/o-que-e-preparedstatement-e-para-que-serve/86774/
