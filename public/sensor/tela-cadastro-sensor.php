@@ -55,12 +55,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Sensor</title>
-    <link rel="stylesheet" href="../assets/style/style.css">
+    <link rel="stylesheet" href="../../assets/style/style.css">
 </head>
 
 <body>
     <header class="barra-superior">
-        <h1>FJL Tech</h1>
+        <h1>PIA Enterprise</h1>
 
         <div class="acoes-superiores">
             <span class="ponto-online"></span>
@@ -107,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="linha-campos-formulario">
                     <div class="grupo-nome_sensor-sensor">
                         <label class="nome_sensor-sensor">
-                            nome_sensor do Sensor
+                            Nome do Sensor
                         </label>
                     </div>
 
@@ -121,20 +121,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         Tipo do sensor
                     </label>
 
-                    <select class="select-tipo-sensor">
+                    <input class="select-tipo-sensor">
 
-                    </select>
+                   
                 </div>
 
-                <div class="grupo-id-sensor">
-
-                    <label class="id-sensor">
-                        ID do sensor
-                    </label>
-
-                    <input type="text" class="input-id-sensor">
-
-                </div>
+                
 
 
                 <!-- linha 2 -->
@@ -159,9 +151,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         Unidade de medida
                     </label>
 
-                    <select class="select-unidade-medida">
+                   <input class="select-unidade-medida">
 
-                    </select>
+                   
 
                 </div>
 
