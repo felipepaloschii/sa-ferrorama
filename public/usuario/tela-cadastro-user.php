@@ -1,3 +1,23 @@
+<?php 
+
+include '../../infra/conexao.php';
+
+if ($_SERVER["REQUEST_METHOD"]  == "POST") {
+    $email = $_POST['email'];
+    $senha = $_POST['senha'];
+}
+
+    $sql = "INSERT INTO usuario (email, senha) VALUES ('?', '?')";
+
+     if ($conexao->query($sql) === TRUE) {
+        echo "Novo usuario cadastrado com sucesso!";
+    } else {
+        echo "Erro: " . $sql . "<br>" . $conexao->error;
+    }
+?>
+
+
+
 <html lang="pt-BR">
 
 <head>
