@@ -2,6 +2,9 @@
 
 include '../../infra/conexao.php';
 
+$mensagem = '';
+$erro = '';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome_sensor = $_POST['nome_sensor'];
     $tipo_sensor = $_POST['tipo_sensor'];
@@ -11,14 +14,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status_inicial = $_POST['status_inicial'];
     $descricao = $_POST['status_inicial'];
 
-    $sql = "INSERT INTO sensor (nome_sensor, tipo_sensor, localizacao, unidade_medida, limite_alerta, status_inicial, descricao) VALUES ('$nome_sensor', '$tipo_sensor', '$localizacao', '$unidade_medida', '$limite_alerta', '$status_inicial', '$descricao')";
+    $sql = "INSERT INTO sensor (nome_sensor, tipo_sensor, localizacao, unidade_medida, limite_alerta, status_inicial, descricao) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    if ($conexao->query($sql) === TRUE) {
-        echo "Novo sensor cadastrado com sucesso!";
+    $stmt = $conexao->prepare($sql);
+
+    if ($stmt) {
+
+    $limite_alerta = (float) $limite_alerta;
+
+    $stmt->bind_param(
+        "ssssdss",
+        $nome_sensor,
+        $tipo_sensor,
+        $localizacao,
+        $unidade_medida,
+        $limite_alerta,
+        $status_inicial,
+        $descricao
+    );
+
+   if ($stmt->execute()) {
+    $mensagem = 'Novo sensor cadastrado com sucesso!';
+
+   } else {
+    $erro = 'Não foi possível cadastrar o sensor';
+   }
+
+   $stmt->close();
     } else {
-        echo "Erro: " . $sql . "<br>" . $conexao->error;
+        $erro = 'Erro ao preparar o cadastro do sensor.';
     }
 }
+
 ?>
 
 
@@ -110,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
 
-                <!-- Este é um comentário válido em HTML linha 2 -->
+                <!-- linha 2 -->
                  <div class="linha-campos-formulario">
 
                 <div class="grupo-localizacao-sensor">
