@@ -1,3 +1,28 @@
+<?php
+
+include '../../infra/conexao.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nome_sensor = $_POST['nome_sensor'];
+    $tipo_sensor = $_POST['tipo_sensor'];
+    $localizacao = $_POST['localizacao'];
+    $unidade_medida = $_POST['unidade_medida'];
+    $limite_alerta = $_POST['limite_alerta'];
+    $status_inicial = $_POST['status_inicial'];
+    $descricao = $_POST['status_inicial'];
+
+    $sql = "INSERT INTO cliente (nome_sensor, tipo_sensor, localizacao, unidade_medida, limite_alerta, status_inicial, descricao) VALUES ('$nome_sensor', '$tipo_sensor', '$localizacao', '$unidade_medida', '$limite_alerta', '$status_inicial', '$descricao')";
+
+    if ($conexao->query($sql) === TRUE) {
+        echo "Novo cliente adicionado com sucesso!";
+    } else {
+        echo "Erro: " . $sql . "<br>" . $conexao->error;
+    }
+}
+?>
+
+
+
 <html lang="en">
 
 <head>
@@ -54,13 +79,13 @@
 
              <!-- linha 1 -->
                 <div class="linha-campos-formulario">
-                    <div class="grupo-nome-sensor">
-                        <label class="nome-sensor">
-                            Nome do Sensor
+                    <div class="grupo-nome_sensor-sensor">
+                        <label class="nome_sensor-sensor">
+                            nome_sensor do Sensor
                         </label>
                     </div>
 
-                    <input type="text" class="input-nomesensor">
+                    <input type="text" class="input-nome_sensorsensor">
                 </div>
 
 
