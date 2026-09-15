@@ -20,7 +20,7 @@
     <aside class="menu-lateral">
         <nav>
             <a class="ativo" href="#">Dashboard</a>
-            <a href="#">Sensores</a>
+            <a href="public/sensor/tela-cadastro-sensor.php">Sensores</a>
             <a href="#">Alertas</a>
             <a href="#">Relat&oacute;rios</a>
             <a href="#">Configura&ccedil;&otilde;es</a>
