@@ -795,3 +795,212 @@ textarea:focus{
     border-radius:10px;
     cursor:pointer;
 }
+
+.cabecalho-sensor {
+    padding: 32px 0 0 42px;
+}
+
+.titulo-sensores {
+    margin: 0;
+    color: #ffffff;
+    font-size: 34px;
+    font-weight: 900;
+}
+
+.descricao-sensores {
+    margin: 7px 0 0;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.cartao-sensores-ativos {
+    width: 220px;
+    height: 145px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 22px;
+
+    margin: 16px 0 0 42px;
+    padding: 20px 24px;
+
+    background-color: rgba(20, 20, 20, 0.96);
+
+    border-radius: 12px;
+
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.65);
+}
+
+.painel-acoes-sensores {
+    margin: 45px 40px 65px 52px;
+    padding: 17px 20px 15px;
+
+    background-color: rgba(20, 20, 20, 0.95);
+
+    border-radius: 13px;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65);
+}
+
+.icone-sensor {
+    position: relative;
+
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icone-sensor span {
+    position: absolute;
+
+    border: 3px solid #000000;
+
+    border-radius: 50%;
+}
+
+.icone-sensor span:nth-child(1) {
+    width: 17px;
+    height: 17px;
+}
+
+.icone-sensor span:nth-child(2) {
+    width: 34px;
+    height: 34px;
+}
+
+.icone-sensor span:nth-child(3) {
+    width: 52px;
+    height: 52px;
+}
+
+
+.informacoes-sensor h2 {
+    margin: 0 0 18px;
+
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.informacoes-sensor strong {
+    color: #ffffff;
+
+    font-size: 32px;
+    font-weight: 900;
+}
+
+.painel-acoes-sensores {
+    margin: 45px 40px 65px 52px;
+
+    padding: 17px 20px 15px;
+
+    background-color: rgba(20, 20, 20, 0.95);
+
+    border-radius: 13px;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65);
+}
+
+.painel-acoes-sensores > h2 {
+    margin: 0 0 12px;
+
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.lista-acoes-sensores {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 21px;
+}
+
+.cartao-acao-sensor {
+    min-height: 150px;
+    padding: 13px 14px;
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #171717;
+    border-radius: 11px;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.45);
+    transition: 0.2s;
+}
+
+.cartao-acao-sensor:hover {
+    transform: translateY(-3px);
+    background-color: #222222;
+}
+
+.icone-acao-sensor {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 9px;
+    color: #000000;
+    font-size: 38px;
+    font-weight: 900;
+}
+
+.icone-acao-sensor.cadastrar {
+    font-size: 42px;
+}
+
+.icone-acao-sensor.editar {
+    font-size: 39px;
+}
+
+.icone-acao-sensor.listar {
+    font-size: 42px;
+}
+
+.icone-acao-sensor.excluir {
+    font-size: 48px;
+}
+
+.cartao-acao-sensor h3 {
+    margin: 0 0 6px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.cartao-acao-sensor p {
+    margin: 0;
+    color: #d0d0d0;
+    font-size: 11px;
+    line-height: 1.45;
+    font-weight: 600;
+}
+
+@media (max-width: 1000px) {
+    .lista-acoes-sensores {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .cartao-sensores-ativos {
+        margin-left: 20px;
+    }
+
+    .cabecalho-sensor {
+        padding-left: 20px;
+    }
+
+    .painel-acoes-sensores {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .lista-acoes-sensores {
+        grid-template-columns: 1fr;
+    }
