@@ -1,13 +1,13 @@
-create database sa_ferrorama_db;
-use sa_ferrorama_db;
+CREATE DATABASE sa_ferrorama_db;
+USE sa_ferrorama_db;
 
-create table usuario (
+CREATE TABLE usuario (
     id_usuario int primary key auto_increment,
     email varchar(100) not null unique,
     senha varchar(100) not null
 );
 
-create table sensor (
+CREATE TABLE sensor (
 
     id int primary key auto_increment,  
     nome_sensor varchar (100)  not null,
@@ -19,4 +19,12 @@ create table sensor (
     descricao text
 
 );
+
+CREATE TABLE IF NOT EXISTS trens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo VARCHAR(30) NOT NULL UNIQUE,
+    modelo VARCHAR(100) NOT NULL,
+    status ENUM('operacao', 'parado', 'manutencao', 'inativo') NOT NULL DEFAULT 'parado',
+    cadastrado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) 
 
