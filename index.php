@@ -26,13 +26,13 @@ if (!isset($_SESSION['usuario'])) {
         <div class="acoes-superiores">
             <span class="ponto-online"></span>
             <span class="texto-online">Online</span>
-            <span class="icone-sino"></span>
+            <span class="icone-sin" href="public/notificacoes/notificacoes.php"> Notificação </span>
            <div class="menu-usuario">
 
-        <span class="icone-usuario"></span>
+        <span class="icone-usuari"></span>
 
         <div class="aba-usuario">
-        <a href="public/usuario/logout.php">Encerrar sessão</a>
+        <a href="public/logout/logout.php">Encerrar sessão</a>
         </div>
 
 </div>

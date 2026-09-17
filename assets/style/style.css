@@ -1017,14 +1017,14 @@ textarea:focus{
 
 .aba-usuario {
     position: absolute;
-    top: 48px;
+    top: 45px;
     right: 0;
     display: none;
     width: 180px;
     padding: 12px;
     background-color: #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    z-index: 1000;
+    z-index: 9999;
 }
 
 .menu-usuario:hover .aba-usuario {
@@ -1041,4 +1041,5 @@ textarea:focus{
 
 .aba-usuario a:hover {
     color: #555555;
+}
 }

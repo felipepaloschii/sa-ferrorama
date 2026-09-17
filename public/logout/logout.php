@@ -1,4 +1,3 @@
-
 <?php
 
 session_start();
@@ -6,8 +5,7 @@ session_start();
 session_unset();
 session_destroy();
 
-header("Location: ../tela-login.php");
+header("Location: ../usuario/tela-login.php");
 exit;
 
 ?>
-```

@@ -72,8 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <aside class="menu-lateral">
         <nav>
-            <a href="#">Dashboard</a>
-            <a class="ativo" href="#">Sensores</a>
+            <a href="public/usuario/index.php">Dashboard</a>
+            <a class="ativo" href="tela-home-sensor.php">Sensores</a>
             <a href="#">Alertas</a>
             <a href="#">Relat&oacute;rios</a>
             <a href="#">Configura&ccedil;&otilde;es</a>
@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </p>
             </div>
 
-            <button class="botao-voltar-sensores">
+            <button class="botao-voltar-sensores" onclick="window.location.href='tela-home-sensor.php'">
                 🠐 Voltar para sensores
             </button>
         </section>
