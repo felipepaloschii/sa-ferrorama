@@ -1,6 +1,10 @@
 <?php 
-header("Location: public/usuario/tela-login.php");
-exit;
+session_start();
+
+if (!isset($_SESSION['usuario'])) {
+    header("Location: public/usuario/tela-login.php");
+    exit;
+}
 ?>
 
 
@@ -23,7 +27,15 @@ exit;
             <span class="ponto-online"></span>
             <span class="texto-online">Online</span>
             <span class="icone-sino"></span>
-            <span class="icone-usuario"></span>
+           <div class="menu-usuario">
+
+        <span class="icone-usuario"></span>
+
+        <div class="aba-usuario">
+        <a href="public/usuario/logout.php">Encerrar sessão</a>
+        </div>
+
+</div>
         </div>
     </header>
 

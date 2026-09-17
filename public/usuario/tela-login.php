@@ -4,6 +4,8 @@ include '../../infra/conexao.php';
 
 $mensagem = '';
 
+
+
 if ($_SERVER["REQUEST_METHOD"]  == "POST") {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
@@ -13,6 +15,8 @@ if ($_SERVER["REQUEST_METHOD"]  == "POST") {
     $resultado = $conexao->query($sql);
 
     if ($resultado->num_rows > 0) {
+        session_start();
+        $_SESSION['usuario'] = $email;
         header("Location: ../../index.php");
         exit;
     } else {
@@ -37,20 +41,20 @@ if ($_SERVER["REQUEST_METHOD"]  == "POST") {
     <main id="login-area">
         <section class="caixa-login">
 
-            <form id="form-login">
+            <form id="form-login" method = "POST">
                 <h2 id="titulo">Login - Administrador</h2>
 
                 <div class="conjunto">
                     <label for="email" class="label-form">Usuario:</label>
-                    <input type="email" class="caixa-escrita" id="email" placeholder="Usuario" required>
+                    <input type="email" class="caixa-escrita" name="email" id="email" placeholder="Usuario" required>
                 </div>
 
                 <div class="conjunto">
                     <label for="senha" class="label-form">Senha:</label>
-                    <input type="password" class="caixa-escrita" id="senha" placeholder="Senha" required>
+                    <input type="password" class="caixa-escrita" name="senha" id="senha" placeholder="Senha" required>
                 </div>
 
-                <button id="botao-envio" type="submit" href="../../index.php">
+                <button id="botao-envio" type="submit">
                     Entrar
                 </button>
             </form>

@@ -1,22 +1,28 @@
-<?php 
+<?php
 
 include '../../infra/conexao.php';
 
 $mensagem = '';
 
-if ($_SERVER["REQUEST_METHOD"]  == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $email = $_POST['email'];
     $senha = $_POST['senha'];
-}
 
     $sql = "INSERT INTO usuario (email, senha) VALUES ('$email', '$senha')";
 
-     if ($conexao->query($sql) === TRUE) {
+    if ($conexao->query($sql) === TRUE) {
+
         header("Location: tela-login.php");
         exit;
+
     } else {
+
         $mensagem = "Erro ao cadastrar usuário.";
+
     }
+}
+
 ?>
 
 
@@ -35,17 +41,17 @@ if ($_SERVER["REQUEST_METHOD"]  == "POST") {
     <main id="login-area">
         <section class="caixa-login">
 
-            <form id="form-login">
+            <form id="form-login" method = "POST">
                 <h2 id="titulo">Cadastrar Usuário</h2>
 
                 <div class="conjunto">
                     <label for="email" class="label-form">Usuario:</label>
-                    <input type="email" class="caixa-escrita" id="email" placeholder="Usuario" required>
+                    <input type="email" class="caixa-escrita"name="email" id="email" placeholder="Usuario" required>
                 </div>
 
                 <div class="conjunto">
                     <label for="senha" class="label-form">Senha:</label>
-                    <input type="password" class="caixa-escrita" id="senha" placeholder="Senha" required>
+                    <input type="password" class="caixa-escrita" name="senha" id="senha" placeholder="Senha" required>
                 </div>
 
                 <button id="botao-envio" type="submit">
