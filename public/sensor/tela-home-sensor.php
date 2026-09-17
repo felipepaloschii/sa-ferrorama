@@ -201,7 +201,7 @@ if ($resultado) {
 
 
                                 <a
-                                    href="tela-editar-sensor.php?id=<?php echo $sensor['id']; ?>"
+                                    href="tela-edit-sensor.php?id=<?php echo $sensor['id']; ?>"
                                     class="botao-editar"
                                     title="Editar">
 
