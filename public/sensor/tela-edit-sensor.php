@@ -137,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <nav>
 
-            <a href="../dashboard/index.php">
+            <a href="../../index.php">
                 Dashboard
             </a>
 
@@ -145,17 +145,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 Sensores
             </a>
 
-            <a href="#">
-                Alertas
+            <a href="../../public/trem/cadastro_trem.php">
+             Trens
             </a>
 
             <a href="#">
-                Relatórios
+                Rotas
             </a>
 
-            <a href="#">
-                Configurações
-            </a>
+            
 
         </nav>
 
