@@ -40,19 +40,33 @@ document.getElementById("form-login").onsubmit = (e) => {
 
 
     if (!usuario) {
-        const tentativas = Number(localStorage.getItem("tentativas")) || 0;
-        localStorage.setItem("tentativas", tentativas + 1);
+        const tentativas = (Number(localStorage.getItem("tentativas")) || 0) + 1;
 
-        if (tentativas + 1 >= max_tentativas) {
+        if (tentativas >= max_tentativas) {
             localStorage.setItem("bloqueadoate", Date.now() + tempo_bloqueio);
             localStorage.removeItem("tentativas");
+            mensagem.textContent = "Você excedeu o número máximo de tentativas. Tente novamente em 1 minuto.";
+            mensagem.className = "erro";
+        } else {
+            localStorage.setItem("tentativas", tentativas);
+            mensagem.textContent = `E-mail ou senha incorretos. Tentativa ${tentativas} de ${max_tentativas}.`;
+            mensagem.className = "erro";
         }
 
-        mensagem.textContent = "E-mail ou senha incorretos.";
         mensagem.className = "erro";
-    } else {
-        localStorage.removeItem("tentativas");
-        localStorage.removeItem("bloqueadoate");
-        window.location.href = "index.php";
+        return;
     }
+     
+    localStorage.removeItem("tentativas");
+    localStorage.removeItem("bloqueadoate");
+    localStorage.setItem("usuarioLogado", JSON.stringify(usuario));
+    window.location.href = "index.php";
+};
+
+const toggle = document.getElementById("toggle");
+if (toggle) {
+    toggle.style.cursor = "pointer";
+    toggle.onclick = () => {
+        window.location.href = "cadastro.php";
+    };
 }
