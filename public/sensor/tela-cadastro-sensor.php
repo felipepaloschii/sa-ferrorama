@@ -62,21 +62,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <header class="barra-superior">
         <h1>PIA Enterprise</h1>
 
-        <div class="acoes-superiores">
-            <span class="ponto-online"></span>
-            <span class="texto-online">Online</span>
-            <span class="icone-sino"></span>
-            <span class="icone-usuario"></span>
-        </div>
     </header>
 
     <aside class="menu-lateral">
         <nav>
             <a href="public/usuario/index.php">Dashboard</a>
             <a class="ativo" href="tela-home-sensor.php">Sensores</a>
-            <a href="#">Alertas</a>
-            <a href="#">Relat&oacute;rios</a>
-            <a href="#">Configura&ccedil;&otilde;es</a>
+            <a href="#">Trens</a>
+            <a href="#">Rotas</a>
         </nav>
     </aside>
 

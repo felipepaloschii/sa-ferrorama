@@ -44,3 +44,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $erro = 'Erro ao preparar o cadastro do trem.';
     }
 }
+
+?>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Trem</title>
+    <link rel="stylesheet" href="../../assets/style/style.css">
+</head>
+
+<body>
+    <header class="barra-superior">
+        <h1>PIA Enterprise</h1>
