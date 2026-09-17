@@ -57,5 +57,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <header class="barra-superior">
+     <header class="barra-superior">
         <h1>PIA Enterprise</h1>
+ 
+        <div class="acoes-superiores">
+ 
+                <div class="aba-usuario">
+                    <a href="../usuario/tela-cadastro-user.php">Meu perfil</a>
+                    <a href="../logout/logout.php">Sair</a>
+                </div>
+                </div>
+ 
+        </div>
+    </header>
+
+    <aside class="menu-lateral">
+        <nav>
+            <a href="../../index.php">Dashboard</a>
+            <a class="ativo" href="cadastro_trem.php">Trens</a>
+            <a href="#">Sensores</a>
+            <a href="#">Rotas</a>
+        </nav>
