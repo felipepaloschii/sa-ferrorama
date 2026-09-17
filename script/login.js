@@ -14,4 +14,12 @@ document.getElementById("form-login").onsubmit = (e) => {
     mensagem.textContent = "";
     mensagem.className = "";
 
+
+    const bloqueadoate = Number(localStorage.getItem("bloqueadoate")) || 0;
+    if (Date.now() < bloqueadoate) {
+        const tempoRestante = Math.ceil((bloqueadoate - Date.now()) / 1000);
+        mensagem.textContent = `Você está temporariamente bloqueado. Tente novamente em ${tempoRestante} segundos.`;
+        mensagem.className = "erro";
+        return;
+    }
 }
