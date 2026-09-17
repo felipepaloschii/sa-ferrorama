@@ -44,7 +44,7 @@ if ($resultado) {
     <aside class="menu-lateral">
         <nav>
             <a href="public/usuario/index.php">Dashboard</a>
-            <a class="ativo" href="tela-home-sensor.php">Sensores</a>
+            <a class="ativo" href="public/sensor/tela-home-sensor.php">Sensores</a>
             <a href="#">Trens</a>
             <a href="#">Rotas</a>
         </nav>
