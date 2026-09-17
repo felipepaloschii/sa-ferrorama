@@ -815,8 +815,8 @@ textarea:focus{
 }
 
 .cartao-sensores-ativos {
-    width: 220px;
-    height: 145px;
+    width: 195px;
+    height: 130px;
 
     display: flex;
     align-items: center;
@@ -1015,32 +1015,33 @@ textarea:focus{
 /* LISTA DE SENSORES */
 
 .conteudo-lista-sensores {
-    margin: 20px 40px;
+    display: grid;
+    grid-template-columns: 195px 1fr;
+    gap: 28px;
+    margin: 0 40px;
+    align-items: start;
+}
 }
 
 .topo-lista-sensores {
     display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 25px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin: 0;
 }
 
 .botao-novo-sensor {
+    width: 195px;
     padding: 15px 25px;
-    background: linear-gradient(90deg, #4b6fff, #ff4db8);
-    color: #fff;
-    text-decoration: none;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
+    background: #4b6fff;
+    text-align: center;
 }
 
 .painel-lista-sensores {
     width: 100%;
-    padding: 20px;
-    background: rgba(20, 20, 20, 0.96);
-    border-radius: 13px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65);
+    height: 390px;
+    padding: 10px;
 }
 
 .titulo-painel-lista h2 {
@@ -1175,4 +1176,93 @@ textarea:focus{
 .aba-usuario a:hover {
     color: #555555;
 }
+
+/* ajuste home sensores */
+
+.area-principal {
+    padding: 18px 28px 30px 38px;
+}
+
+.cabecalho-sensor {
+    padding: 0 0 0 0;
+    margin-bottom: 12px;
+}
+
+.conteudo-lista-sensores {
+    display: grid !important;
+    grid-template-columns: 195px minmax(0, 1fr) !important;
+    gap: 20px !important;
+    margin: 0 !important;
+    align-items: start;
+}
+
+.topo-lista-sensores {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    margin: 0 !important;
+}
+
+.cartao-sensores-ativos {
+    width: 195px;
+    height: 130px;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.botao-novo-sensor {
+    width: 195px;
+    height: 55px;
+    box-sizing: border-box;
+    padding: 15px 25px;
+    background: #4b6fff;
+    text-align: center;
+    border-radius: 6px;
+}
+
+.painel-lista-sensores {
+    width: 100% !important;
+    height: 390px;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 0 !important;
+}
+
+.titulo-painel-lista {
+    display: none;
+}
+
+.cabecalho-tabela,
+.linha-tabela {
+    grid-template-columns:
+        35px
+        1.3fr
+        55px
+        1.1fr
+        55px
+        70px
+        45px
+        70px;
+}
+
+.cabecalho-tabela {
+    min-height: 48px;
+}
+
+.linha-tabela {
+    min-height: 33px;
+}
+
+.status {
+    width: 25px;
+    height: 25px;
+    padding: 0;
+}
+
+.botao-editar,
+.botao-excluir {
+    width: 25px;
+    height: 25px;
 }

@@ -50,7 +50,7 @@ if ($resultado) {
     <aside class="menu-lateral">
         <nav>
             <a href="index.php">Dashboard</a>
-            <a class="ativo" href="tela-home-sensor.html">Sensores</a>
+            <a class="ativo" href="tela-home-sensor.php">Sensores</a>
             <a href="#">Alertas</a>
             <a href="#">Relat&oacute;rios</a>
             <a href="#">Configura&ccedil;&otilde;es</a>
