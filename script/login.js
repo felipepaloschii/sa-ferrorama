@@ -1,12 +1,17 @@
+const max_tentativas = 5;
+const tempo_bloqueio = 60000;
+
+
 document.getElementById("form-login").onsubmit = (e) => {
     e.preventDefault();
 
-     let email = document.getElementById("email").value;
-    let senha = document.getElementById("senha").value;
-    let mensagem = document.getElementById("mensagem");    
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value;
+    const mensagem = document.getElementById("mensagem");
 
-        mensagem.innerHTML = "";
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+    mensagem.textContent = "";
+    mensagem.className = "";
 
-        document.getElementById("form-login").reset();
-    } 
+}
