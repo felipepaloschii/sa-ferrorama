@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $unidade_medida = $_POST['unidade_medida'];
     $limite_alerta = $_POST['limite_alerta'];
     $status_inicial = $_POST['status_inicial'];
-    $descricao = $_POST['status_inicial'];
+    $descricao = $_POST['descricao'];
 
     $sql = "INSERT INTO sensor (nome_sensor, tipo_sensor, localizacao, unidade_medida, limite_alerta, status_inicial, descricao) VALUES (?, ?, ?, ?, ?, ?, ?)";
 

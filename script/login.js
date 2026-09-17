@@ -67,6 +67,6 @@ const toggle = document.getElementById("toggle");
 if (toggle) {
     toggle.style.cursor = "pointer";
     toggle.onclick = () => {
-        window.location.href = "cadastro.php";
+        window.location.href = "public/usuario/tela-cadastro-usuario.php";
     };
 }
