@@ -10,7 +10,8 @@ if ($_SERVER["REQUEST_METHOD"]  == "POST") {
     $sql = "INSERT INTO usuario (email, senha) VALUES ('?', '?')";
 
      if ($conexao->query($sql) === TRUE) {
-        echo "Novo usuario cadastrado com sucesso!";
+        header("Location: public/usuario/tela-login.php");
+        exit;
     } else {
         echo "Erro: " . $sql . "<br>" . $conexao->error;
     }

@@ -1,3 +1,9 @@
+<?php 
+header("Location: public/usuario/tela-login.php");
+exit;
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
