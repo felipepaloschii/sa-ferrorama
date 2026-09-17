@@ -22,4 +22,37 @@ document.getElementById("form-login").onsubmit = (e) => {
         mensagem.className = "erro";
         return;
     }
+
+    if (!email || !senha) {
+        mensagem.textContent = "Preencha todos os campos.";
+        mensagem.className = "erro";
+        return;
+    }
+
+    if (!regexEmail.test(email)) {
+        mensagem.textContent = "Digite um e-mail válido.";
+        mensagem.className = "erro";
+        return;
+    }
+
+    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+
+
+    if (!usuario) {
+        const tentativas = Number(localStorage.getItem("tentativas")) || 0;
+        localStorage.setItem("tentativas", tentativas + 1);
+
+        if (tentativas + 1 >= max_tentativas) {
+            localStorage.setItem("bloqueadoate", Date.now() + tempo_bloqueio);
+            localStorage.removeItem("tentativas");
+        }
+
+        mensagem.textContent = "E-mail ou senha incorretos.";
+        mensagem.className = "erro";
+    } else {
+        localStorage.removeItem("tentativas");
+        localStorage.removeItem("bloqueadoate");
+        window.location.href = "index.php";
+    }
 }
