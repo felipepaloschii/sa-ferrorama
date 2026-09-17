@@ -17,3 +17,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO trem (nome_trem, modelo_trem, localizacao_i, codigo, capacidade, ano, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conexao->prepare($sql);
+
+     if ($stmt) {
+
+
+    $stmt->bind_param(
+        "ssssdss",
+        $nome_trem,
+        $modelo_trem,
+        $localizacao_i,
+        $codigo,
+        $capacidade,
+        $ano,
+        $status
+    );
+    
+       if ($stmt->execute()) {
+    $mensagem = 'Novo trem cadastrado com sucesso!';
+
+   } else {
+    $erro = 'Não foi possível cadastrar o trem';
+   }
+
+   $stmt->close();
+    } else {
+        $erro = 'Erro ao preparar o cadastro do trem.';
+    }
+}
