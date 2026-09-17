@@ -39,21 +39,14 @@ if ($resultado) {
     <header class="barra-superior">
         <h1>PIA Enterprise</h1>
 
-        <div class="acoes-superiores">
-            <span class="ponto-online"></span>
-            <span class="texto-online">Online</span>
-            <span class="icone-sino"></span>
-            <span class="icone-usuario"></span>
-        </div>
     </header>
 
     <aside class="menu-lateral">
         <nav>
             <a href="index.php">Dashboard</a>
             <a class="ativo" href="tela-home-sensor.php">Sensores</a>
-            <a href="#">Alertas</a>
-            <a href="#">Relat&oacute;rios</a>
-            <a href="#">Configura&ccedil;&otilde;es</a>
+            <a href="public/trem/cadastro_trem.php">Trens</a>
+            <a href="#">Rotas</a>
         </nav>
     </aside>
 
@@ -208,7 +201,7 @@ if ($resultado) {
 
 
                                 <a
-                                    href="tela-editar-sensor.php?id=<?php echo $sensor['id']; ?>"
+                                    href="tela-edit-sensor.php?id=<?php echo $sensor['id']; ?>"
                                     class="botao-editar"
                                     title="Editar">
 

@@ -41,11 +41,10 @@ if (!isset($_SESSION['usuario'])) {
 
     <aside class="menu-lateral">
         <nav>
-            <a class="ativo" href="#">Dashboard</a>
-            <a href="public/sensor/tela-home-sensor.php">Sensores</a>
-            <a href="#">Alertas</a>
-            <a href="#">Relat&oacute;rios</a>
-            <a href="#">Configura&ccedil;&otilde;es</a>
+            <a class="ativo" href="index.php">Dashboard</a>
+            <a class="#" href="public/sensor/tela-home-sensor.php">Sensores</a>
+             <a href="public/trem/cadastro_trem.php">Trens</a>
+            <a href="#">Rotas</a>
         </nav>
     </aside>
 

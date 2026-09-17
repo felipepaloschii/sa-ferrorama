@@ -1266,3 +1266,235 @@ textarea:focus{
     width: 25px;
     height: 25px;
 }
+
+
+.painel-lista-sensores {
+    background: rgba(20, 20, 20, 0.96);
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+.cabecalho-tabela {
+    height: 45px;
+    padding: 0 12px;
+    background: #242424;
+    border-radius: 10px;
+    font-size: 10px;
+}
+
+.linha-tabela {
+    min-height: 42px;
+    padding: 0 12px;
+    border-bottom: 1px solid #292929;
+    font-size: 10px;
+    transition: background 0.2s;
+}
+
+.linha-tabela:hover {
+    background: #202020;
+}
+
+.cabecalho-tabela,
+.linha-tabela {
+    grid-template-columns:
+        35px
+        1.5fr
+        60px
+        1.2fr
+        70px
+        80px
+        55px
+        75px;
+    column-gap: 10px;
+}
+
+.acoes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.botao-editar,
+.botao-excluir {
+    width: 27px;
+    height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+.status {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    margin: auto;
+}
+
+.botao-editar {
+    background: #4b6fff;
+}
+
+.botao-excluir {
+    background: #e60000;
+}
+
+
+.painel-excluir-sensor {
+    width: 100%;
+    min-height: 390px;
+    padding: 45px;
+    background: rgba(20, 20, 20, 0.96);
+    border-radius: 12px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.icone-excluir-sensor {
+    width: 55px;
+    height: 55px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e60000;
+    border-radius: 50%;
+    font-size: 27px;
+}
+
+.painel-excluir-sensor h2 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.painel-excluir-sensor > p {
+    font-size: 12px;
+}
+
+.informacoes-sensor-excluir {
+    width: 300px;
+    margin: 30px auto;
+    padding: 12px;
+    background: #333;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.botoes-excluir-sensor {
+    display: flex;
+    gap: 10px;
+    margin-top: 80px;
+}
+
+.botao-confirmar-exclusao {
+    width: 115px;
+    height: 32px;
+    border: none;
+    border-radius: 7px;
+    background: #e60000;
+    color: white;
+    cursor: pointer;
+}
+
+.erro-excluir-sensor {
+    color: red;
+}
+
+.grade-formulario-trem {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 38px;
+}
+ 
+.grupo-campo-trem {
+    margin-bottom: 20px;
+}
+ 
+.rotulo-campo-trem {
+    display: block;
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-weight: bold;
+}
+ 
+.obrigatorio {
+    color: #e52222;
+}
+ 
+.opcoes-status-trem {
+    margin-top: 14px;
+}
+ 
+.opcao-status-trem {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    color: #ffffff;
+    cursor: pointer;
+}
+ 
+.opcao-status-trem input[type="radio"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    opacity: 0;
+}
+ 
+.marcador-status {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #111111;
+    border: 1px solid #3a3a3a;
+    border-radius: 50%;
+}
+ 
+.marcador-status::after {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+ 
+.opcao-status-trem input[type="radio"]:checked + .marcador-status::after {
+    background: #16db4b;
+}
+ 
+.opcao-status-trem input[type="radio"]:focus-visible + .marcador-status {
+    border-color: #4b6fff;
+    box-shadow: 0 0 0 3px rgba(75, 111, 255, 0.35);
+}
+ 
+.aviso-cadastro {
+    margin: 0 0 18px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+ 
+.aviso-cadastro.sucesso {
+    background: #123d1d;
+    color: #35ff68;
+}
+ 
+.aviso-cadastro.falha {
+    background: #3d1212;
+    color: #ff6b6b;
+}
+ 
+@media (max-width: 900px) {
+    .grade-formulario-trem {
+        grid-template-columns: 1fr;
+    }
+}
+ 

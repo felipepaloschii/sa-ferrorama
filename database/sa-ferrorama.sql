@@ -19,12 +19,15 @@ CREATE TABLE sensor (
     descricao text
 
 );
-
-CREATE TABLE IF NOT EXISTS trens (
+ 
+CREATE TABLE IF NOT EXISTS trem (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_trem VARCHAR(100) NOT NULL,
+    modelo_trem VARCHAR(100) NOT NULL,
+    localizacao_i VARCHAR(150) NOT NULL,
     codigo VARCHAR(30) NOT NULL UNIQUE,
-    modelo VARCHAR(100) NOT NULL,
+    capacidade DECIMAL(10,2) NOT NULL,
+    ano VARCHAR(4) NOT NULL,
     status ENUM('operacao', 'parado', 'manutencao', 'inativo') NOT NULL DEFAULT 'parado',
-    cadastrado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-) 
+);
 
