@@ -43,7 +43,7 @@ if (!isset($_SESSION['usuario'])) {
         <nav>
             <a href="public/usuario/index.php">Dashboard</a>
             <a class="ativo" href="tela-home-sensor.php">Sensores</a>
-            <a href="#">Trens</a>
+             <a href="public/trem/cadastro_trem.php">Trens</a>
             <a href="#">Rotas</a>
         </nav>
     </aside>
