@@ -2,18 +2,20 @@
 
 include '../../infra/conexao.php';
 
+$mensagem = '';
+
 if ($_SERVER["REQUEST_METHOD"]  == "POST") {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 }
 
-    $sql = "INSERT INTO usuario (email, senha) VALUES ('?', '?')";
+    $sql = "INSERT INTO usuario (email, senha) VALUES ('$email', '$senha')";
 
      if ($conexao->query($sql) === TRUE) {
-        header("Location: public/usuario/tela-login.php");
+        header("Location: tela-login.php");
         exit;
     } else {
-        echo "Erro: " . $sql . "<br>" . $conexao->error;
+        $mensagem = "Erro ao cadastrar usuário.";
     }
 ?>
 
@@ -25,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"]  == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - FJL Tech</title>
-    <link rel="stylesheet" href="../assets/style/style.css">
+    <link rel="stylesheet" href="../../assets/style/style.css">
 </head>
 
 <body id="login-corpo">
@@ -51,10 +53,13 @@ if ($_SERVER["REQUEST_METHOD"]  == "POST") {
                 </button>
             </form>
 
-            <div id="mensagem"></div>
+            <div id="mensagem">
+                <?php echo $mensagem; ?>
+            </div>
 
             <div class="linha"></div>
 
+            <a href="tela-login.php">Já tem uma conta? Faça login</a>
           
 
         </section>

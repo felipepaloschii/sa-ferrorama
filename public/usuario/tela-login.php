@@ -1,10 +1,35 @@
+<?php 
+
+include '../../infra/conexao.php';
+
+$mensagem = '';
+
+if ($_SERVER["REQUEST_METHOD"]  == "POST") {
+    $email = $_POST['email'];
+    $senha = $_POST['senha'];
+
+    $sql = "SELECT * FROM usuario WHERE email = '$email' AND senha = '$senha'";
+
+    $resultado = $conexao->query($sql);
+
+    if ($resultado->num_rows > 0) {
+        header("Location: ../../index.php");
+        exit;
+    } else {
+        $mensagem = "Usuário ou senha inválidos.";
+    }
+}
+
+?>
+
+
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - FJL Tech</title>
-    <link rel="stylesheet" href="assets/style/style.css">
+    <link rel="stylesheet" href="../../assets/style/style.css">
 </head>
 
 <body id="login-corpo">
@@ -25,17 +50,19 @@
                     <input type="password" class="caixa-escrita" id="senha" placeholder="Senha" required>
                 </div>
 
-                <button id="botao-envio" type="submit">
+                <button id="botao-envio" type="submit" href="../../index.php">
                     Entrar
                 </button>
             </form>
 
-            <div id="mensagem"></div>
+            <div id="mensagem">
+                <?php echo $mensagem; ?>
+            </div>
 
             <div class="linha"></div>
 
             <div class="toggle" id="toggle">
-             <a href="public/usuario/tela-cadastro-user.php">Não tem conta? Cadastre-se</a>
+             <a href="tela-cadastro-user.php">Não tem conta? Cadastre-se</a>
            
             </div>
 
