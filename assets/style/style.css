@@ -1340,3 +1340,67 @@ textarea:focus{
 .botao-excluir {
     background: #e60000;
 }
+
+
+.painel-excluir-sensor {
+    width: 100%;
+    min-height: 390px;
+    padding: 45px;
+    background: rgba(20, 20, 20, 0.96);
+    border-radius: 12px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.icone-excluir-sensor {
+    width: 55px;
+    height: 55px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e60000;
+    border-radius: 50%;
+    font-size: 27px;
+}
+
+.painel-excluir-sensor h2 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.painel-excluir-sensor > p {
+    font-size: 12px;
+}
+
+.informacoes-sensor-excluir {
+    width: 300px;
+    margin: 30px auto;
+    padding: 12px;
+    background: #333;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.botoes-excluir-sensor {
+    display: flex;
+    gap: 10px;
+    margin-top: 80px;
+}
+
+.botao-confirmar-exclusao {
+    width: 115px;
+    height: 32px;
+    border: none;
+    border-radius: 7px;
+    background: #e60000;
+    color: white;
+    cursor: pointer;
+}
+
+.erro-excluir-sensor {
+    color: red;
+}
