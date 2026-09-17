@@ -101,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         <section class="painel-cadastro-sensor">
-            <form class="formulario-cadastro-sensor">
+            <form class="formulario-cadastro-sensor" method="POST"  >
 
              <!-- linha 1 -->
                 <div class="linha-campos-formulario">
@@ -111,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </label>
                     </div>
 
-                    <input type="text" class="input-nome_sensorsensor">
+                    <input type="text" name="nome_sensor" class="input-nome_sensorsensor">
                 </div>
 
 
@@ -121,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         Tipo do sensor
                     </label>
 
-                    <input class="select-tipo-sensor">
+                    <input type="text" name="tipo_sensor" class="select-tipo-sensor">
 
                    
                 </div>
@@ -140,8 +140,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <input
                         type="text"
-                        class="input-localizacao-sensor">
-
+                        class="input-localizacao-sensor"
+                        name="localizacao">
 
                                     </div>
 
@@ -151,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         Unidade de medida
                     </label>
 
-                   <input class="select-unidade-medida">
+                   <input type="text" name="unidade_medida" class="select-unidade-medida">
 
                    
 
@@ -165,6 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <input
                         type="text"
+                        name="limite_alerta"
                         class="input-limite-alerta">
 
                 </div>
@@ -182,12 +183,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="opcoes-status-sensor">
 
                         <label class="opcao-status-ativo">
-                            <input type="radio">
+                            <input type="radio" name="status_inicial" value="ativo">
                             Ativo
                         </label>
 
                         <label class="opcao-status-inativo">
-                            <input type="radio">
+                            <input type="radio" name="status_inicial" value="inativo">
                             Inativo
                         </label>
 
@@ -202,6 +203,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </label>
 
                     <textarea
+                        name="descricao"
                         class="textarea-descricao-sensor">
                     </textarea>
 

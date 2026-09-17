@@ -1266,3 +1266,77 @@ textarea:focus{
     width: 25px;
     height: 25px;
 }
+
+
+.painel-lista-sensores {
+    background: rgba(20, 20, 20, 0.96);
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+.cabecalho-tabela {
+    height: 45px;
+    padding: 0 12px;
+    background: #242424;
+    border-radius: 10px;
+    font-size: 10px;
+}
+
+.linha-tabela {
+    min-height: 42px;
+    padding: 0 12px;
+    border-bottom: 1px solid #292929;
+    font-size: 10px;
+    transition: background 0.2s;
+}
+
+.linha-tabela:hover {
+    background: #202020;
+}
+
+.cabecalho-tabela,
+.linha-tabela {
+    grid-template-columns:
+        35px
+        1.5fr
+        60px
+        1.2fr
+        70px
+        80px
+        55px
+        75px;
+    column-gap: 10px;
+}
+
+.acoes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.botao-editar,
+.botao-excluir {
+    width: 27px;
+    height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+.status {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    margin: auto;
+}
+
+.botao-editar {
+    background: #4b6fff;
+}
+
+.botao-excluir {
+    background: #e60000;
+}
