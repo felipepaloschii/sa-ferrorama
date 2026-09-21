@@ -74,7 +74,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <aside class="menu-lateral">
         <nav>
             <a href="../../index.php">Dashboard</a>
+            <a href="../sensor/tela-home-sensor.php">Sensores</a>
             <a class="ativo" href="cadastro_trem.php">Trens</a>
-            <a href="#">Sensores</a>
-            <a href="#">Rotas</a>
+            <a href="../rotas/tela-home-rotas.php">Rotas</a>
         </nav>
+
+
+
+       

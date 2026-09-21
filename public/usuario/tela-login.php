@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"]  == "POST") {
             <div class="linha"></div>
 
             <div class="toggle" id="toggle">
-             <a href="tela-cadastro-user.php">Não tem conta? Cadastre-se</a>
+             <a href="tela-cadastro-usuario.php">Não tem conta? Cadastre-se</a>
            
             </div>
 

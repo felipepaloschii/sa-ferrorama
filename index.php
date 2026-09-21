@@ -24,12 +24,9 @@ if (!isset($_SESSION['usuario'])) {
         <h1>PIA Enterprise</h1>
 
         <div class="acoes-superiores">
-            <span class="ponto-online"></span>
-            <span class="texto-online">Online</span>
-            <span class="icone-sin" href="public/notificacoes/notificacoes.php"> Notificação </span>
            <div class="menu-usuario">
 
-        <span class="icone-usuari"></span>
+        <span class="icone-usuario"></span>
 
         <div class="aba-usuario">
         <a href="public/logout/logout.php">Encerrar sessão</a>
@@ -44,7 +41,7 @@ if (!isset($_SESSION['usuario'])) {
             <a class="ativo" href="index.php">Dashboard</a>
             <a class="#" href="public/sensor/tela-home-sensor.php">Sensores</a>
              <a href="public/trem/cadastro_trem.php">Trens</a>
-            <a href="#">Rotas</a>
+            <a href="public/rotas/tela-home-rotas.php">Rotas</a>
         </nav>
     </aside>
 
