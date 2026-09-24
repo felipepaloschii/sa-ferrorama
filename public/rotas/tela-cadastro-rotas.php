@@ -163,6 +163,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     </div>
 
+                    <div class="campo-rota">
+
+                        <label for="tempo_estimado">
+                            Tempo Estimado
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="tempo_estimado"
+                            name="tempo_estimado"
+                            placeholder="Ex.: 00h45m"
+                            required
+                        >
+
+                    </div>
+
 
 
 
