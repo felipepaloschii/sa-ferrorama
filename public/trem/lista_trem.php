@@ -89,8 +89,12 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
                             </span>
                             <span><?= htmlspecialchars(($trem[$col['codigo']] ?? '')) ?></span>
                             <span class="acoes">
-                                <button type="button" onclick="window.location.href='public/edicao_trem.php?id=<?php echo $trem['id']; ?>'">Editar</button>
-                                <button type="button" onclick="if (confirm('Tem certeza que deseja excluir este trem?')) { window.location.href='public/exclusao_trem.php?id=<?php echo $trem['id']; ?>'; }">Excluir</button>
+                                <button type="button"
+                                    onclick="window.location.href='edicao_trem.php?id=<?= (int) $trem['id'] ?>'">
+                                    Editar
+                                </button>
+                                <button type="button" onclick="if (confirm('Tem certeza que deseja excluir este trem?')) { window.location.href='../trem/exclusao_trem.php?id=<?php echo $trem['id']; ?>'; }">Excluir</button>
+                            </span>
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>

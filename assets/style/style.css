@@ -1540,6 +1540,7 @@ textarea:focus{
     margin: 0;
 }
 
+/* CADASTRO DE TRENS */
 
 .cadastro-trem {
     padding: 18px 32px 30px 260px;
@@ -1672,4 +1673,158 @@ textarea:focus{
         align-items: stretch;
     }
 
+}
+
+.conteudo-edicao-trem {
+    padding: 18px 40px 32px 239px;
+}
+
+.subtitulo-edicao-trem {
+    margin-top: -12px;
+    color: #f1f1f1;
+}
+
+.painel-formulario-trem {
+    width: min(100%, 560px);
+    min-height: 475px;
+    padding: 30px 34px 24px;
+    background: rgba(20, 20, 20, 0.96);
+    border-radius: 12px;
+}
+
+.painel-formulario-trem .grade-formulario-trem {
+    column-gap: 38px;
+}
+
+.painel-formulario-trem .grupo-campo-trem {
+    min-width: 0;
+    margin-bottom: 18px;
+}
+
+.painel-formulario-trem .rotulo-campo-trem {
+    display: block;
+    margin: 0 0 8px;
+    color: #f1f1f1;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.painel-formulario-trem .obrigatorio {
+    margin-left: 2px;
+}
+
+.campo-edicao-trem {
+    width: 100%;
+    height: 36px;
+    padding: 0 12px;
+    color: #f1f1f1;
+    background: #303030;
+    border: 1px solid #3a3a3a;
+    border-radius: 10px;
+    font: 12px Arial, Helvetica, sans-serif;
+}
+
+.campo-edicao-trem:focus {
+    outline: 2px solid #858585;
+}
+
+.campo-edicao-trem::placeholder {
+    color: #858585;
+}
+
+.painel-formulario-trem .opcoes-status-trem {
+    margin-top: 0;
+}
+
+.painel-formulario-trem .opcao-status-trem {
+    gap: 12px;
+    margin-bottom: 11px;
+    font-size: 12px;
+}
+
+.painel-formulario-trem .marcador-status {
+    width: 23px;
+    height: 23px;
+    flex-basis: 23px;
+    background: #050505;
+    border: 0;
+}
+
+.painel-formulario-trem .marcador-status::after {
+    width: 10px;
+    height: 10px;
+}
+
+.acoes-edicao-trem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin: 12px -4px 0;
+}
+
+.botao-edicao-claro,
+.botao-edicao-escuro {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 13px;
+    border: 0;
+    border-radius: 9px;
+    font: bold 12px Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.botao-edicao-claro {
+    color: #171717;
+    background: #dedede;
+}
+
+.botao-edicao-escuro {
+    color: #f1f1f1;
+    background: #303030;
+}
+
+.botao-edicao-claro:hover,
+.botao-edicao-escuro:hover {
+    filter: brightness(1.12);
+}
+
+.aviso-edicao-trem {
+    margin: 0 0 16px;
+    color: #ff7777;
+    font-size: 13px;
+}
+
+@media (max-width: 900px) {
+    .conteudo-edicao-trem {
+        padding: 18px;
+    }
+
+    .painel-formulario-trem {
+        width: 100%;
+    }
+}
+
+@media (max-width: 560px) {
+    .painel-formulario-trem {
+        padding: 24px 18px;
+    }
+
+    .acoes-edicao-trem {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+.campo-ano-trem {
+    grid-column: 2;
+}
+
+@media (max-width: 900px) {
+    .campo-ano-trem {
+        grid-column: 1;
+    }
 }
