@@ -1,3 +1,26 @@
+<?php
+
+include'../../infra/conexao.php';
+
+$rotas = [];
+
+$sql = "SELECT * FROM rotas ORDER BY id_rota DESC";
+
+$resultado = $conexao->query($sql);
+
+if ($resultado) {
+
+    while ($rota = $resultado->fetch_assoc()) {
+
+        $rotas[] = $rota;
+
+    }
+}
+
+
+?>
+
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
