@@ -180,6 +180,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     </div>
 
+                    <div class="campo-rota">
+
+                        <label for="codigo">
+                            Código
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="codigo"
+                            name="codigo"
+                            placeholder="Ex.: RT-016"
+                            required
+                        >
+
+                    </div>
+
+
+
 
 
 
