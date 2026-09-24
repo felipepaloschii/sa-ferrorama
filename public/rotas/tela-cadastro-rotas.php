@@ -238,6 +238,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
 
                     </div>
+                    
+                    <div class="campo-rota">
+
+                        <label for="capacidade">
+                            Capacidade
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="capacidade"
+                            name="capacidade"
+                            placeholder="Ex.: 100 Ton"
+                            required
+                        >
 
 
 
