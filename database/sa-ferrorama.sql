@@ -39,4 +39,5 @@
         distancia decimal(10,2) not null,
         tempo_estimado decimal(10,2) not null,
         capacidade_rota decimal(10,2) not null,
+        foreign key (id_trem) references trem(id)
     );

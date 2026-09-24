@@ -16,11 +16,25 @@
     <aside class="menu-lateral">
         <nav>
             <a href="../../index.php">Dashboard</a>
-            <a class="ativo" href="tela-home-sensor.php">Sensores</a>
-            <a href="../trem/cadastro_trem.php">Trens</a>
+            <a href="tela-home-sensor.php">Sensores</a>
+            <a class="ativo" href="lista_trem.php">Trens</a>
             <a href="#">Rotas</a>
         </nav>
     </aside>
 
     <main class="area-principal">
         <section class="cabecalho-sensor">
+            <h2>Lista de Trens</h2>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Modelo</th>
+                    <th>Capacidade</th>
+                    <th>Status</th>
+                    <th>Ano de Fabricação</th>
+                    <th>Código de Rastreio</th>
+                </tr>
+
+
+
+    </main>
