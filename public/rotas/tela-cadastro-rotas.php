@@ -274,50 +274,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 </div>
 
+                <div class="botoes-rota">
+
+                    <button
+                        type="submit"
+                        class="botao-salvar-rota"
+                    >
+                        Salvar Rota
+                    </button>
 
 
+                    <a
+                        href="tela-home-rotas.php"
+                        class="botao-voltar-rota"
+                    >
+                        Voltar para Rotas
+                    </a>
 
+                </div>
 
+            </form>
 
+        </section>
 
+    </main>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</body>
 
 </html>
