@@ -128,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             >
 
                 <div class="formulario-grid">
-                    
+
                     <div class="campo-rota">
 
                         <label for="nome_rota">
@@ -141,6 +141,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             id="nome_rota"
                             name="nome_rota"
                             placeholder="Ex.: Rota Joinville → Barra Velha"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="campo-rota">
+
+                        <label for="trem">
+                            Trem
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="trem"
+                            name="trem"
+                            placeholder="Ex.: Trem 1947"
                             required
                         >
 
