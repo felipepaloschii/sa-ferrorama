@@ -41,8 +41,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         href="../../assets/style/style.css"
     >
 </head>
-<body>
-    
+
+<body id="pagina-rota">
+
+    <header class="barra-superior">
+
+        <h1>PIA Enterprise</h1>
+
+        <div class="acoes-superiores">
+
+            <div class="aba-usuario">
+                <a href="../usuario/tela-cadastro-user.php">
+                    Meu perfil
+                </a>
+
+                <a href="../logout/logout.php">
+                    Sair
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <aside class="menu-lateral">
+
+        <nav>
+
+            <a href="../../index.php">
+                Dashboard
+            </a>
+
+            <a href="../sensor/tela-home-sensor.php">
+                Sensores
+            </a>
+
+            <a href="../trem/lista_trem.php">
+                Trens
+            </a>
+
+            <a
+                class="ativo"
+                href="tela-home-rotas.php"
+            >
+                Rotas
+            </a>
+
+        </nav>
+
+    </aside>
 
 
 
@@ -87,5 +135,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-</body>
 </html>
