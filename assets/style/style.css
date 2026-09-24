@@ -1497,4 +1497,45 @@ textarea:focus{
         grid-template-columns: 1fr;
     }
 }
+
+.topo-lista-trens {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
  
+.botao-novo-trem {
+    width: auto;
+    height: auto;
+    padding: 10px 18px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 900;
+    transition: filter 0.2s;
+}
+ 
+.botao-novo-trem:hover {
+    filter: brightness(1.15);
+}
+ 
+
+.painel-lista-trens {
+    height: auto;
+    min-height: 460px;
+    padding: 20px 40px;
+}
+ 
+
+.colunas-trens {
+    grid-template-columns: 40px 1fr 1.2fr 1fr 60px 90px 80px 1fr 80px;
+    text-align: center;
+}
+ 
+
+.status-trem {
+    width: auto;
+    height: auto;
+    padding: 4px 10px;
+    margin: 0;
+}
