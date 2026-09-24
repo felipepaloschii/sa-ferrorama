@@ -1,30 +1,31 @@
 <?php
-    include '../../infra/conexao.php';
+include '../../infra/conexao.php';
 
-    $tabela = 'trem';
+$tabela = 'trem';
 
-    $col = [
-        'id'         => 'id',
-        'nome'       => 'nome_trem',
-        'modelo'     => 'modelo_trem',
-        'local'      => 'localizacao_i',
-        'ano'        => 'ano',
-        'capacidade' => 'capacidade',
-        'status'     => 'status',
-        'codigo'     => 'codigo',
-    ];
+$col = [
+    'id'         => 'id',
+    'nome'       => 'nome_trem',
+    'modelo'     => 'modelo_trem',
+    'local'      => 'localizacao_i',
+    'ano'        => 'ano',
+    'capacidade' => 'capacidade',
+    'status'     => 'status',
+    'codigo'     => 'codigo',
+];
 
-    $rotulosStatus = [
-        'operacao'   => 'Em operação',
-        'parado'     => 'Parado',
-        'manutencao' => 'Manutenção',
-        'inativo'    => 'Inativo',
-    ];
+$rotulosStatus = [
+    'operacao'   => 'Em operação',
+    'parado'     => 'Parado',
+    'manutencao' => 'Manutenção',
+    'inativo'    => 'Inativo',
+];
 
-    $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id']}`");
+$resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id']}`");
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,6 +33,7 @@
     <link rel="stylesheet" href="../../assets/style/style.css">
     <link rel="stylesheet" href="../../assets/style/lista_trem.css">
 </head>
+
 <body>
     <header class="barra-superior">
         <h1>PIA Enterprise</h1>
@@ -69,9 +71,9 @@
                 <?php if ($resultado && mysqli_num_rows($resultado) > 0): ?>
                     <?php while ($trem = mysqli_fetch_assoc($resultado)): ?>
                         <?php
-                            $statusBanco   = $trem[$col['status']] ?? '';
-                            $classeStatus  = isset($rotulosStatus[$statusBanco]) ? $statusBanco : 'inativo';
-                            $textoStatus   = $rotulosStatus[$statusBanco] ?? $statusBanco;
+                        $statusBanco   = $trem[$col['status']] ?? '';
+                        $classeStatus  = isset($rotulosStatus[$statusBanco]) ? $statusBanco : 'inativo';
+                        $textoStatus   = $rotulosStatus[$statusBanco] ?? $statusBanco;
                         ?>
                         <div class="linha-tabela colunas-trens">
                             <span><?= htmlspecialchars(($trem[$col['id']] ?? '')) ?></span>
@@ -87,8 +89,8 @@
                             </span>
                             <span><?= htmlspecialchars(($trem[$col['codigo']] ?? '')) ?></span>
                             <span class="acoes">
-                               <button type="button" onclick="window.location.href='public/edicao_trem.php?id=<?php echo $trem['id']; ?>'">Editar</button>
-                                 <button type="button" onclick="if (confirm('Tem certeza que deseja excluir este trem?')) { window.location.href='public/exclusao_trem.php?id=<?php echo $trem['id']; ?>'; }">Excluir</button>
+                                <button type="button" onclick="window.location.href='public/edicao_trem.php?id=<?php echo $trem['id']; ?>'">Editar</button>
+                                <button type="button" onclick="if (confirm('Tem certeza que deseja excluir este trem?')) { window.location.href='public/exclusao_trem.php?id=<?php echo $trem['id']; ?>'; }">Excluir</button>
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
@@ -98,4 +100,5 @@
         </section>
     </main>
 </body>
+
 </html>

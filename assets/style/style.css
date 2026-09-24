@@ -1539,3 +1539,137 @@ textarea:focus{
     padding: 4px 10px;
     margin: 0;
 }
+
+
+.cadastro-trem {
+    padding: 18px 32px 30px 260px;
+}
+
+.cadastro-trem .cabecalho-cadastro-sensor {
+    margin-bottom: 12px;
+}
+
+.cadastro-trem .titulo-pagina {
+    margin: 0 0 6px;
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.cadastro-trem .descricao-pagina {
+    margin: 0 0 14px;
+    color: #d1d5db;
+    font-size: 12px;
+}
+
+.cadastro-trem .painel-cadastro-sensor {
+    width: 540px;
+    max-width: 100%;
+    padding: 28px 34px;
+    background: rgba(20, 20, 20, 0.96);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.65);
+}
+
+.cadastro-trem .grade-formulario-trem {
+    gap: 0 38px;
+}
+
+.cadastro-trem .grupo-campo-trem {
+    margin-bottom: 18px;
+}
+
+.cadastro-trem .rotulo-campo-trem {
+    margin-bottom: 8px;
+    font-size: 12px;
+}
+
+.cadastro-trem input[type="text"],
+.cadastro-trem input[type="number"] {
+    height: 35px;
+    padding: 8px 12px;
+    background: #333333;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 11px;
+}
+
+.cadastro-trem input::placeholder {
+    color: #999999;
+}
+
+.cadastro-trem input[type="text"]:focus,
+.cadastro-trem input[type="number"]:focus {
+    outline: none;
+    border: 1px solid #555555;
+}
+
+.botoes-cadastro-trem {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 4px;
+}
+
+.botao-salvar-trem,
+.botao-cancelar-trem,
+.botao-voltar-trem {
+    height: 35px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 900;
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.botao-salvar-trem {
+    color: #222222;
+    background: #eeeeee;
+}
+
+.botao-cancelar-trem {
+    color: #ffffff;
+    background: #333333;
+}
+
+.botao-voltar-trem {
+    color: #222222;
+    background: #eeeeee;
+}
+
+.botao-salvar-trem:hover,
+.botao-cancelar-trem:hover,
+.botao-voltar-trem:hover {
+    filter: brightness(1.12);
+}
+
+@media (max-width: 900px) {
+
+    .cadastro-trem {
+        padding: 20px;
+    }
+
+    .cadastro-trem .painel-cadastro-sensor {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .cadastro-trem .grade-formulario-trem {
+        grid-template-columns: 1fr;
+    }
+
+    .botoes-cadastro-trem {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+}
