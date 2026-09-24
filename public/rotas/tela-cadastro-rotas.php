@@ -92,6 +92,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     </aside>
 
+    <main class="conteudo">
+
+        <section class="area-cadastro-rota">
+
+            <h2>Cadastrar rotas</h2>
+
+            <p class="subtitulo-rota">
+                Preencha as informações para cadastrar a rota.
+            </p>
+
+
+            <?php if ($mensagem != ''): ?>
+
+                <div class="mensagem-sucesso">
+                    <?= htmlspecialchars($mensagem) ?>
+                </div>
+
+            <?php endif; ?>
+
+
+            <?php if ($erro != ''): ?>
+
+                <div class="mensagem-erro">
+                    <?= htmlspecialchars($erro) ?>
+                </div>
+
+            <?php endif; ?>
+
+
+            <form
+                class="formulario-rota"
+                method="POST"
+                action=""
+            >
+
+                <div class="formulario-grid">
+
 
 
 
