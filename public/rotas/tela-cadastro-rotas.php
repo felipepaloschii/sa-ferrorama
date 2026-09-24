@@ -253,6 +253,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             placeholder="Ex.: 100 Ton"
                             required
                         >
+                        </div>
+
+                        <div class="campo-rota">
+
+                        <label for="distancia">
+                            Distância
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="distancia"
+                            name="distancia"
+                            placeholder="Ex.: 50km"
+                            required
+                        >
+
+                    </div>
+
+                </div>
 
 
 
