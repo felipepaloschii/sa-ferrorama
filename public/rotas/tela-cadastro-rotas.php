@@ -197,6 +197,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     </div>
 
+                    <div class="campo-rota campo-status">
+
+                        <label>
+                            Status Inicial
+                            <span>*</span>
+                        </label>
+
+
+                        <div class="radio-rota">
+
+                            <input
+                                type="radio"
+                                id="ativa"
+                                name="status"
+                                value="Ativa"
+                                checked
+                            >
+
+                            <label for="ativa">
+                                Ativa
+                            </label>
+
+                        </div>
+
+
+                        <div class="radio-rota">
+
+                            <input
+                                type="radio"
+                                id="inativa"
+                                name="status"
+                                value="Inativa"
+                            >
+
+                            <label for="inativa">
+                                Inativa
+                            </label>
+
+                        </div>
+
+                    </div>
+
 
 
 
