@@ -57,8 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <main class="area-principal cadastro-trem">
         <div class="cabecalho-cadastro-sensor">
-            <h2 class="titulo-pagina">Cadastrar novo trem</h2>
-            <p class="descricao-pagina">Preencha as informações para cadastrar um novo trem no sistema.</p>
+            <h2 class="titulo-pagina">Cadastrar nova rota</h2>
+            <p class="descricao-pagina">Preencha as informações para cadastrar um nova rota no sistema.</p>
         </div>
 
         <?php if (isset($erro)): ?>
@@ -69,68 +69,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="POST">
                 <div class="grade-formulario-trem">
                     <div class="grupo-campo-trem">
-                        <label class="rotulo-campo-trem" for="nome_trem">Nome do trem<span class="obrigatorio">*</span></label>
-                        <input type="text" id="nome_trem" name="nome_trem" placeholder="Ex.: Paloschi trem" required>
+                        <label class="rotulo-campo-trem" for="nome_trem">Nome da rota<span class="obrigatorio">*</span></label>
+                        <input type="text" id="nome_trem" name="nome_trem" placeholder="Ex.: Rota Joinville → Barra Velha" required>
                     </div>
 
                     <div class="grupo-campo-trem">
-                        <label class="rotulo-campo-trem" for="modelo_trem">Modelo<span class="obrigatorio">*</span></label>
-                        <input type="text" id="modelo_trem" name="modelo_trem" placeholder="Ex.: Velocidade Trem A" required>
+                        <label class="rotulo-campo-trem" for="modelo_trem">Trem<span class="obrigatorio">*</span></label>
+                        <input type="text" id="modelo_trem" name="modelo_trem" placeholder="Ex.: Trem 1947" required>
                     </div>
 
                     <div class="grupo-campo-trem">
-                        <label class="rotulo-campo-trem" for="localizacao_i">Localização Inicial<span class="obrigatorio">*</span></label>
-                        <input type="text" id="localizacao_i" name="localizacao_i" placeholder="Ex.: Estação Central" required>
+                        <label class="rotulo-campo-trem" for="localizacao_i">Tempo estimado<span class="obrigatorio">*</span></label>
+                        <input type="text" id="localizacao_i" name="localizacao_i" placeholder="Ex.: 00h45m" required>
                     </div>
 
                     <div class="grupo-campo-trem">
                         <label class="rotulo-campo-trem" for="codigo">Código<span class="obrigatorio">*</span></label>
-                        <input type="text" id="codigo" name="codigo" placeholder="Ex.: TREM-001" required>
+                        <input type="text" id="codigo" name="codigo" placeholder="Ex.: RT - 016" required>
                     </div>
 
                     <div class="grupo-campo-trem">
-                        <label class="rotulo-campo-trem">Status Inicial<span class="obrigatorio">*</span></label>
+                        <label class="rotulo-campo-trem">Status<span class="obrigatorio">*</span></label>
                         <div class="opcoes-status-trem">
                             <label class="opcao-status-trem">
                                 <input type="radio" name="status" value="operacao" checked>
                                 <span class="marcador-status"></span>
-                                Em operação
-                            </label>
-
-                            <label class="opcao-status-trem">
-                                <input type="radio" name="status" value="parado">
-                                <span class="marcador-status"></span>
-                                Parado
-                            </label>
-
-                            <label class="opcao-status-trem">
-                                <input type="radio" name="status" value="manutencao">
-                                <span class="marcador-status"></span>
-                                Manutenção
+                                Ativa
                             </label>
 
                             <label class="opcao-status-trem">
                                 <input type="radio" name="status" value="inativo">
                                 <span class="marcador-status"></span>
-                                Inativo
+                                Inativa
                             </label>
                         </div>
                     </div>
 
                     <div class="grupo-campo-trem">
-                        <label class="rotulo-campo-trem" for="capacidade">Capacidade<span class="obrigatorio">*</span></label>
-                        <input type="number" id="capacidade" name="capacidade" placeholder="Ex.: 300" required>
+                        <label class="rotulo-campo-trem" for="capacidade">Distância<span class="obrigatorio">*</span></label>
+                        <input type="number" id="capacidade" name="capacidade" placeholder="Ex.: 50km" required>
                     </div>
-
-                    <div class="grupo-campo-trem">
-                        <label class="rotulo-campo-trem" for="ano">Ano<span class="obrigatorio">*</span></label>
-                        <input type="number" id="ano" name="ano" placeholder="Ex.: 2026" required>
-                    </div>
-                </div>
 
                 <div class="botoes-cadastro-trem">
-                    <button type="submit" class="botao-salvar-trem">Salvar trem</button>
-                    <a href="lista_trem.php" class="botao-voltar-trem">← Voltar para trens</a>
+                    <button type="submit" class="botao-salvar-trem">Salvar rota</button>
+                    <a href="lista_trem.php" class="botao-voltar-trem">← Voltar para rotas</a>
                 </div>
             </form>
         </section>
