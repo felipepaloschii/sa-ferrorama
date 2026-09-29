@@ -48,3 +48,5 @@ if ($resultado) {
 
     <main class="area-principal">
         <section class="cabecalho-sensor">
+
+        <a href="tela-cadastro-rotas.php">Nova rota</a>

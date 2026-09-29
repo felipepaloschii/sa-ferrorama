@@ -32,12 +32,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Trem</title>
+    <title>Cadastrar </title>
     <link rel="stylesheet" href="../../assets/style/style.css">
 </head>
 
@@ -50,8 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <nav>
             <a href="../../index.php">Dashboard</a>
             <a href="../sensor/tela-home-sensor.php">Sensores</a>
-            <a class="ativo" href="lista_trem.php">Trens</a>
-            <a href="../rotas/tela-home-rotas.php">Rotas</a>
+            <a href="lista_trem.php">Trens</a>
+            <a class= "ativo "href="../rotas/tela-home-rotas.php">Rotas</a>
         </nav>
     </aside>
 
