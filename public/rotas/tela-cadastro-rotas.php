@@ -32,7 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
-<?php
  <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -138,4 +137,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </main>
 </body>
 </html>
-?>
