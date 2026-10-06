@@ -28,7 +28,6 @@ if ($resultado) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listagem de Rotas</title>
     <link rel="stylesheet" href="../../assets/style/style.css">
-    <link rel="stylesheet" href="../../assets/style/lista_trem.css">
 </head>
 
 <body>
@@ -69,23 +68,23 @@ if ($resultado) {
                 <?php if ($resultado && mysqli_num_rows($resultado) > 0): ?>
                     <?php while ($trem = mysqli_fetch_assoc($resultado)): ?>
                         <?php
-                        $statusBanco   = $trem[$col['status']] ?? '';
+                        $statusBanco   = $trem[['status']] ?? '';
                         $classeStatus  = isset($rotulosStatus[$statusBanco]) ? $statusBanco : 'inativo';
                         $textoStatus   = $rotulosStatus[$statusBanco] ?? $statusBanco;
                         ?>
                         <div class="linha-tabela colunas-trens">
-                            <span><?= htmlspecialchars(($trem[$col['id']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars(($trem[$col['nome']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars(($trem[$col['modelo']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars(($trem[$col['local']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars(($trem[$col['ano']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars((string)(float)($trem[$col['capacidade']] ?? 0)) ?></span>
+                            <span><?= htmlspecialchars(($trem[['id']] ?? '')) ?></span>
+                            <span><?= htmlspecialchars(($trem[['nome']] ?? '')) ?></span>
+                            <span><?= htmlspecialchars(($trem[['modelo']] ?? '')) ?></span>
+                            <span><?= htmlspecialchars(($trem[['local']] ?? '')) ?></span>
+                            <span><?= htmlspecialchars(($trem[['ano']] ?? '')) ?></span>
+                            <span><?= htmlspecialchars((string)(float)($trem[['capacidade']] ?? 0)) ?></span>
                             <span>
                                 <span class="status status-trem <?= $classeStatus ?>">
                                     <?= htmlspecialchars($textoStatus) ?>
                                 </span>
                             </span>
-                            <span><?= htmlspecialchars(($trem[$col['codigo']] ?? '')) ?></span>
+                            <span><?= htmlspecialchars(($trem[['codigo']] ?? '')) ?></span>
                             <span class="acoes">
                                 <button type="button"
                                     onclick="window.location.href='edicao_trem.php?id=<?= (int) $trem['id'] ?>'">
