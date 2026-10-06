@@ -6,17 +6,16 @@ $mensagem = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $id_trem = $_POST['id_trem'];
     $nome_rota = $_POST['nome_rota'];
+    $modelo_trem = $_POST['modelo_trem'];
+    $tempo_estimado = $_POST['tempo_estimado'];
     $codigo = $_POST['codigo'];
     $distancia = $_POST['distancia'];
-    $tempo_estimado = $_POST['tempo_estimado'];
-    $capacidade_rota = $_POST['capacidade_rota'];
 
-    $sql = "INSERT INTO rotas (id_trem, nome_rota, codigo, distancia, tempo_estimado, capacidade_rota) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO rotas (nome_rota, modelo_trem, tempo_estimado, codigo, distancia) VALUES (?, ?, ?, ?, ?)";
 
     $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("isssdd", $id_trem, $nome_rota, $codigo, $distancia, $tempo_estimado, $capacidade_rota);
+    $stmt->bind_param("ssssd", $nome_rota, $modelo_trem, $tempo_estimado, $codigo, $distancia);
 
     if ($stmt->execute() === TRUE) {
 
@@ -70,8 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="POST">
                 <div class="grade-formulario-trem">
                     <div class="grupo-campo-trem">
-                        <label class="rotulo-campo-trem" for="nome_trem">Nome da rota<span class="obrigatorio">*</span></label>
-                        <input type="text" id="nome_trem" name="nome_trem" placeholder="Ex.: Rota Joinville → Barra Velha" required>
+                        <label class="rotulo-campo-trem" for="nome_rota">Nome da rota<span class="obrigatorio">*</span></label>
+                        <input type="text" id="nome_rota" name="nome_rota" placeholder="Ex.: Rota Joinville → Barra Velha" required>
                     </div>
 
                     <div class="grupo-campo-trem">
@@ -80,8 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="grupo-campo-trem">
-                        <label class="rotulo-campo-trem" for="localizacao_i">Tempo estimado<span class="obrigatorio">*</span></label>
-                        <input type="text" id="localizacao_i" name="localizacao_i" placeholder="Ex.: 00h45m" required>
+                        <label class="rotulo-campo-trem" for="tempo_estimado">Tempo estimado<span class="obrigatorio">*</span></label>
+                        <input type="text" id="tempo_estimado" name="tempo_estimado" placeholder="Ex.: 00h45m" required>
                     </div>
 
                     <div class="grupo-campo-trem">
@@ -107,8 +106,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="grupo-campo-trem">
-                        <label class="rotulo-campo-trem" for="capacidade">Distância<span class="obrigatorio">*</span></label>
-                        <input type="number" id="capacidade" name="capacidade" placeholder="Ex.: 50km" required>
+                        <label class="rotulo-campo-trem" for="distancia">Distância<span class="obrigatorio">*</span></label>
+                        <input type="number" id="distancia" name="distancia" placeholder="Ex.: 50km" required>
                     </div>
 
                 <div class="botoes-cadastro-trem">

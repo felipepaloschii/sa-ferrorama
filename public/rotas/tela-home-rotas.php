@@ -4,7 +4,7 @@ include'../../infra/conexao.php';
 
 $rotas = [];
 
-$sql = "SELECT * FROM rotas ORDER BY id_rota DESC";
+$sql = "SELECT * FROM rotas ORDER BY nome_rota DESC";
 
 $resultado = $conexao->query($sql);
 

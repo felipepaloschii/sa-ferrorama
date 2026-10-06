@@ -32,12 +32,9 @@
     );
 
     create table if not exists rotas (
-        id_rota int primary key auto_increment,
-        id_trem int not null,
-        nome_rota varchar(100) not null,
-        codigo varchar(100) not null,
-        distancia decimal(10,2) not null,
-        tempo_estimado decimal(10,2) not null,
-        capacidade_rota decimal(10,2) not null,
-        foreign key (id_trem) references trem(id)
+        nome_rota VARCHAR(100) NOT NULL,
+        modelo_trem VARCHAR(100) NOT NULL,
+        codigo VARCHAR(100) NOT NULL,
+        tempo_estimado DECIMAL(10,2) NOT NULL,
+        distancia DECIMAL(10,2) NOT NULL
     );
