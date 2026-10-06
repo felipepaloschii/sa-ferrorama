@@ -42,6 +42,7 @@ if (!isset($_SESSION['usuario'])) {
             <a class="#" href="public/sensor/tela-home-sensor.php">Sensores</a>
              <a href="public/trem/lista_trem.php">Trens</a>
             <a href="public/rotas/tela-home-rotas.php">Rotas</a>
+            <a href="public/usuario/tela-home-usuario.php">Usuários</a>
         </nav>
     </aside>
 

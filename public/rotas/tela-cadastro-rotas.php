@@ -52,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="../sensor/tela-home-sensor.php">Sensores</a>
             <a href="lista_trem.php">Trens</a>
             <a class= "ativo "href="../rotas/tela-home-rotas.php">Rotas</a>
+            <a href="../usuario/tela-home-usuario.php">Usuários</a>
         </nav>
     </aside>
 
