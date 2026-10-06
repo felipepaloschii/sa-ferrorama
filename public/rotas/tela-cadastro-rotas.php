@@ -79,8 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="grupo-campo-trem">
-                        <label class="rotulo-campo-trem" for="tempo_estimado">Tempo estimado<span class="obrigatorio">*</span></label>
-                        <input type="text" id="tempo_estimado" name="tempo_estimado" placeholder="Ex.: 00h45m" required>
+                        <label class="rotulo-campo-trem" for="tempo_estimado">Tempo estimado (Min)<span class="obrigatorio">*</span></label>
+                        <input type="text" id="tempo_estimado" name="tempo_estimado" placeholder="Ex.: 45.00 " required>
                     </div>
 
                     <div class="grupo-campo-trem">
