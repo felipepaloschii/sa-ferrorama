@@ -2,18 +2,18 @@
 
 include '../../infra/conexao.php';
 
-$quantidade_usuarios = 0;
+$quantidade_usuario = 0;
 $usuarios = [];
 
-$sql = "SELECT id_usuario, email, senha FROM usuarios ORDER BY id_usuario DESC";
+$sql = "SELECT id_usuario, email, senha, tipo FROM usuario ORDER BY id_usuario DESC";
 
 $resultado = $conexao->query($sql);
 
 if ($resultado) {
 
-while ($usuario = $resultado->fetch_assoc()) {
-    $usuarios[] = $usuario;
-    $quantidade_usuarios++;
+while ($usuarios = $resultado->fetch_assoc()) {
+    $usuario[] = $usuarios;
+    $quantidade_usuario++;
 }
 
 }
@@ -53,6 +53,7 @@ while ($usuario = $resultado->fetch_assoc()) {
         <h1 class="titulo-sensor">Usuários</h1>
         <p class="descricao-sensor">Gerencie os usuários cadastrados no sistema</p>
         </div>
+        </section>
 
         <section class= "conteudo-lista-sensor">
         <div class="topo-lista-sensores">
@@ -62,7 +63,78 @@ while ($usuario = $resultado->fetch_assoc()) {
                         <span></span>
                         <span></span>
                         <span></span>
-                        
+
                 </div>
+
+                 <div class="informacoes-sensor">
+
+                        <h2>Usuários Cadastrados</h2>
+
+                        <strong>
+                            <?php echo $quantidade_usuario; ?>
+                        </strong>
+                    </div>
+                </div>
+            </div>
+
+
+        <section class="painel-lista-sensores">
+            <div class="titulo-painel-lista">
+                <h2>Lista de Usuários</h2>
+            </div>
+            
+            <div class="tabela-sensores">
+
+            <div class="cabecalho-tabela">
+
+             <span>ID</span>
+                        <span>E-mail</span>
+                        <span>Senha</span>
+                        <span>Tipo</span>
+                        <span>Ações</span>
+            </div>
+            <?php if (count($usuario) > 0) { ?>
+
+    <?php foreach ($usuario as $usuario) { ?>
+
+        <div class="linha-tabela">
+
+            <span>
+                <?php echo htmlspecialchars($usuario['id_usuario']); ?>
+            </span>
+
+            <span>
+                <?php echo htmlspecialchars($usuario['email']); ?>
+            </span>
+
+            <span>
+                <?php echo htmlspecialchars($usuario['senha']); ?>
+            </span>
+
+            <span>
+               <?php echo htmlspecialchars($usuario['tipo']); ?>
+            </span>
+
+            <span class="acoes">
+
+                <a href="tela-edit-usuario.php?id=<?php echo $usuario['id_usuario']; ?>"
+                   class="botao-editar"
+                   title="Editar">✎</a>
+
+                <a href="tela-excluir-usuario.php?id=<?php echo $usuario['id_usuario']; ?>"
+                   class="botao-excluir"
+                   title="Excluir">🗑</a>
+
+            </span>
+
+        </div>
+
+    <?php } ?>
+
+<?php } ?>
+
+            </div>
+        </section>
+    </main>
 </body>
 </html>
