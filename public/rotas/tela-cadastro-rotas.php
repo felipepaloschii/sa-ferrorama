@@ -52,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="../sensor/tela-home-sensor.php">Sensores</a>
             <a href="lista_trem.php">Trens</a>
             <a class= "ativo "href="../rotas/tela-home-rotas.php">Rotas</a>
+            <a href="../usuario/tela-home-usuario.php">Usuários</a>
         </nav>
     </aside>
 
@@ -112,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="botoes-cadastro-trem">
                     <button type="submit" class="botao-salvar-trem">Salvar rota</button>
-                    <a href="lista_trem.php" class="botao-voltar-trem">← Voltar para rotas</a>
+                    <a href="tela-home-rotas.php" class="botao-voltar-trem">← Voltar para rotas</a>
                 </div>
             </form>
         </section>

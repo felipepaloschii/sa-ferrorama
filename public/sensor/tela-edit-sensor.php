@@ -149,12 +149,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              Trens
             </a>
 
-            <a href="#">
+            <a href="rotas/tela-home-rotas.php">
                 Rotas
             </a>
 
-            
+            <a href="usuario/tela-home-usuario.php">
+                Usuários
+            </a>
 
+            
         </nav>
 
     </aside>

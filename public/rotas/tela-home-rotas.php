@@ -42,6 +42,7 @@ if ($resultado) {
             <a href="tela-home-sensor.php">Sensores</a>
             <a href="../trem/lista_trem.php">Trens</a>
             <a class="ativo" href="tela-home-rotas.php">Rotas</a>
+            <a href="../usuario/tela-home-usuario.php">Usuários</a>
         </nav>
     </aside>
 
