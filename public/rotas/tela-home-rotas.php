@@ -1,6 +1,6 @@
 <?php
 
-include'../../infra/conexao.php';
+include '../../infra/conexao.php';
 
 $rotas = [];
 
@@ -9,16 +9,12 @@ $sql = "SELECT * FROM rotas ORDER BY nome_rota DESC";
 $resultado = $conexao->query($sql);
 
 if ($resultado) {
-
     while ($rota = $resultado->fetch_assoc()) {
-
         $rotas[] = $rota;
-
     }
 }
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -31,6 +27,7 @@ if ($resultado) {
 </head>
 
 <body>
+
     <header class="barra-superior">
         <h1>PIA Enterprise</h1>
     </header>
@@ -46,60 +43,72 @@ if ($resultado) {
     </aside>
 
     <main class="area-principal">
+
         <section class="cabecalho-sensor topo-lista-trens">
             <h2 class="titulo-sensores">Listagem de rotas</h2>
-            <a class="botao-novo-sensor botao-novo-trem" href="tela-cadastro-rotas.php">+ Nova Rota</a>
+
+            <a class="botao-novo-sensor botao-novo-trem"
+               href="tela-cadastro-rotas.php">
+                + Nova Rota
+            </a>
         </section>
 
         <section class="painel-lista-sensores painel-lista-trens">
+
             <div class="tabela-sensores">
+
                 <div class="cabecalho-tabela colunas-trens">
-                    <span>ID</span>
                     <span>Nome</span>
-                    <span>Modelo</span>
-                    <span>Loc. Inicial</span>
-                    <span>Ano</span>
-                    <span>Capacidade</span>
-                    <span>Status</span>
+                    <span>Trem</span>
+                    <span>Tempo estimado</span>
                     <span>Código</span>
-                    <span>Ações</span>
+                    <span>Distância</span>
                 </div>
 
-                <?php if ($resultado && mysqli_num_rows($resultado) > 0): ?>
-                    <?php while ($trem = mysqli_fetch_assoc($resultado)): ?>
-                        <?php
-                        $statusBanco   = $trem[['status']] ?? '';
-                        $classeStatus  = isset($rotulosStatus[$statusBanco]) ? $statusBanco : 'inativo';
-                        $textoStatus   = $rotulosStatus[$statusBanco] ?? $statusBanco;
-                        ?>
+                <?php if (count($rotas) > 0): ?>
+
+                    <?php foreach ($rotas as $rota): ?>
+
                         <div class="linha-tabela colunas-trens">
-                            <span><?= htmlspecialchars(($trem[['id']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars(($trem[['nome']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars(($trem[['modelo']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars(($trem[['local']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars(($trem[['ano']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars((string)(float)($trem[['capacidade']] ?? 0)) ?></span>
+
                             <span>
-                                <span class="status status-trem <?= $classeStatus ?>">
-                                    <?= htmlspecialchars($textoStatus) ?>
-                                </span>
+                                <?= htmlspecialchars($rota['nome_rota']) ?>
                             </span>
-                            <span><?= htmlspecialchars(($trem[['codigo']] ?? '')) ?></span>
-                            <span class="acoes">
-                                <button type="button"
-                                    onclick="window.location.href='edicao_trem.php?id=<?= (int) $trem['id'] ?>'">
-                                    Editar
-                                </button>
-                                <button type="button" onclick="if (confirm('Tem certeza que deseja excluir este trem?')) { window.location.href='../trem/exclusao_trem.php?id=<?php echo $trem['id']; ?>'; }">Excluir</button>
+
+                            <span>
+                                <?= htmlspecialchars($rota['modelo_trem']) ?>
                             </span>
+
+                            <span>
+                                <?= htmlspecialchars($rota['tempo_estimado']) ?>
+                            </span>
+
+                            <span>
+                                <?= htmlspecialchars($rota['codigo']) ?>
+                            </span>
+
+                            <span>
+                                <?= htmlspecialchars($rota['distancia']) ?>
+                            </span>
+
                         </div>
-                    <?php endwhile; ?>
+
+                    <?php endforeach; ?>
+
                 <?php else: ?>
-                    <p class="nenhum-sensor">Nenhum trem cadastrado.</p>
+
+                    <p class="nenhum-sensor">
+                        Nenhuma rota cadastrada.
+                    </p>
+
                 <?php endif; ?>
+
             </div>
+
         </section>
+
     </main>
+
 </body>
 
 </html>
