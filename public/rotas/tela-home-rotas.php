@@ -26,7 +26,7 @@ if ($resultado) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listagem de Trens</title>
+    <title>Listagem de Rotas</title>
     <link rel="stylesheet" href="../../assets/style/style.css">
     <link rel="stylesheet" href="../../assets/style/lista_trem.css">
 </head>
@@ -47,7 +47,7 @@ if ($resultado) {
 
     <main class="area-principal">
         <section class="cabecalho-sensor topo-lista-trens">
-            <h2 class="titulo-sensores">Listagem de trens</h2>
+            <h2 class="titulo-sensores">Listagem de rotas</h2>
             <a class="botao-novo-sensor botao-novo-trem" href="tela-cadastro-rotas.php">+ Nova Rota</a>
         </section>
 
