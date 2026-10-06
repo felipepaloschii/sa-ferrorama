@@ -639,7 +639,6 @@ body {
     }
 }
 
-/*sensores*/
 
 .area-principal{
     margin-left:200px;
@@ -1011,8 +1010,6 @@ textarea:focus{
     align-items: center;
 }
 
-
-/* LISTA DE SENSORES */
 
 .conteudo-lista-sensores {
     display: grid;
@@ -1525,11 +1522,17 @@ textarea:focus{
     min-height: 460px;
     padding: 20px 40px;
 }
- 
 
+
+ 
 .colunas-trens {
-    grid-template-columns: 40px 1fr 1.2fr 1fr 60px 90px 80px 1fr 80px;
+    grid-template-columns: 2.5fr 1.5fr 1fr 1fr 1fr;
+    column-gap: 25px;
     text-align: center;
+}
+
+.colunas-trens span {
+    white-space: nowrap;
 }
  
 
