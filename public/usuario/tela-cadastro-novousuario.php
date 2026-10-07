@@ -7,12 +7,11 @@ $erro = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $nome = $_POST['nome'];
     $email = $_POST['email'];
     $senha = $_POST['senha'];
     $tipo = $_POST['tipo'];
 
-    if (empty($nome) || empty($email) || empty($senha) || empty($tipo)) {
+    if (empty($email) || empty($senha) || empty($tipo)) {
 
         $erro = 'Preencha todos os campos.';
 
@@ -30,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $stmt->bind_param("s", $email);
             $stmt->execute();
+
             $resultado = $stmt->get_result();
 
             if ($resultado->num_rows > 0) {
@@ -38,15 +38,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             } else {
 
-                $sql = "INSERT INTO usuario (nome, email, senha, tipo) VALUES (?, ?, ?, ?)";
+                $sql = "INSERT INTO usuario (email, senha, tipo) VALUES (?, ?, ?)";
 
                 $stmt2 = $conexao->prepare($sql);
 
                 if ($stmt2) {
 
                     $stmt2->bind_param(
-                        "ssss",
-                        $nome,
+                        "sss",
                         $email,
                         $senha,
                         $tipo
@@ -83,220 +82,222 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
+<!DOCTYPE html>
+
 <html lang="pt-br">
 
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Cadastrar Usuário</title>
 
-    <link rel="stylesheet" href="../../assets/style/style.css">
+    <link
+        rel="stylesheet"
+        href="../../assets/style/style.css"
+    >
 
 </head>
 
 <body>
 
-    <header class="barra-superior">
+<header class="barra-superior">
 
-        <h1>PIA Enterprise</h1>
+    <h1>PIA Enterprise</h1>
 
-    </header>
-
-
-    <aside class="menu-lateral">
-
-        <nav>
-
-            <a href="../../index.php">Dashboard</a>
-
-            <a href="../sensor/tela-home-sensor.php">Sensores</a>
-
-            <a href="../../public/trem/cadastro_trem.php">Trens</a>
-
-            <a href="../../public/rotas/tela-home-rotas.php">Rotas</a>
-
-            <a class="ativo" href="tela-home-usuario.php">Usuários</a>
-
-        </nav>
-
-    </aside>
+</header>
 
 
-    <main class="area-principal">
+<aside class="menu-lateral">
 
-        <section class="cabecalho-cadastro-sensor">
+    <nav>
 
-            <div class="informacoes-pagina">
+        <a href="../../index.php">
+            Dashboard
+        </a>
 
-                <h1 class="titulo-pagina">
-                    Cadastrar novo usuário
-                </h1>
+        <a href="../sensor/tela-home-sensor.php">
+            Sensores
+        </a>
 
-                <p class="descricao-pagina">
-                    Preencha as informações para cadastrar um novo usuário.
-                </p>
+        <a href="../trem/lista_trem.php">
+            Trens
+        </a>
+
+        <a href="../rotas/tela-home-rotas.php">
+            Rotas
+        </a>
+
+        <a
+            class="ativo"
+            href="tela-home-usuario.php"
+        >
+            Usuários
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<main class="area-principal">
+
+    <section class="cabecalho-cadastro-sensor">
+
+        <div class="informacoes-pagina">
+
+            <h1 class="titulo-pagina">
+                Cadastrar novo usuário
+            </h1>
+
+            <p class="descricao-pagina">
+                Preencha as informações para cadastrar um novo usuário.
+            </p>
+
+        </div>
+
+
+        <button
+            class="botao-voltar-sensores"
+            onclick="window.location.href='tela-home-usuario.php'"
+        >
+
+            🠐 Voltar para usuários
+
+        </button>
+
+    </section>
+
+
+    <section class="painel-cadastro-sensor">
+
+        <?php if ($mensagem != '') { ?>
+
+            <p style="color: green; font-weight: bold;">
+
+                <?php echo $mensagem; ?>
+
+            </p>
+
+        <?php } ?>
+
+
+        <?php if ($erro != '') { ?>
+
+            <p style="color: red; font-weight: bold;">
+
+                <?php echo $erro; ?>
+
+            </p>
+
+        <?php } ?>
+
+
+        <form
+            class="formulario-cadastro-sensor"
+            method="POST"
+        >
+
+            <div class="linha-campos-formulario">
+
+                <div class="grupo-nome_sensor-sensor">
+
+                    <label class="nome_sensor-sensor">
+                        E-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        class="input-nome_sensorsensor"
+                    >
+
+                </div>
 
             </div>
 
 
-            <button
-                class="botao-voltar-sensores"
-                onclick="window.location.href='tela-home-usuario.php'">
+            <div class="linha-campos-formulario">
 
-                🠐 Voltar para usuários
+                <div class="grupo-nome_sensor-sensor">
 
-            </button>
+                    <label class="nome_sensor-sensor">
+                        Senha
+                    </label>
 
-        </section>
-
-
-        <section class="painel-cadastro-sensor">
-
-            <?php if ($mensagem != '') { ?>
-
-                <p style="color: green; font-weight: bold;">
-                    <?php echo $mensagem; ?>
-                </p>
-
-            <?php } ?>
-
-
-            <?php if ($erro != '') { ?>
-
-                <p style="color: red; font-weight: bold;">
-                    <?php echo $erro; ?>
-                </p>
-
-            <?php } ?>
-
-
-            <form
-                class="formulario-cadastro-sensor"
-                method="POST">
-
-
-                <div class="linha-campos-formulario">
-
-                    <div class="grupo-nome_sensor-sensor">
-
-                        <label class="nome_sensor-sensor">
-                            Nome completo
-                        </label>
-
-                        <input
-                            type="text"
-                            name="nome"
-                            class="input-nome_sensorsensor">
-
-                    </div>
-
-
-                    <div class="grupo-nome_sensor-sensor">
-
-                        <label class="nome_sensor-sensor">
-                            E-mail
-                        </label>
-
-                        <input
-                            type="email"
-                            name="email"
-                            class="input-nome_sensorsensor">
-
-                    </div>
+                    <input
+                        type="password"
+                        name="senha"
+                        class="input-nome_sensorsensor"
+                    >
 
                 </div>
 
 
-                <div class="linha-campos-formulario">
+                <div class="grupo-nome_sensor-sensor">
 
-                    <div class="grupo-nome_sensor-sensor">
+                    <label class="nome_sensor-sensor">
+                        Tipo de usuário
+                    </label>
 
-                        <label class="nome_sensor-sensor">
-                            Senha
-                        </label>
+                    <select
+                        name="tipo"
+                        class="select-tipo-sensor"
+                    >
 
-                        <input
-                            type="password"
-                            name="senha"
-                            class="input-nome_sensorsensor">
+                        <option value="">
+                            Selecione
+                        </option>
 
-                    </div>
+                        <option value="administrador">
+                            Administrador
+                        </option>
 
+                        <option value="funcionario">
+                            Funcionário
+                        </option>
 
-                    <div class="grupo-nome_sensor-sensor">
-
-                        <label class="nome_sensor-sensor">
-                            Tipo de usuário
-                        </label>
-
-                        <select
-                            name="tipo"
-                            class="select-tipo-sensor">
-
-                            <option value="">Selecione</option>
-
-                            <option value="admin">
-                                Administrador
-                            </option>
-
-                            <option value="usuario">
-                                Usuário
-                            </option>
-
-                        </select>
-
-                    </div>
+                    </select>
 
                 </div>
 
-
-                <div class="linha-status-e-descricao">
-
-                    <div class="grupo-descricao-sensor">
-
-                        <label class="descricao-sensor">
-                            Informações
-                        </label>
-
-                        <textarea
-                            class="textarea-descricao-sensor"
-                            readonly>O usuário cadastrado poderá acessar o sistema de acordo com o tipo selecionado.</textarea>
-
-                    </div>
-
-                </div>
+            </div>
 
 
-                <div class="area-botoes-formulario">
+            <div class="area-botoes-formulario">
 
-                    <button
-                        type="submit"
-                        class="botao-salvar-sensor">
+                <button
+                    type="submit"
+                    class="botao-salvar-sensor"
+                >
 
-                        Salvar usuário
+                    Salvar usuário
 
-                    </button>
+                </button>
 
 
-                    <button
-                        type="button"
-                        class="botao-cancelar-cadastro"
-                        onclick="window.location.href='tela-home-usuario.php'">
+                <button
+                    type="button"
+                    class="botao-cancelar-cadastro"
+                    onclick="window.location.href='tela-home-usuario.php'"
+                >
 
-                        Cancelar
+                    Cancelar
 
-                    </button>
+                </button>
 
-                </div>
+            </div>
 
-            </form>
+        </form>
 
-        </section>
+    </section>
 
-    </main>
+</main>
 
 </body>
 
