@@ -31,11 +31,14 @@
         status ENUM('operacao', 'parado', 'manutencao', 'inativo') NOT NULL DEFAULT 'parado'
     );
 
-   CREATE TABLE rotas (
+   DROP TABLE IF EXISTS rotas;
+
+CREATE TABLE rotas (
     id_rota INT AUTO_INCREMENT PRIMARY KEY,
     nome_rota VARCHAR(100) NOT NULL,
     modelo_trem VARCHAR(100) NOT NULL,
     tempo_estimado VARCHAR(50) NOT NULL,
     codigo VARCHAR(50) NOT NULL UNIQUE,
-    distancia DECIMAL(10,2) NOT NULL
+    distancia DECIMAL(10,2) NOT NULL,
+    status ENUM('Ativa', 'Inativa') NOT NULL DEFAULT 'Ativa'
 );

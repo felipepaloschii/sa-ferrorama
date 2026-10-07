@@ -99,6 +99,8 @@ $resultado = mysqli_query(
 
                     <span>Distância</span>
 
+                    <span>Status</span>
+
                     <span>Ações</span>
 
                 </div>
@@ -141,7 +143,23 @@ $resultado = mysqli_query(
                                 <?= htmlspecialchars($rota['distancia']) ?>
                             </span>
 
+<span>
 
+    <?php if ($rota['status'] == 'Ativa'): ?>
+
+        <span class="status-ativa">
+            Ativa
+        </span>
+
+    <?php else: ?>
+
+        <span class="status-inativa">
+            Inativa
+        </span>
+
+    <?php endif; ?>
+
+</span>
                             <span class="acoes">
 
                             <a
