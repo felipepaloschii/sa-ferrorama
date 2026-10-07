@@ -11,13 +11,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tempo_estimado = $_POST['tempo_estimado'];
     $codigo = $_POST['codigo'];
     $distancia = $_POST['distancia'];
+    $status = $_POST['status'];
 
-    $sql = "INSERT INTO rotas (nome_rota, modelo_trem, tempo_estimado, codigo, distancia) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO rotas 
+    (nome_rota, modelo_trem, tempo_estimado, codigo, distancia, status) 
+    VALUES (?, ?, ?, ?, ?, ?)";
 
     $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("ssssd", $nome_rota, $modelo_trem, $tempo_estimado, $codigo, $distancia);
 
-    if ($stmt->execute() === TRUE) {
+    $stmt->bind_param(
+        "ssssds",
+        $nome_rota,
+        $modelo_trem,
+        $tempo_estimado,
+        $codigo,
+        $distancia,
+        $status
+    );
+
+    if ($stmt->execute()) {
 
         header("Location: tela-home-rotas.php");
         exit;

@@ -5,7 +5,7 @@ include '../../infra/conexao.php';
 $quantidade_usuario = 0;
 $usuarios = [];
 
-$sql = "SELECT id_usuario, email, senha, tipo FROM usuario ORDER BY id_usuario DESC";
+$sql = "SELECT id_usuario, email, senha FROM usuario ORDER BY id_usuario DESC";
 
 $resultado = $conexao->query($sql);
 
