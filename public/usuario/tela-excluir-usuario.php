@@ -237,7 +237,7 @@ function e($valor)
 
                 <form
                     method="post"
-                    action="tela-exclusao-usuario.php"
+                    action="tela-excluir-usuario.php"
                 >
 
                     <input
