@@ -62,7 +62,6 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
                     <span>Nome</span>
                     <span>Modelo</span>
                     <span>Loc. Inicial</span>
-                    <span>Ano</span>
                     <span>Capacidade</span>
                     <span>Status</span>
                     <span>Código</span>

@@ -46,14 +46,25 @@ while ($usuarios = $resultado->fetch_assoc()) {
     </aside>
 
     <main class="area-principal">
-        <section class="cabecalho-sensor">]
+      <section class="cabecalho-sensor topo-lista-trens">
 
-        <div>
+    <div>
+        <h2 class="titulo-sensores">
+            Usuários
+        </h2>
 
-        <h1 class="titulo-sensor">Usuários</h1>
-        <p class="descricao-sensor">Gerencie os usuários cadastrados no sistema</p>
-        </div>
-        </section>
+        <p class="descricao-sensores">
+            Gerencie os usuários cadastrados no sistema
+        </p>
+    </div>
+
+    <a
+        class="botao-novo-sensor botao-novo-trem"
+        href="tela-cadastro-novousuario.php">
+        + Novo Usuário
+    </a>
+
+</section>
 
         <section class= "conteudo-lista-sensor">
         <div class="topo-lista-sensores">
@@ -75,8 +86,11 @@ while ($usuarios = $resultado->fetch_assoc()) {
                         </strong>
                     </div>
                 </div>
+
+               
             </div>
 
+             
 
         <section class="painel-lista-sensores">
             <div class="titulo-painel-lista">
