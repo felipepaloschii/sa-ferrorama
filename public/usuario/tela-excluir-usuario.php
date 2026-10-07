@@ -3,6 +3,7 @@
 include '../../infra/conexao.php';
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
 $erro = '';
 $usuario = null;
 
@@ -17,7 +18,7 @@ if (!$id || $id < 1) {
 
 $consulta = mysqli_prepare(
     $conexao,
-    'SELECT email, senha, tipo FROM usuario WHERE id_usuario = ?'
+    'SELECT id_usuario, email, tipo FROM usuario WHERE id_usuario = ?'
 );
 
 mysqli_stmt_bind_param($consulta, 'i', $id);
@@ -25,16 +26,16 @@ mysqli_stmt_execute($consulta);
 
 mysqli_stmt_bind_result(
     $consulta,
+    $id_usuario,
     $email,
-    $senha,
     $tipo
 );
 
 if (mysqli_stmt_fetch($consulta)) {
 
     $usuario = [
+        'id_usuario' => $id_usuario,
         'email' => $email,
-        'senha' => $senha,
         'tipo' => $tipo
     ];
 
@@ -55,7 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'DELETE FROM usuario WHERE id_usuario = ?'
     );
 
-    mysqli_stmt_bind_param($exclusao, 'i', $id);
+    mysqli_stmt_bind_param(
+        $exclusao,
+        'i',
+        $id
+    );
 
     if (mysqli_stmt_execute($exclusao)) {
 
@@ -111,9 +116,7 @@ function e($valor)
 
     <header class="barra-superior">
 
-        <h1>
-            PIA Enterprise
-        </h1>
+        <h1>PIA Enterprise</h1>
 
     </header>
 
@@ -157,7 +160,7 @@ function e($valor)
         </h2>
 
         <p class="subtitulo-excluir-trem">
-            Confirme a exclusão do usuário relacionado
+            Confirme a exclusão do usuário
         </p>
 
 
@@ -184,18 +187,36 @@ function e($valor)
             <div class="informacoes-sensor-excluir">
 
                 <span>
+                    ID:
+                    <?= e($usuario['id_usuario']) ?>
+                </span>
+
+
+                <span>
                     E-mail:
                     <?= e($usuario['email']) ?>
                 </span>
 
-                <span>
-                    Senha:
-                    <?= e($usuario['senha']) ?>
-                </span>
 
                 <span>
                     Tipo:
-                    <?= e($usuario['tipo']) ?>
+                    <?php
+
+                    if ($usuario['tipo'] === 'administrador') {
+
+                        echo 'Administrador';
+
+                    } elseif ($usuario['tipo'] === 'funcionario') {
+
+                        echo 'Funcionário';
+
+                    } else {
+
+                        echo e($usuario['tipo']);
+
+                    }
+
+                    ?>
                 </span>
 
             </div>
@@ -225,11 +246,14 @@ function e($valor)
                         value="<?= e($id) ?>"
                     >
 
+
                     <button
                         class="botao-confirmar-exclusao"
                         type="submit"
                     >
+
                         Excluir usuário
+
                     </button>
 
                 </form>
@@ -239,7 +263,9 @@ function e($valor)
                     type="button"
                     onclick="window.location.href='tela-home-usuario.php'"
                 >
+
                     Cancelar
+
                 </button>
 
             </div>

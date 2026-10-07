@@ -131,11 +131,11 @@ while ($usuarios = $resultado->fetch_assoc()) {
 
             <span class="acoes">
 
-                <a href="tela-edição-rotas.php?id=<?php echo $usuario['id_usuario']; ?>"
+                <a href="tela-edit-usuario.php?id=<?php echo $usuario['id_usuario']; ?>"
                    class="botao-editar"
                    title="Editar">✎</a>
 
-                <a href="tela-exclusão-rotas.php?id=<?php echo $usuario['id_usuario']; ?>"
+                <a href="tela-excluir-usuario.php?id=<?php echo $usuario['id_usuario']; ?>"
                    class="botao-excluir"
                    title="Excluir">🗑</a>
 
