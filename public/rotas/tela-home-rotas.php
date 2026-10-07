@@ -58,11 +58,13 @@ if ($resultado) {
             <div class="tabela-sensores">
 
                 <div class="cabecalho-tabela colunas-trens">
+                    <span>ID</span>
                     <span>Nome</span>
                     <span>Trem</span>
                     <span>Tempo estimado</span>
                     <span>Código</span>
                     <span>Distância</span>
+                    <span>Ações</span>
                 </div>
 
                 <?php if (count($rotas) > 0): ?>
@@ -70,6 +72,10 @@ if ($resultado) {
                     <?php foreach ($rotas as $rota): ?>
 
                         <div class="linha-tabela colunas-trens">
+
+                            <span>
+                                 <?= htmlspecialchars($rota['id_rota']) ?>
+                            </span>
 
                             <span>
                                 <?= htmlspecialchars($rota['nome_rota']) ?>
@@ -92,6 +98,18 @@ if ($resultado) {
                             </span>
 
                         </div>
+
+                        <span class="acoes">
+
+                    <a href="tela-edit-usuario.php?id=<?php echo $usuario['id_rota']; ?>"
+                   class="botao-editar"
+                   title="Editar">✎</a>
+
+                    <a href="tela-excluir-usuario.php?id=<?php echo $usuario['id_rota']; ?>"
+                    class="botao-excluir"
+                    title="Excluir">🗑</a>
+
+            </span>
 
                     <?php endforeach; ?>
 

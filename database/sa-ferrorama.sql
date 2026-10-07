@@ -32,6 +32,7 @@
     );
 
     create table if not exists rotas (
+        id INT AUTO_INCREMENT PRIMARY KEY,
         nome_rota VARCHAR(100) NOT NULL,
         modelo_trem VARCHAR(100) NOT NULL,
         codigo VARCHAR(100) NOT NULL,
