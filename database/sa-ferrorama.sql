@@ -5,6 +5,7 @@
         id_usuario int primary key auto_increment,
         email varchar(100) not null unique,
         senha varchar(100) not null
+        tipo ENUM('admin', 'usuario') not null default 'usuario'
     );
 
     CREATE TABLE sensor (
@@ -31,7 +32,6 @@
         status ENUM('operacao', 'parado', 'manutencao', 'inativo') NOT NULL DEFAULT 'parado'
     );
 
-   DROP TABLE IF EXISTS rotas;
 
 CREATE TABLE rotas (
     id_rota INT AUTO_INCREMENT PRIMARY KEY,

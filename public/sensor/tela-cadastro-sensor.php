@@ -216,12 +216,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 </button>
 
-                <button
-                    class="botao-cancelar-cadastro">
-
-                    Cancelar
-
-                </button>
+               <button
+                type="button"
+                class="botao-cancelar-cadastro"
+                onclick="window.location.href='tela-home-sensor.php'">
+                Cancelar
+            </button>
 
 
 
