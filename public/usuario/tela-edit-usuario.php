@@ -33,10 +33,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $email = $_POST['email'];
     $senha = $_POST['senha'];
+    $tipo = $_POST['tipo'];
 
     $sql = "UPDATE usuario SET
             email = ?,
-            senha = ?
+            senha = ?,
+            tipo = ?
             WHERE id_usuario = ?";
 
     $stmt = $conexao->prepare($sql);
@@ -44,9 +46,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt) {
 
         $stmt->bind_param(
-            "ssi",
+            "sssi",
             $email,
             $senha,
+            $tipo,
             $id
         );
 
@@ -56,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $usuario['email'] = $email;
             $usuario['senha'] = $senha;
+            $usuario['tipo'] = $tipo;
 
         } else {
 
@@ -204,6 +208,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         value="<?php echo htmlspecialchars($usuario['email']); ?>"
                         required>
 
+
                     <div class="grupo-tipo-sensor">
 
                         <label class="tipo-sensor">
@@ -220,6 +225,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                 </div>
+
+
+                <div class="linha-campos-formulario">
+
+                    <div class="grupo-tipo-sensor">
+
+                        <label class="tipo-sensor">
+                            Tipo de usuário *
+                        </label>
+
+                        <select
+                            name="tipo"
+                            class="select-tipo-sensor"
+                            required>
+
+                            <option value="">
+                                Selecione o tipo
+                            </option>
+
+                            <option
+                                value="admin"
+                                <?php
+                                if ($usuario['tipo'] == 'admin') {
+                                    echo 'selected';
+                                }
+                                ?>>
+                                Administrador
+                            </option>
+
+                            <option
+                                value="usuario"
+                                <?php
+                                if ($usuario['tipo'] == 'usuario') {
+                                    echo 'selected';
+                                }
+                                ?>>
+                                Usuário
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
 
                 <div class="area-botoes-formulario">
 
