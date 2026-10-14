@@ -124,3 +124,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </a>
         </nav>
     </aside>
+    <main class="conteudo-edicao-trem">
+
+        <h2>Editar rotas</h2>
+
+        <p class="subtitulo-edicao-trem">
+            Preencha as informações para editar a rota cadastrada
+        </p>
+
+        <section class="painel-formulario-trem">
+
+            <?php if ($mensagem != ''): ?>
+                <p class="aviso-edicao-trem">
+                    <?= htmlspecialchars($mensagem) ?>
+                </p>
+            <?php endif; ?>
+
+            <form method="POST">
+
+                <div class="grade-formulario-trem">
+
+                    <div>
+
+                        <div class="grupo-campo-trem">
+                            <label class="rotulo-campo-trem" for="nome_rota">
+                                Nome da rota <span class="obrigatorio">*</span>
+                            </label>
