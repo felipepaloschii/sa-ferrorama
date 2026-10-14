@@ -1,5 +1,7 @@
 <?php 
 
+
+session_start();
 include '../../infra/conexao.php';
 
 $mensagem = '';
@@ -7,21 +9,35 @@ $mensagem = '';
 
 
 if ($_SERVER["REQUEST_METHOD"]  == "POST") {
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
+    $email = trim($_POST['email'] ?? '');
+    $senha = ($_POST['senha'] ?? '');
 
-    $sql = "SELECT * FROM usuario WHERE email = '$email' AND senha = '$senha'";
+    $sql = "SELECT id_usuario, email, senha, tipo FROM usuario WHERE email = ?";
+    $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    
+    $resultado = $stmt->get_result();
+    $usuario = $resultado->fetch_assoc();
 
-    $resultado = $conexao->query($sql);
+    if ($usuario && (
+        password_verify($senha, $usuario['senha']) ||
+        hash_equals($usuario['senha'], $senha)
+    )) {
+        session_regenerate_id(true);
 
-    if ($resultado->num_rows > 0) {
-        session_start();
-        $_SESSION['usuario'] = $email;
-        header("Location: ../../index.php");
-        exit;
-    } else {
-        $mensagem = "Usuário ou senha inválidos.";
-    }
+    $_SESSION['id_usuario'] = $usuario['id_usuario'];
+    $_SESSION['usuario'] = $usuario['email'];
+    $_SESSION['tipo'] = $usuario['tipo'];
+
+    header("Location: ../../index.php");
+    exit;
+} else {
+    $mensagem = "Usuário ou senha inválidos.";
+}
+
+$stmt->close();
+
 }
 
 ?>
@@ -42,7 +58,10 @@ if ($_SERVER["REQUEST_METHOD"]  == "POST") {
         <section class="caixa-login">
 
             <form id="form-login" method = "POST">
-                <h2 id="titulo">Login - Administrador</h2>
+                <h2 id="titulo">Login - PIA Enterprise</h2>
+
+                <h2> Entrar no painel</h2>
+                <p> Acesso restrito a administradores</p>
 
                 <div class="conjunto">
                     <label for="email" class="label-form">Usuario:</label>
@@ -60,13 +79,13 @@ if ($_SERVER["REQUEST_METHOD"]  == "POST") {
             </form>
 
             <div id="mensagem">
-                <?php echo $mensagem; ?>
+               <?php echo htmlspecialchars($mensagem); ?>
             </div>
 
             <div class="linha"></div>
 
             <div class="toggle" id="toggle">
-             <a href="tela-cadastro-usuario.php">Não tem conta? Cadastre-se</a>
+             <a href="tela-cadastro-usuario.php">Ainda não tem acesso? Criar conta de administrador</a>
            
             </div>
 

@@ -4,7 +4,7 @@
     CREATE TABLE usuario (
         id_usuario int primary key auto_increment,
         email varchar(100) not null unique,
-        senha varchar(100) not null
+        senha varchar(100) not null,
         tipo ENUM('administrador', 'funcionario') not null default 'funcionario'
     );
 
