@@ -50,3 +50,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     distancia = ?,
                     status = ?
                 WHERE id_rota = ?";
+
+                  $stmt = $conexao->prepare($sql);
+
+        $stmt->bind_param(
+            "ssssdsi",
+            $nome_rota,
+            $modelo_trem,
+            $tempo_estimado,
+            $codigo,
+            $distancia,
+            $status,
+            $id
+        );
+
+        if ($stmt->execute()) {
+            header('Location: tela-home-rotas.php');
+            exit;
+        } else {
+            $mensagem = 'Erro ao atualizar a rota.';
+        }
