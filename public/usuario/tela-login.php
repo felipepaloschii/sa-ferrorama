@@ -82,7 +82,7 @@ $stmt->close();
             <div class="linha"></div>
 
             <div class="toggle" id="toggle">
-             <a href="tela-cadastro-usuario.php">Ainda não tem acesso? Criar conta de administrador</a>
+             <a href="tela-cadastro-adm.php">Ainda não tem acesso? Criar conta de administrador</a>
            
             </div>
 
