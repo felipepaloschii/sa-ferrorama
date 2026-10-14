@@ -251,3 +251,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <label class="rotulo-campo-trem" for="distancia">
                                 Distância (km) <span class="obrigatorio">*</span>
                             </label>
+
+                            <input
+                                class="campo-edicao-trem"
+                                type="number"
+                                id="distancia"
+                                name="distancia"
+                                placeholder="Ex.: 50 km"
+                                step="0.1"
+                                min="0.1"
+                                value="<?= htmlspecialchars($rota['distancia'] ?? '') ?>"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="acoes-edicao-trem">
+
+                    <a
+                        href="tela-home-rotas.php"
+                        class="botao-edicao-claro"
+                    >
+                        ← Voltar para Rotas
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="botao-edicao-escuro"
+                    >
+                        Salvar
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+</html>
