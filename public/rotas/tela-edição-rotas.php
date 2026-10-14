@@ -82,3 +82,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rota['distancia'] = $distancia;
     $rota['status'] = $status;
 }
+
+?>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Editar Rotas - PIA Enterprise</title>
+
+    <link rel="stylesheet" href="../../assets/style/style.css">
+</head>
+
+<body class="estrutura-dashboard">
+
+    <header class="barra-superior">
+        <h1>PIA Enterprise</h1>
+    </header>
+
+    <aside class="menu-lateral">
+        <nav>
+            <a href="../../index.php">Dashboard</a>
+
+            <a href="../sensor/tela-home-sensor.php">
+                Sensores
+            </a>
+
+            <a href="../trem/lista_trem.php">
+                Trens
+            </a>
+
+            <a class="ativo" href="tela-home-rotas.php">
+                Rotas
+            </a>
+
+            <a href="../usuario/tela-home-usuario.php">
+                Usuários
+            </a>
+        </nav>
+    </aside>
