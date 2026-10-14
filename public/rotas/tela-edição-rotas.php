@@ -70,3 +70,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $mensagem = 'Erro ao atualizar a rota.';
         }
+
+        } else {
+        $mensagem = 'Preencha todos os campos corretamente.';
+    }
+
+    $rota['nome_rota'] = $nome_rota;
+    $rota['modelo_trem'] = $modelo_trem;
+    $rota['tempo_estimado'] = $tempo_estimado;
+    $rota['codigo'] = $codigo;
+    $rota['distancia'] = $distancia;
+    $rota['status'] = $status;
+}
