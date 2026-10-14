@@ -182,3 +182,72 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <label class="rotulo-campo-trem">
                                 Status Inicial <span class="obrigatorio">*</span>
                             </label>
+
+                            <div class="opcoes-status-trem">
+
+                                <label class="opcao-status-trem">
+                                    <input
+                                        type="radio"
+                                        name="status"
+                                        value="Ativa"
+                                        <?= (($rota['status'] ?? '') == 'Ativa') ? 'checked' : '' ?>
+                                        required
+                                    >
+                                    <span class="marcador-status"></span>
+                                    Ativa
+                                </label>
+
+                                <label class="opcao-status-trem">
+                                    <input
+                                        type="radio"
+                                        name="status"
+                                        value="Inativa"
+                                        <?= (($rota['status'] ?? '') == 'Inativa') ? 'checked' : '' ?>
+                                    >
+                                    <span class="marcador-status"></span>
+                                    Inativa
+                                </label>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div>
+
+                        <div class="grupo-campo-trem">
+                            <label class="rotulo-campo-trem" for="modelo_trem">
+                                Trem <span class="obrigatorio">*</span>
+                            </label>
+
+                            <input
+                                class="campo-edicao-trem"
+                                type="text"
+                                id="modelo_trem"
+                                name="modelo_trem"
+                                placeholder="Ex.: Trem X-1947"
+                                value="<?= htmlspecialchars($rota['modelo_trem'] ?? '') ?>"
+                                required
+                            >
+                        </div>
+
+                        <div class="grupo-campo-trem">
+                            <label class="rotulo-campo-trem" for="codigo">
+                                Código <span class="obrigatorio">*</span>
+                            </label>
+
+                            <input
+                                class="campo-edicao-trem"
+                                type="text"
+                                id="codigo"
+                                name="codigo"
+                                placeholder="Ex.: RT-016"
+                                value="<?= htmlspecialchars($rota['codigo'] ?? '') ?>"
+                                required
+                            >
+                        </div>
+
+                        <div class="grupo-campo-trem">
+                            <label class="rotulo-campo-trem" for="distancia">
+                                Distância (km) <span class="obrigatorio">*</span>
+                            </label>
