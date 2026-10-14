@@ -9,16 +9,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
-    $sql = "INSERT INTO usuario (email, senha) VALUES ('$email', '$senha')";
+    $sql = "INSERT INTO usuario (email, senha, tipo) VALUES (?, ?, 'administrador')";
 
-    if ($conexao->query($sql) === TRUE) {
+    $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("ss", $email, $senha);
+
+    if ($stmt->execute() === TRUE) {
 
         header("Location: tela-login.php");
         exit;
 
     } else {
 
-        $mensagem = "Erro ao cadastrar usuário.";
+        $mensagem = "Erro ao cadastrar administrador.";
 
     }
 }
@@ -42,11 +45,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <section class="caixa-login">
 
             <form id="form-login" method = "POST">
-                <h2 id="titulo">Cadastrar Usuário</h2>
+                <h2 id="titulo">Cadastro - PIA Enterprise</h2>
 
                 <div class="conjunto">
-                    <label for="email" class="label-form">Usuario:</label>
-                    <input type="email" class="caixa-escrita"name="email" id="email" placeholder="Usuario" required>
+                    <label for="email" class="label-form">Email:</label>
+                    <input type="email" class="caixa-escrita"name="email" id="email" placeholder="Email" required>
                 </div>
 
                 <div class="conjunto">

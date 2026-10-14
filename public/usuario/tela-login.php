@@ -60,12 +60,9 @@ $stmt->close();
             <form id="form-login" method = "POST">
                 <h2 id="titulo">Login - PIA Enterprise</h2>
 
-                <h2> Entrar no painel</h2>
-                <p> Acesso restrito a administradores</p>
-
                 <div class="conjunto">
-                    <label for="email" class="label-form">Usuario:</label>
-                    <input type="email" class="caixa-escrita" name="email" id="email" placeholder="Usuario" required>
+                    <label for="email" class="label-form">Email:</label>
+                    <input type="email" class="caixa-escrita" name="email" id="email" placeholder="Email" required>
                 </div>
 
                 <div class="conjunto">
