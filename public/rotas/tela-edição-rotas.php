@@ -23,3 +23,30 @@ if (!$rota) {
     header('Location: tela-home-rotas.php');
     exit;
 }
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $nome_rota = trim($_POST['nome_rota']);
+    $modelo_trem = trim($_POST['modelo_trem']);
+    $tempo_estimado = trim($_POST['tempo_estimado']);
+    $codigo = trim($_POST['codigo']);
+    $distancia = (float) $_POST['distancia'];
+    $status = $_POST['status'];
+
+    if (
+        $nome_rota != '' &&
+        $modelo_trem != '' &&
+        $tempo_estimado != '' &&
+        $codigo != '' &&
+        $distancia > 0 &&
+        in_array($status, ['Ativa', 'Inativa'])
+    ) {
+
+        $sql = "UPDATE rotas
+                SET nome_rota = ?,
+                    modelo_trem = ?,
+                    tempo_estimado = ?,
+                    codigo = ?,
+                    distancia = ?,
+                    status = ?
+                WHERE id_rota = ?";
