@@ -150,3 +150,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <label class="rotulo-campo-trem" for="nome_rota">
                                 Nome da rota <span class="obrigatorio">*</span>
                             </label>
+
+                             <input
+                                class="campo-edicao-trem"
+                                type="text"
+                                id="nome_rota"
+                                name="nome_rota"
+                                placeholder="Ex.: Rota Joinville → Barra Velha"
+                                value="<?= htmlspecialchars($rota['nome_rota'] ?? '') ?>"
+                                required
+                            >
+                        </div>
+
+                        <div class="grupo-campo-trem">
+                            <label class="rotulo-campo-trem" for="tempo_estimado">
+                                Tempo Estimado <span class="obrigatorio">*</span>
+                            </label>
+
+                            <input
+                                class="campo-edicao-trem"
+                                type="text"
+                                id="tempo_estimado"
+                                name="tempo_estimado"
+                                placeholder="Ex.: 00h45m"
+                                value="<?= htmlspecialchars($rota['tempo_estimado'] ?? '') ?>"
+                                required
+                            >
+                        </div>
+
+                        <div class="grupo-campo-trem">
+                            <label class="rotulo-campo-trem">
+                                Status Inicial <span class="obrigatorio">*</span>
+                            </label>
