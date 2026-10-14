@@ -38,7 +38,7 @@ while ($usuarios = $resultado->fetch_assoc()) {
     <aside class="menu-lateral">
         <nav>
             <a href="../../index.php">Dashboard</a>
-            <a href="tela-home-sensor.php">Sensores</a>
+            <a href="../sensor/tela-home-sensor.php">Sensores</a>
             <a href="../trem/cadastro_trem.php">Trens</a>
             <a href="../rotas/tela-home-rotas.php">Rotas</a>
             <a class="ativo" href="tela-home-usuario.php">Usuários</a>
