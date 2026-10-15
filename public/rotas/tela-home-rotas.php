@@ -166,14 +166,14 @@ $resultado = mysqli_query(
                                 href="tela-edição-rotas.php?id=<?= (int)$rota['id_rota'] ?>"
                                 class="botao-editar"
                             >
-                                 ✎
+                               E  
                             </a>
 
                             <a
                                 href="tela_exclusão-rotas.php?id=<?= (int)$rota['id_rota'] ?>"
                                 class="botao-excluir"
                             >
-                                🗑
+                               D 
                             </a>
 
                         </span>

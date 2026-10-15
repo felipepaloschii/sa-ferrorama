@@ -191,7 +191,7 @@ if ($resultado) {
                                     class="botao-editar"
                                     title="Editar"
                                 >
-                                    ✎
+                                  E  
                                 </a>
 
                                 <a
@@ -199,7 +199,7 @@ if ($resultado) {
                                     class="botao-excluir"
                                     title="Excluir"
                                 >
-                                    🗑
+                                   D 
                                 </a>
 
                             </span>

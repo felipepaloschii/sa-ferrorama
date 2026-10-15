@@ -27,7 +27,7 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8">a
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listagem de Trens</title>
     <link rel="stylesheet" href="../../assets/style/style.css">
@@ -58,15 +58,12 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
         <section class="painel-lista-sensores painel-lista-trens">
             <div class="tabela-sensores">
                 <div class="cabecalho-tabela colunas-trens">
-                    <span>ID</span>
-                    <span>Nome</span>
-                    <span>Modelo</span>
-                    <span>Loc. Inicial</span>
-                    <span>Capacidade</span>
-                    <span>Status</span>
-                    <span>Código</span>
-                    <span>Ações</span>
-                </div>
+    <span>ID</span>
+    <span>Nome / Código</span>
+    <span>Modelo / Ano</span>
+    <span>Loc. Inicial / Capacidade</span>
+    <span>Status / Ações</span>
+</div>
 
                 <?php if ($resultado && mysqli_num_rows($resultado) > 0): ?>
                     <?php while ($trem = mysqli_fetch_assoc($resultado)): ?>
@@ -75,27 +72,37 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
                         $classeStatus  = isset($rotulosStatus[$statusBanco]) ? $statusBanco : 'inativo';
                         $textoStatus   = $rotulosStatus[$statusBanco] ?? $statusBanco;
                         ?>
-                        <div class="linha-tabela colunas-trens">
-                            <span><?= htmlspecialchars(($trem[$col['id']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars(($trem[$col['nome']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars(($trem[$col['modelo']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars(($trem[$col['local']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars(($trem[$col['ano']] ?? '')) ?></span>
-                            <span><?= htmlspecialchars((string)(float)($trem[$col['capacidade']] ?? 0)) ?></span>
-                            <span>
-                                <span class="status status-trem <?= $classeStatus ?>">
-                                    <?= htmlspecialchars($textoStatus) ?>
-                                </span>
-                            </span>
-                            <span><?= htmlspecialchars(($trem[$col['codigo']] ?? '')) ?></span>
-                            <span class="acoes">
-                                <button type="button"
-                                    onclick="window.location.href='edicao_trem.php?id=<?= (int) $trem['id'] ?>'">
-                                    Editar
-                                </button>
-                                <button type="button" onclick="if (confirm('Tem certeza que deseja excluir este trem?')) { window.location.href='../trem/exclusao_trem.php?id=<?php echo $trem['id']; ?>'; }">Excluir</button>
-                            </span>
-                        </div>
+                       <div class="linha-tabela colunas-trens">
+    <span><?= htmlspecialchars($trem[$col['id']] ?? '') ?></span>
+
+    <span>
+        <?= htmlspecialchars($trem[$col['nome']] ?? '') ?><br>
+        <small><?= htmlspecialchars($trem[$col['codigo']] ?? '') ?></small>
+    </span>
+
+    <span>
+        <?= htmlspecialchars($trem[$col['modelo']] ?? '') ?><br>
+        <small><?= htmlspecialchars($trem[$col['ano']] ?? '') ?></small>
+    </span>
+
+    <span>
+        <?= htmlspecialchars($trem[$col['local']] ?? '') ?><br>
+        <small><?= htmlspecialchars((string)(float)($trem[$col['capacidade']] ?? 0)) ?></small>
+    </span>
+
+    <span class="acoes">
+        <span class="status status-trem <?= $classeStatus ?>">
+            <?= htmlspecialchars($textoStatus) ?>
+        </span>
+        <button type="button" class="botao-editar"
+            onclick="window.location.href='edicao_trem.php?id=<?= (int) $trem['id'] ?>'">
+        E  
+        </button>
+        <button type="button"class="botao-excluir" onclick="if (confirm('Tem certeza que deseja excluir este trem?')) 
+        { window.location.href='../trem/exclusao_trem.php?id=<?= (int) $trem['id'] ?>'; }">
+       D </button>
+    </span>
+</div>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <p class="nenhum-sensor">Nenhum trem cadastrado.</p>
