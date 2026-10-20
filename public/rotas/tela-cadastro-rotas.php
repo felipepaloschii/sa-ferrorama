@@ -1,8 +1,5 @@
+
 <?php
-
-include'../../infra/conexao.php';
-
-$mensagem = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -13,8 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $distancia = $_POST['distancia'];
     $status = $_POST['status'];
 
-    $sql = "INSERT INTO rotas 
-    (nome_rota, modelo_trem, tempo_estimado, codigo, distancia, status) 
+    $sql = "INSERT INTO rotas
+    (nome_rota, modelo_trem, tempo_estimado, codigo, distancia, status)
     VALUES (?, ?, ?, ?, ?, ?)";
 
     $stmt = $conexao->prepare($sql);
@@ -30,18 +27,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
 
     if ($stmt->execute()) {
-
-        header("Location: tela-home-rotas.php");
-        exit;
-
+        echo "Rota cadastrada com sucesso!";
     } else {
-
-        $mensagem = "Erro ao cadastrar rota.";
-
+        echo "Erro ao cadastrar rota.";
     }
-}
 
+    $stmt->close();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -78,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 
         <section class="painel-cadastro-sensor">
-            <form method="POST">
+            <form action="tela-cadastro-rotas.php" method="POST">
                 <div class="grade-formulario-trem">
                     <div class="grupo-campo-trem">
                         <label class="rotulo-campo-trem" for="nome_rota">Nome da rota<span class="obrigatorio">*</span></label>
