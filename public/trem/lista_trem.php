@@ -27,7 +27,7 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">a
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listagem de Trens</title>
     <link rel="stylesheet" href="../../assets/style/style.css">
