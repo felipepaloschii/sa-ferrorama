@@ -118,10 +118,7 @@ $rotulosStatus = [
                         <input type="hidden" name="id" value="<?= e($id) ?>">
                         <button class="botao-confirmar-exclusao" type="submit">Excluir trem</button>
                     </form>
-                    <button type="button"
-                        onclick="window.location.href='exclusao_trem.php?id=<?= (int) $trem['id'] ?>'">
-                        Excluir
-                    </button>
+                   
                 </div>
             </section>
         </main>
