@@ -139,16 +139,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                     </div>
 
-                <div class="grupo-unidade-medida">
-
-                    <label class="unidade-medida">
+                    <div class="grupo-unidade-medida">
+                    <label class="unidade-medida" for="unidade_medida">
                         Unidade de medida
                     </label>
 
-                   <input type="text" name="unidade_medida" class="select-unidade-medida">
-
-                   
-
+                    <select name="unidade_medida" id="unidade_medida" class="select-unidade-medida" required>
+                        <option value="">Selecione</option>
+                        <option value="°C">°C</option>
+                        <option value="km/h">km/h</option>
+                        <option value="mm/s">mm/s</option>
+                        <option value="GPS">GPS</option>
+                        <option value="kWh">kWh</option>
+                        <option value="m">m</option>
+                    </select>
                 </div>
 
                 <div class="grupo-limite-alerta">
@@ -210,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="area-botoes-formulario">
 
                 <button
-                    class="botao-salvar-sensor">
+                    class="botao-salvar-trem">
 
                     Salvar sensor
 
