@@ -1,6 +1,20 @@
 <?php 
-require_once '../../infra/verificar-admin.php';
+
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+if (
+    !isset($_SESSION['id_usuario']) ||
+    !isset($_SESSION['tipo'])
+) {
+    header('Location: ../usuario/tela-login.php');
+    exit;
+}
+
 require_once '../../infra/conexao.php';
+
 
 $quantidade_ativos = 0;
 $sensores = [];
@@ -105,8 +119,9 @@ if ($resultado) {
 
             </div>
 
-
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
             <a class="botao-novo-sensor botao-novo-trem" href="tela-cadastro-sensor.php">+ Novo Sensor</a>
+            <?php endif; ?>
 
         </div>
 
@@ -133,8 +148,10 @@ if ($resultado) {
                     <span>Unidade</span>
                     <span>Limite</span>
                     <span>Status</span>
-                    <span>Ações</span>
-
+                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+                        <span>Ações</span>
+                    <?php endif; ?>
+                 
                 </div>
 
 
@@ -186,7 +203,7 @@ if ($resultado) {
 
                             </span>
 
-
+                            <?php if ($_SESSION['tipo'] === 'administrador'): ?>
                             <span class="acoes">
 
                                 <a
@@ -206,6 +223,7 @@ if ($resultado) {
                                 </a>
 
                             </span>
+                            <?php endif; ?>
 
                         </div>
 

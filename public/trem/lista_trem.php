@@ -1,6 +1,19 @@
 <?php
-require_once '../../infra/verificar-admin.php';
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+if (
+    !isset($_SESSION['id_usuario']) ||
+    !isset($_SESSION['tipo'])
+) {
+    header('Location: ../usuario/tela-login.php');
+    exit;
+}
+
 require_once '../../infra/conexao.php';
+
 
 $tabela = 'trem';
 
@@ -57,7 +70,9 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
     <main class="area-principal">
         <section class="cabecalho-sensor topo-lista-trens">
             <h2 class="titulo-sensores">Listagem de trens</h2>
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
             <a class="botao-novo-sensor botao-novo-trem" href="cadastro_trem.php">+ Novo Trem</a>
+            <?php endif; ?>
         </section>
 
         <section class="painel-lista-sensores painel-lista-trens">
@@ -67,7 +82,13 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
     <span>Nome / Código</span>
     <span>Modelo / Ano</span>
     <span>Loc. Inicial / Capacidade</span>
-    <span>Status / Ações</span>
+
+    <span>Status</span>
+
+    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+    <span>Ações</span>
+    <?php endif; ?>
+        
 </div>
 
                 <?php if ($resultado && mysqli_num_rows($resultado) > 0): ?>
@@ -77,8 +98,12 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
                         $classeStatus  = isset($rotulosStatus[$statusBanco]) ? $statusBanco : 'inativo';
                         $textoStatus   = $rotulosStatus[$statusBanco] ?? $statusBanco;
                         ?>
-                       <div class="linha-tabela colunas-trens">
-    <span><?= htmlspecialchars($trem[$col['id']] ?? '') ?></span>
+                       <
+<div class="linha-tabela colunas-trens">
+
+    <span>
+        <?= htmlspecialchars($trem[$col['id']] ?? '') ?>
+    </span>
 
     <span>
         <?= htmlspecialchars($trem[$col['nome']] ?? '') ?><br>
@@ -95,20 +120,38 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
         <small><?= htmlspecialchars((string)(float)($trem[$col['capacidade']] ?? 0)) ?></small>
     </span>
 
-    <span class="acoes">
-        <span class="status status-trem <?= $classeStatus ?>">
+    <span>
+        <span class="status status-trem <?= htmlspecialchars($classeStatus) ?>">
             <?= htmlspecialchars($textoStatus) ?>
         </span>
-        <button type="button" class="botao-editar"
-            onclick="window.location.href='edicao_trem.php?id=<?= (int) $trem['id'] ?>'">
-        E  
-        </button>
-        <button type="button"class="botao-excluir" onclick="if (confirm('Tem certeza que deseja excluir este trem?')) 
-        { window.location.href='../trem/exclusao_trem.php?id=<?= (int) $trem['id'] ?>'; }">
-       D </button>
     </span>
+
+    <?php if ($_SESSION['tipo'] === 'administrador'): ?>
+        <span class="acoes">
+
+            <button
+                type="button"
+                class="botao-editar"
+                onclick="window.location.href='edicao_trem.php?id=<?= (int) $trem['id'] ?>'">
+                Editar
+            </button>
+
+            <button
+                type="button"
+                class="botao-excluir"
+                onclick="if (confirm('Tem certeza que deseja excluir este trem?')) {
+                    window.location.href='exclusao_trem.php?id=<?= (int) $trem['id'] ?>';
+                }">
+                Excluir
+            </button>
+
+        </span>
+    <?php endif; ?>
+
 </div>
-                    <?php endwhile; ?>
+
+<?php endwhile; ?>
+
                 <?php else: ?>
                     <p class="nenhum-sensor">Nenhum trem cadastrado.</p>
                 <?php endif; ?>

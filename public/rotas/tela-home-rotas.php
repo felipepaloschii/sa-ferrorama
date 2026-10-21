@@ -1,7 +1,20 @@
 <?php
 
-require_once '../../infra/verificar-admin.php';
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+if (
+    !isset($_SESSION['id_usuario']) ||
+    !isset($_SESSION['tipo'])
+) {
+    header('Location: ../usuario/tela-login.php');
+    exit;
+}
+
 require_once '../../infra/conexao.php';
+
 
 $resultado = mysqli_query(
     $conexao,
@@ -73,12 +86,16 @@ $resultado = mysqli_query(
                 Listagem de rotas
             </h2>
 
+            <?php if ($_SESSION['tipo'] === 'administrador'): ?>
+            
             <a
                 class="botao-novo-sensor botao-novo-trem"
                 href="tela-cadastro-rotas.php"
             >
                 + Nova Rota
             </a>
+
+            <?php endif; ?>
 
         </section>
 
@@ -103,9 +120,9 @@ $resultado = mysqli_query(
                     <span>Distância</span>
 
                     <span>Status</span>
-
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
                     <span>Ações</span>
-
+          <?php endif; ?>
                 </div>
 
 
@@ -164,21 +181,24 @@ $resultado = mysqli_query(
 
 </span>
                             <span class="acoes">
-
+ <?php if ($_SESSION['tipo'] === 'administrador'): ?>
                             <a
                                 href="tela-edição-rotas.php?id=<?= (int)$rota['id_rota'] ?>"
                                 class="botao-editar"
                             >
                                E  
                             </a>
+<?php endif; ?>
+ <?php if ($_SESSION['tipo'] === 'administrador'): ?>
 
                             <a
                                 href="tela_exclusão-rotas.php?id=<?= (int)$rota['id_rota'] ?>"
                                 class="botao-excluir"
                             >
                                D 
-                            </a>
-
+                              
+                               /a>
+          <?php endif; ?>
                         </span>
 
 
