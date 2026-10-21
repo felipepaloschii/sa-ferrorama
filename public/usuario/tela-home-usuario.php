@@ -42,8 +42,11 @@ while ($usuarios = $resultado->fetch_assoc()) {
             <a href="../sensor/tela-home-sensor.php">Sensores</a>
             <a href="../trem/cadastro_trem.php">Trens</a>
             <a href="../rotas/tela-home-rotas.php">Rotas</a>
-            <a class="ativo" href="tela-home-usuario.php">Usuários</a>
-        </nav>
+ <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+
+            <a class="ativo" href="public/usuario/tela-home-usuario.php">Usuários</a>
+
+            <?php endif; ?>        </nav>
     </aside>
 
     <main class="area-principal">

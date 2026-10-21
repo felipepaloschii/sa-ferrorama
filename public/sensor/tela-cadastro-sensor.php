@@ -70,8 +70,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a class="ativo" href="tela-home-sensor.php">Sensores</a>
             <a href="../../public/trem/cadastro_trem.php">Trens</a>
             <a href="../../public/rotas/tela-home-rotas.php">Rotas</a>
-            <a href="../../public/usuario/tela-home-usuario.php">Usuários</a>
-        </nav>
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+
+            <a href="public/usuario/tela-home-usuario.php">Usuários</a>
+
+            <?php endif; ?>        </nav>
     </aside>
 
     <main class="area-principal">

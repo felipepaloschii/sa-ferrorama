@@ -114,9 +114,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 Trens
             </a>
 
-            <a href="#">
-                Rotas
-            </a>
+             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+
+            <a href="public/usuario/tela-home-usuario.php">Usuários</a>
+
+            <?php endif; ?>
 
         </nav>
 

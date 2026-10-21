@@ -135,9 +135,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 Rotas
             </a>
 
-            <a class="ativo" href="tela-home-usuario.php">
-                Usuários
-            </a>
+           <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+
+            <a href="public/usuario/tela-home-usuario.php">Usuários</a>
+
+            <?php endif; ?>
 
         </nav>
 
