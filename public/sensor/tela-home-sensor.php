@@ -1,5 +1,6 @@
 <?php 
-include '../../infra/conexao.php';
+require_once '../../infra/verificar-admin.php';
+require_once '../../infra/conexao.php';
 
 $quantidade_ativos = 0;
 $sensores = [];

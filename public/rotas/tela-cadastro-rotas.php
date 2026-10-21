@@ -1,6 +1,9 @@
 
 <?php
 
+require_once '../../infra/verificar-admin.php';
+require_once '../../infra/conexao.php';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $nome_rota = $_POST['nome_rota'];
