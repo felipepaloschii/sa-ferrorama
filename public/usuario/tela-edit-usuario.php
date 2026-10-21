@@ -28,38 +28,65 @@ if ($resultado->num_rows == 0) {
 
 $usuario = $resultado->fetch_assoc();
 
-$stmt->close();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $email = $_POST['email'];
+    $email = trim($_POST['email'] ?? '');
     $senha = $_POST['senha'] ?? '';
+    $tipo = $_POST['tipo'] ?? '';
 
-    if ($senha !== '') {
-        $senha = password_hash($senha, PASSWORD_DEFAULT);
-    }
-    $tipo = $_POST['tipo'];
+    if (empty($email) || empty($tipo)) {
 
-    $sql = "UPDATE usuario SET email = ?, senha = ?, tipo = ? WHERE id_usuario = ?";
+        $erro = 'Preencha o e-mail e o tipo de usuário.';
 
-    $stmt = $conexao->prepare($sql);
+    } elseif ($senha !== '' && strlen($senha) < 8) {
 
-    if ($stmt) {
+        $erro = 'A nova senha deve ter no mínimo 8 caracteres.';
 
-        $stmt->bind_param(
-            "sssi",
-            $email,
-            $senhaHash,
-            $tipo,
-            $id
-        );
+    } else {
 
-        if ($stmt->execute()) {
+        if ($senha !== '') {
+
+            $senhaHash = password_hash(
+                $senha,
+                PASSWORD_DEFAULT
+            );
+
+            $sql = "UPDATE usuario
+                    SET email = ?, senha = ?, tipo = ?
+                    WHERE id_usuario = ?";
+
+            $stmt = $conexao->prepare($sql);
+
+            $stmt->bind_param(
+                "sssi",
+                $email,
+                $senhaHash,
+                $tipo,
+                $id
+            );
+
+        } else {
+
+            $sql = "UPDATE usuario
+                    SET email = ?, tipo = ?
+                    WHERE id_usuario = ?";
+
+            $stmt = $conexao->prepare($sql);
+
+            $stmt->bind_param(
+                "ssi",
+                $email,
+                $tipo,
+                $id
+            );
+        }
+
+        if ($stmt && $stmt->execute()) {
 
             $mensagem = 'Usuário atualizado com sucesso!';
 
             $usuario['email'] = $email;
-            $usuario['senha'] = $senha;
             $usuario['tipo'] = $tipo;
 
         } else {
@@ -68,14 +95,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         }
 
-        $stmt->close();
-
-    } else {
-
-        $erro = 'Erro ao preparar a atualização do usuário.';
-
+        if ($stmt) {
+            $stmt->close();
+        }
     }
 }
+
 
 ?>
 

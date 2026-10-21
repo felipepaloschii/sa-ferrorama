@@ -107,8 +107,9 @@ while ($linha = $resultado->fetch_assoc()) {
 
             <div class="cabecalho-tabela">
 
-                        <span>ID</span>
+             <span>ID</span>
                         <span>E-mail</span>
+                        <span>Senha</span>
                         <span>Tipo</span>
                         <span>Ações</span>
             </div>
@@ -126,7 +127,9 @@ while ($linha = $resultado->fetch_assoc()) {
                 <?php echo htmlspecialchars($usuario['email']); ?>
             </span>
 
-          
+            <span>
+                <?php echo htmlspecialchars($usuario['senha']); ?>
+            </span>
 
             <span>
                <?php echo htmlspecialchars($usuario['tipo']); ?>
