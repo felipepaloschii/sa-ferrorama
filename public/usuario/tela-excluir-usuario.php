@@ -1,6 +1,7 @@
 <?php
 
-include '../../infra/conexao.php';
+require_once '../../infra/verificar-admin.php';
+require_once '../../infra/conexao.php';
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
