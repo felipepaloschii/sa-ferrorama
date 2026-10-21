@@ -46,6 +46,60 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
     <title>Listagem de Trens</title>
     <link rel="stylesheet" href="../../assets/style/style.css">
     <link rel="stylesheet" href="../../assets/style/lista_trem.css">
+
+    <style>
+        .colunas-trens {
+    display: grid;
+    grid-template-columns:
+        60px
+        minmax(130px, 1.3fr)
+        minmax(130px, 1.2fr)
+        minmax(150px, 1.4fr)
+        minmax(110px, 0.9fr)
+        minmax(140px, 1fr);
+    align-items: center;
+    gap: 12px;
+}
+
+.cabecalho-tabela.colunas-trens {
+    text-align: center;
+}
+
+.linha-tabela.colunas-trens {
+    min-height: 82px;
+    text-align: center;
+}
+
+.linha-tabela.colunas-trens > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.linha-tabela.colunas-trens .acoes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.linha-tabela.colunas-trens .botao-editar,
+.linha-tabela.colunas-trens .botao-excluir {
+    margin: 0;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .colunas-trens {
+        min-width: 850px;
+    }
+
+    .painel-lista-trens {
+        overflow-x: auto;
+    }
+}
+    </style>
 </head>
 
 <body>
@@ -126,14 +180,14 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
         </span>
     </span>
 
-    <?php if ($_SESSION['tipo'] === 'administrador'): ?>
+    <?php if ($administrador): ?>
         <span class="acoes">
 
             <button
                 type="button"
                 class="botao-editar"
                 onclick="window.location.href='edicao_trem.php?id=<?= (int) $trem['id'] ?>'">
-                Editar
+                E
             </button>
 
             <button
@@ -142,7 +196,7 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
                 onclick="if (confirm('Tem certeza que deseja excluir este trem?')) {
                     window.location.href='exclusao_trem.php?id=<?= (int) $trem['id'] ?>';
                 }">
-                Excluir
+                D
             </button>
 
         </span>

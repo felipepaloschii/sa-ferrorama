@@ -15,10 +15,10 @@ if (
 
 require_once '../../infra/conexao.php';
 
-
-$resultado = mysqli_query(
+    $resultado = mysqli_query(
     $conexao,
     "SELECT * FROM rotas ORDER BY id_rota"
+
 );
 
 ?>
@@ -180,26 +180,24 @@ $resultado = mysqli_query(
     <?php endif; ?>
 
 </span>
-                            <span class="acoes">
- <?php if ($_SESSION['tipo'] === 'administrador'): ?>
-                            <a
-                                href="tela-edição-rotas.php?id=<?= (int)$rota['id_rota'] ?>"
-                                class="botao-editar"
-                            >
-                               E  
-                            </a>
-<?php endif; ?>
- <?php if ($_SESSION['tipo'] === 'administrador'): ?>
+                     
+<?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+    <span class="acoes">
+        <a
+            href="tela-edição-rotas.php?id=<?= (int) $rota['id_rota'] ?>"
+            class="botao-editar"
+            aria-label="Editar rota"
+        >E</a>
 
-                            <a
-                                href="tela_exclusão-rotas.php?id=<?= (int)$rota['id_rota'] ?>"
-                                class="botao-excluir"
-                            >
-                               D 
-                              
-                               /a>
-          <?php endif; ?>
-                        </span>
+        <a
+            href="tela_exclusão-rotas.php?id=<?= (int) $rota['id_rota'] ?>"
+            class="botao-excluir"
+            aria-label="Excluir rota"
+            onclick="return confirm('Tem certeza que deseja excluir esta rota?');"
+        >D</a>
+    </span>
+<?php endif; ?>
+
 
 
                             </span>
