@@ -70,7 +70,7 @@ if ($resultado) {
 
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
 
-            <a href="public/usuario/tela-home-usuario.php">Usuários</a>
+            <a href="../usuario/tela-home-usuario.php">Usuários</a>
 
             <?php endif; ?>
     </nav>
