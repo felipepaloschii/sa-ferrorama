@@ -33,14 +33,14 @@ $stmt->close();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $email = $_POST['email'];
-    $senha = $_POST['senha'];
+    $senha = $_POST['senha'] ?? '';
+
+    if ($senha !== '') {
+        $senha = password_hash($senha, PASSWORD_DEFAULT);
+    }
     $tipo = $_POST['tipo'];
 
-    $sql = "UPDATE usuario SET
-            email = ?,
-            senha = ?,
-            tipo = ?
-            WHERE id_usuario = ?";
+    $sql = "UPDATE usuario SET email = ?, senha = ?, tipo = ? WHERE id_usuario = ?";
 
     $stmt = $conexao->prepare($sql);
 
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param(
             "sssi",
             $email,
-            $senha,
+            $senhaHash,
             $tipo,
             $id
         );
@@ -215,11 +215,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="grupo-tipo-sensor">
 
                         <label class="tipo-sensor">
-                            Senha *
+                           Nova senha  
                         </label>
 
                         <input
-                            type="text"
+                            type="password"
                             name="senha"
                             class="select-tipo-sensor"
                             value="<?php echo htmlspecialchars($usuario['senha']); ?>"

@@ -1,46 +1,89 @@
-<?php 
 
+<?php
 
 session_start();
-include '../../infra/conexao.php';
+
+require_once '../../infra/conexao.php';
 
 $mensagem = '';
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-
-if ($_SERVER["REQUEST_METHOD"]  == "POST") {
     $email = trim($_POST['email'] ?? '');
-    $senha = ($_POST['senha'] ?? '');
+    $senha = $_POST['senha'] ?? '';
 
     $sql = "SELECT id_usuario, email, senha, tipo FROM usuario WHERE email = ?";
+
     $stmt = $conexao->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
-    
+
     $resultado = $stmt->get_result();
     $usuario = $resultado->fetch_assoc();
 
-    if ($usuario && (
-        password_verify($senha, $usuario['senha']) ||
-        hash_equals($usuario['senha'], $senha)
-    )) {
+    $senhaValida = false;
+
+    if ($usuario) {
+
+        if (password_verify($senha, $usuario['senha'])) {
+
+            $senhaValida = true;
+
+        } else {
+
+            $infoHash = password_get_info($usuario['senha']);
+
+            if (
+                $infoHash['algoName'] === 'unknown' &&
+                hash_equals($usuario['senha'], $senha)
+            ) {
+
+                $senhaHash = password_hash(
+                    $senha,
+                    PASSWORD_DEFAULT
+                );
+
+                $sqlAtualizar = "UPDATE usuario SET senha = ? WHERE id_usuario = ?";
+
+                $stmtAtualizar = $conexao->prepare($sqlAtualizar);
+
+                $stmtAtualizar->bind_param(
+                    "si",
+                    $senhaHash,
+                    $usuario['id_usuario']
+                );
+
+                if ($stmtAtualizar->execute()) {
+                    $senhaValida = true;
+                }
+
+                $stmtAtualizar->close();
+            }
+        }
+    }
+
+    if ($usuario && $senhaValida) {
+
         session_regenerate_id(true);
 
-    $_SESSION['id_usuario'] = $usuario['id_usuario'];
-    $_SESSION['usuario'] = $usuario['email'];
-    $_SESSION['tipo'] = $usuario['tipo'];
+        $_SESSION['id_usuario'] = $usuario['id_usuario'];
+        $_SESSION['usuario'] = $usuario['email'];
+        $_SESSION['tipo'] = $usuario['tipo'];
 
-    header("Location: ../../index.php");
-    exit;
-} else {
-    $mensagem = "Usuário ou senha inválidos.";
-}
+        header("Location: ../../index.php");
+        exit;
 
-$stmt->close();
+    } else {
 
+        $mensagem = "E-mail ou senha inválidos.";
+
+    }
+
+    $stmt->close();
 }
 
 ?>
+
 
 
 <html lang="pt-BR">

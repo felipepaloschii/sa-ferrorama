@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $email = $_POST['email'];
     $senha = $_POST['senha'];
+    $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
     $tipo = $_POST['tipo'];
 
     if (empty($email) || empty($senha) || empty($tipo)) {

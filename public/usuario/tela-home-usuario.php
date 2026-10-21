@@ -10,10 +10,12 @@ $sql = "SELECT id_usuario, email, senha, tipo FROM usuario ORDER BY id_usuario D
 
 $resultado = $conexao->query($sql);
 
+$usuarios = [];
+
 if ($resultado) {
 
-while ($usuarios = $resultado->fetch_assoc()) {
-    $usuario[] = $usuarios;
+while ($linha = $resultado->fetch_assoc()) {
+    $usuario[] = $linha;
     $quantidade_usuario++;
 }
 
@@ -42,7 +44,7 @@ while ($usuarios = $resultado->fetch_assoc()) {
             <a href="../sensor/tela-home-sensor.php">Sensores</a>
             <a href="../trem/lista_trem.php">Trens</a>
             <a href="../rotas/tela-home-rotas.php">Rotas</a>
- <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
 
             <a class="ativo" href="tela-home-usuario.php">Usuários</a>
 
@@ -105,9 +107,8 @@ while ($usuarios = $resultado->fetch_assoc()) {
 
             <div class="cabecalho-tabela">
 
-             <span>ID</span>
+                        <span>ID</span>
                         <span>E-mail</span>
-                        <span>Senha</span>
                         <span>Tipo</span>
                         <span>Ações</span>
             </div>
@@ -125,9 +126,7 @@ while ($usuarios = $resultado->fetch_assoc()) {
                 <?php echo htmlspecialchars($usuario['email']); ?>
             </span>
 
-            <span>
-                <?php echo htmlspecialchars($usuario['senha']); ?>
-            </span>
+          
 
             <span>
                <?php echo htmlspecialchars($usuario['tipo']); ?>
