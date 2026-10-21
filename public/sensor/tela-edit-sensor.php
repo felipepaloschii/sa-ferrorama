@@ -334,6 +334,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     type="radio"
                                     name="status_inicial"
                                     value="Ativo"
+                                    required
                                     <?php echo $sensor['status_inicial'] == 'Ativo' ? 'checked' : ''; ?>>
 
                                 Ativo
