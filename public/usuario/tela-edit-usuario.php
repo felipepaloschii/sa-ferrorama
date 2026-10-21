@@ -248,9 +248,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </option>
 
                             <option
-                                value="admin"
+                                value="administrador"
                                 <?php
-                                if ($usuario['tipo'] == 'admin') {
+                                if ($usuario['tipo'] == 'administrador') {
                                     echo 'selected';
                                 }
                                 ?>>
@@ -258,13 +258,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </option>
 
                             <option
-                                value="usuario"
+                                value="funcionario"
                                 <?php
-                                if ($usuario['tipo'] == 'usuario') {
+                                if ($usuario['tipo'] == 'funcionario') {
                                     echo 'selected';
                                 }
                                 ?>>
-                                Usuário
+                                Funcionário
                             </option>
 
                         </select>

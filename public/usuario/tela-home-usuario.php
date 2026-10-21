@@ -4,7 +4,7 @@ require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
 
 $quantidade_usuario = 0;
-$usuarios = [];
+$usuario = [];
 
 $sql = "SELECT id_usuario, email, senha, tipo FROM usuario ORDER BY id_usuario DESC";
 

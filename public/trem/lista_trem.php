@@ -180,7 +180,7 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
         </span>
     </span>
 
-    <?php if ($administrador): ?>
+    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
         <span class="acoes">
 
             <button
