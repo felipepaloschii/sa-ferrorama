@@ -6,24 +6,44 @@ $mensagem = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $email = $_POST['email'];
+    $email = trim($_POST['email']);
     $senha = $_POST['senha'];
 
-    $sql = "INSERT INTO usuario (email, senha, tipo) VALUES (?, ?, 'administrador')";
-
+    $sql = "SELECT id_usuario FROM usuario WHERE email = ?";
     $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("ss", $email, $senha);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
 
-    if ($stmt->execute() === TRUE) {
+    $resultado = $stmt->get_result();
 
-        header("Location: tela-login.php");
-        exit;
+    if ($resultado->num_rows > 0) {
+
+        $mensagem = "Este e-mail já está cadastrado!";
 
     } else {
 
-        $mensagem = "Erro ao cadastrar administrador.";
+        $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
+        $sql = "INSERT INTO usuario (email, senha, tipo)
+                VALUES (?, ?, 'administrador')";
+
+        $stmt2 = $conexao->prepare($sql);
+        $stmt2->bind_param("ss", $email, $senhaHash);
+
+        if ($stmt2->execute()) {
+
+            header("Location: tela-login.php");
+            exit;
+
+        } else {
+
+            $mensagem = "Erro ao cadastrar administrador.";
+        }
+
+        $stmt2->close();
     }
+
+    $stmt->close();
 }
 
 ?>
@@ -63,9 +83,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
 
             <div id="mensagem">
-                <?php echo $mensagem; ?>
-            </div>
-
+    <?php if (!empty($mensagem)) { ?>
+        <p "><?php echo htmlspecialchars($mensagem); ?></p>
+    <?php } ?>
+</div>
             <div class="linha"></div>
 
             <a href="tela-login.php">Já tem uma conta? Faça login</a>
