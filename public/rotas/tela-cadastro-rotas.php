@@ -123,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                 <div class="botoes-cadastro-trem">
-                    <button type="submit" class="botao-salvar-trem">Salvar rota</button>
+                    <a href="tela-home-rotas.php" type="submit" class="botao-salvar-trem">Salvar rota</a> 
                     <a href="tela-home-rotas.php" class="botao-voltar-trem">← Voltar para rotas</a>
 
             

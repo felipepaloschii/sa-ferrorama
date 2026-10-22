@@ -218,10 +218,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="area-botoes-formulario">
 
                 <button
-                    class="botao-salvar-trem">
-
-                    Salvar sensor
-
+                type= "button"
+                class="botao-salvar-trem"
+                onclick="window.location.href='tela-home-sensor.php'">
+                Salvar sensor
                 </button>
 
                <button
