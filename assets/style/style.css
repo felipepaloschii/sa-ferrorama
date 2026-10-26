@@ -1,5 +1,3 @@
-
-
 * {
     box-sizing: border-box;
 }
@@ -9,8 +7,9 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-
-
+/* ==========================================================================
+   TELA DE LOGIN
+   ========================================================================== */
 #login-corpo {
     min-height: 100vh;
     background-image: url("../img/fundo_certo.png");
@@ -120,8 +119,9 @@ body {
     font-weight: 800;
 }
 
-
-
+/* ==========================================================================
+   ESTRUTURA BASE & BARRA SUPERIOR
+   ========================================================================== */
 #home-corpo {
     min-height: 100vh;
     background-image: url("../img/fundo_certo.png");
@@ -239,6 +239,47 @@ body {
     border-radius: 18px 18px 4px 4px;
 }
 
+.menu-usuario {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.menu-usuario .icone-usuario {
+    cursor: pointer;
+}
+
+.aba-usuario {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    display: none;
+    width: 180px;
+    padding: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+}
+
+.menu-usuario:hover .aba-usuario {
+    display: block;
+}
+
+.aba-usuario a {
+    display: block;
+    color: #111111;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.aba-usuario a:hover {
+    color: #555555;
+}
+
+/* ==========================================================================
+   MENU LATERAL & ÁREAS PRINCIPAIS
+   ========================================================================== */
 .menu-lateral {
     position: fixed;
     top: 88px;
@@ -276,6 +317,15 @@ body {
     padding: 18px 16px 32px 239px;
 }
 
+.area-principal {
+    margin-left: 200px;
+    padding: 18px 28px 30px 38px;
+    min-height: 100vh;
+    background-image: url("../img/fundo_certo.png");
+    background-size: cover;
+    background-position: center;
+}
+
 .painel-principal h2,
 .conteudo h2 {
     margin: 0 0 18px;
@@ -284,6 +334,9 @@ body {
     font-weight: 900;
 }
 
+/* ==========================================================================
+   MÉTRICAS / CARDS DASHBOARD
+   ========================================================================== */
 .metricas {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -324,18 +377,11 @@ body {
     font-size: 13px;
 }
 
-.verde {
-    color: #00ca36;
-}
+.verde { color: #00ca36; }
+.ciano { color: #55d3dd; }
+.vermelho { color: #e50000; }
 
-.ciano {
-    color: #55d3dd;
-}
-
-.vermelho {
-    color: #e50000;
-}
-
+/* Ícones dos Cards */
 .icone-check {
     position: relative;
     width: 43px;
@@ -429,6 +475,9 @@ body {
         linear-gradient(135deg, transparent 0 38%, #55ee72 39% 42%, transparent 43%);
 }
 
+/* ==========================================================================
+   GRADE DO DASHBOARD & EVENTOS
+   ========================================================================== */
 .grade-dashboard {
     display: grid;
     grid-template-columns: minmax(560px, 1fr) 250px;
@@ -501,13 +550,8 @@ body {
     background-color: currentColor;
 }
 
-.icone-evento.alerta {
-    color: #ff1010;
-}
-
-.icone-evento.atencao {
-    color: #ffd11a;
-}
+.icone-evento.alerta { color: #ff1010; }
+.icone-evento.atencao { color: #ffd11a; }
 
 .icone-evento.alerta::before,
 .icone-evento.atencao::before {
@@ -548,136 +592,59 @@ body {
     height: 100%;
 }
 
-
-@media (max-width: 1100px) {
-    .metricas {
-        grid-template-columns: repeat(2, minmax(190px, 1fr));
-        gap: 18px;
-    }
-
-    .grade-dashboard {
-        grid-template-columns: 1fr;
-        grid-template-rows: 202px 150px auto;
-    }
-
-    .cartao-eventos {
-        grid-column: 1;
-        grid-row: 3;
-    }
+/* ==========================================================================
+   INPUTS & ELEMENTOS FORMULÁRIO GERAIS
+   ========================================================================== */
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    background: #2f2f2f;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 8px;
 }
 
-@media (max-width: 760px) {
-    .barra-superior {
-        height: auto;
-        min-height: 78px;
-        padding: 16px;
-    }
-
-    .barra-superior h1 {
-        font-size: 27px;
-    }
-
-    .menu-lateral {
-        position: static;
-        width: 100%;
-        padding: 12px 0;
-        border-right: 0;
-        border-bottom: 2px solid #7f42ff;
-    }
-
-    .menu-lateral nav {
-        flex-direction: row;
-        overflow-x: auto;
-        gap: 16px;
-        padding: 0 14px;
-    }
-
-    .menu-lateral a {
-        flex: 0 0 auto;
-        font-size: 17px;
-    }
-
-    .menu-lateral a.ativo {
-        width: auto;
-        padding: 7px 12px;
-    }
-
-    .conteudo {
-        padding: 18px;
-    }
-
-    .metricas {
-        grid-template-columns: 1fr;
-    }
-
-    .cartao-eventos li {
-        grid-template-columns: 27px minmax(0, 1fr) auto;
-    }
-
-    .cartao-eventos strong {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border: 1px solid #4b6fff;
 }
 
-@media (max-width: 650px) {
-    .caixa-login {
-        padding: 26px 20px;
-    }
-
-    #titulo {
-        font-size: 26px;
-    }
-
-    .label-form,
-    .caixa-escrita {
-        font-size: 18px;
-    }
-
-    .conjunto {
-        margin-bottom: 28px;
-    }
+/* ==========================================================================
+   CADASTRO DE SENSORES
+   ========================================================================== */
+.cabecalho-cadastro-sensor {
+    margin-bottom: 25px;
 }
 
-
-.area-principal{
-    margin-left:200px;
-    padding:30px;
-    min-height:100vh;
-    background-image:url("../img/fundo_certo.png");
-    background-size:cover;
-    background-position:center;
+.titulo-pagina {
+    color: white;
+    font-size: 48px;
+    margin-bottom: 10px;
 }
 
-.cabecalho-cadastro-sensor{
-    margin-bottom:25px;
+.descricao-pagina {
+    color: #d1d5db;
+    margin-bottom: 20px;
 }
 
-.titulo-pagina{
-    color:white;
-    font-size:48px;
-    margin-bottom:10px;
+.botao-voltar-sensores {
+    background: #111;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
-.descricao-pagina{
-    color:#d1d5db;
-    margin-bottom:20px;
-}
-
-.botao-voltar-sensores{
-    background:#111;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-.painel-cadastro-sensor{
-    background:rgba(10,10,10,.95);
-    border-radius:15px;
-    padding:30px;
-    color:white;
+.painel-cadastro-sensor {
+    background: rgba(10, 10, 10, .95);
+    border-radius: 15px;
+    padding: 30px;
+    color: white;
 }
 
 .nome-sensor,
@@ -687,116 +654,102 @@ body {
 .unidade-medida,
 .limite-alerta,
 .status-sensor,
-.descricao-sensor{
-    display:block;
-    color:white;
-    font-weight:bold;
-    margin-bottom:8px;
+.descricao-sensor {
+    display: block;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 8px;
 }
 
-input,
-select,
-textarea{
-    width:100%;
-    padding:12px;
-    background:#2f2f2f;
-    color:white;
-    border:1px solid #444;
-    border-radius:8px;
-}
-
-input:focus,
-select:focus,
-textarea:focus{
-    outline:none;
-    border:1px solid #4b6fff;
-}
-
-.grupo-nome-sensor{
-    margin-bottom:20px;
+.grupo-nome-sensor {
+    margin-bottom: 20px;
 }
 
 .grupo-tipo-sensor,
-.grupo-id-sensor{
-    width:49%;
-    display:inline-block;
-    vertical-align:top;
-    margin-bottom:20px;
+.grupo-id-sensor {
+    width: 49%;
+    display: inline-block;
+    vertical-align: top;
+    margin-bottom: 20px;
 }
 
-.grupo-id-sensor{
-    margin-left:1%;
+.grupo-id-sensor {
+    margin-left: 1%;
 }
 
 .grupo-localizacao-sensor,
 .grupo-unidade-medida,
-.grupo-limite-alerta{
-    width:32%;
-    display:inline-block;
-    vertical-align:top;
-    margin-bottom:20px;
+.grupo-limite-alerta {
+    width: 32%;
+    display: inline-block;
+    vertical-align: top;
+    margin-bottom: 20px;
 }
 
 .grupo-unidade-medida,
-.grupo-limite-alerta{
-    margin-left:1%;
+.grupo-limite-alerta {
+    margin-left: 1%;
 }
 
-.linha-status-e-descricao{
-    display:flex;
-    gap:40px;
-    margin-top:20px;
+.linha-status-e-descricao {
+    display: flex;
+    gap: 40px;
+    margin-top: 20px;
 }
 
-.grupo-status-sensor{
-    width:220px;
+.grupo-status-sensor {
+    width: 220px;
 }
 
-.opcoes-status-sensor{
-    margin-top:15px;
+.opcoes-status-sensor {
+    margin-top: 15px;
 }
 
 .opcao-status-ativo,
-.opcao-status-inativo{
-    display:block;
-    margin-bottom:15px;
+.opcao-status-inativo {
+    display: block;
+    margin-bottom: 15px;
 }
 
-.grupo-descricao-sensor{
-    flex:1;
+.grupo-descricao-sensor {
+    flex: 1;
 }
 
-.textarea-descricao-sensor{
-    height:180px;
-    resize:none;
+.textarea-descricao-sensor {
+    height: 180px;
+    resize: none;
 }
 
-.area-botoes-formulario{
-    margin-top:25px;
+.area-botoes-formulario {
+    margin-top: 25px;
 }
 
-.botao-salvar-sensor{
-    background:linear-gradient(90deg,#4b6fff,#ff4db8);
-    color:white;
-    border:none;
-    padding:12px 25px;
-    border-radius:10px;
-    font-weight:bold;
-    cursor:pointer;
-    margin-right:10px;
+.botao-salvar-sensor {
+    background: linear-gradient(90deg, #4b6fff, #ff4db8);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
 }
 
-.botao-cancelar-cadastro{
-    background:#444;
-    color:white;
-    border:none;
-    padding:12px 25px;
-    border-radius:10px;
-    cursor:pointer;
+.botao-cancelar-cadastro {
+    background: #444;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
+/* ==========================================================================
+   HOME SENSORES & CARDS DE AÇÕES
+   ========================================================================== */
 .cabecalho-sensor {
-    padding: 32px 0 0 42px;
+    padding: 0;
+    margin-bottom: 12px;
 }
 
 .titulo-sensores {
@@ -816,39 +769,21 @@ textarea:focus{
 .cartao-sensores-ativos {
     width: 195px;
     height: 130px;
-
     display: flex;
     align-items: center;
-
     gap: 22px;
-
-    margin: 16px 0 0 42px;
-    padding: 20px 24px;
-
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
     background-color: rgba(20, 20, 20, 0.96);
-
     border-radius: 12px;
-
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.65);
-}
-
-.painel-acoes-sensores {
-    margin: 45px 40px 65px 52px;
-    padding: 17px 20px 15px;
-
-    background-color: rgba(20, 20, 20, 0.95);
-
-    border-radius: 13px;
-
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65);
 }
 
 .icone-sensor {
     position: relative;
-
     width: 55px;
     height: 55px;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -856,61 +791,38 @@ textarea:focus{
 
 .icone-sensor span {
     position: absolute;
-
     border: 3px solid #000000;
-
     border-radius: 50%;
 }
 
-.icone-sensor span:nth-child(1) {
-    width: 17px;
-    height: 17px;
-}
-
-.icone-sensor span:nth-child(2) {
-    width: 34px;
-    height: 34px;
-}
-
-.icone-sensor span:nth-child(3) {
-    width: 52px;
-    height: 52px;
-}
-
+.icone-sensor span:nth-child(1) { width: 17px; height: 17px; }
+.icone-sensor span:nth-child(2) { width: 34px; height: 34px; }
+.icone-sensor span:nth-child(3) { width: 52px; height: 52px; }
 
 .informacoes-sensor h2 {
     margin: 0 0 18px;
-
     color: #ffffff;
-
     font-size: 13px;
     font-weight: 900;
 }
 
 .informacoes-sensor strong {
     color: #ffffff;
-
     font-size: 32px;
     font-weight: 900;
 }
 
 .painel-acoes-sensores {
     margin: 45px 40px 65px 52px;
-
     padding: 17px 20px 15px;
-
     background-color: rgba(20, 20, 20, 0.95);
-
     border-radius: 13px;
-
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65);
 }
 
 .painel-acoes-sensores > h2 {
     margin: 0 0 12px;
-
     color: #ffffff;
-
     font-size: 17px;
     font-weight: 900;
 }
@@ -949,21 +861,10 @@ textarea:focus{
     font-weight: 900;
 }
 
-.icone-acao-sensor.cadastrar {
-    font-size: 42px;
-}
-
-.icone-acao-sensor.editar {
-    font-size: 39px;
-}
-
-.icone-acao-sensor.listar {
-    font-size: 42px;
-}
-
-.icone-acao-sensor.excluir {
-    font-size: 48px;
-}
+.icone-acao-sensor.cadastrar { font-size: 42px; }
+.icone-acao-sensor.editar { font-size: 39px; }
+.icone-acao-sensor.listar { font-size: 42px; }
+.icone-acao-sensor.excluir { font-size: 48px; }
 
 .cartao-acao-sensor h3 {
     margin: 0 0 6px;
@@ -980,211 +881,9 @@ textarea:focus{
     font-weight: 600;
 }
 
-@media (max-width: 1000px) {
-    .lista-acoes-sensores {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 700px) {
-    .cartao-sensores-ativos {
-        margin-left: 20px;
-    }
-
-    .cabecalho-sensor {
-        padding-left: 20px;
-    }
-
-    .painel-acoes-sensores {
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-
-    .lista-acoes-sensores {
-        grid-template-columns: 1fr;
-    }
-
-    .menu-usuario {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-
-.conteudo-lista-sensores {
-    display: grid;
-    grid-template-columns: 195px 1fr;
-    gap: 28px;
-    margin: 0 40px;
-    align-items: start;
-}
-}
-
-.topo-lista-sensores {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    margin: 0;
-}
-
-.botao-novo-sensor {
-    width: 195px;
-    padding: 15px 25px;
-    background: #4b6fff;
-    text-align: center;
-}
-
-.painel-lista-sensores {
-    width: 100%;
-    height: 390px;
-    padding: 10px;
-}
-
-.titulo-painel-lista h2 {
-    margin: 0 0 20px;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 900;
-}
-
-.tabela-sensores {
-    width: 100%;
-    overflow-x: auto;
-}
-
-.cabecalho-tabela,
-.linha-tabela {
-    display: grid;
-    grid-template-columns:
-        40px
-        1.4fr
-        1fr
-        1.4fr
-        .8fr
-        .8fr
-        .8fr
-        90px;
-    align-items: center;
-    min-width: 850px;
-}
-
-.cabecalho-tabela {
-    min-height: 48px;
-    padding: 0 15px;
-    background: #252525;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 900;
-}
-
-.linha-tabela {
-    min-height: 50px;
-    padding: 0 15px;
-    color: #ddd;
-    border-bottom: 1px solid #333;
-    font-size: 11px;
-    font-weight: 600;
-}
-
-.linha-tabela:hover {
-    background: rgba(255, 255, 255, 0.04);
-}
-
-.status {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 6px;
-    font-size: 10px;
-    font-weight: bold;
-}
-
-.status.ativo {
-    background: #123d1d;
-    color: #35ff68;
-}
-
-.status.inativo {
-    background: #3b3b3b;
-    color: #bbb;
-}
-
-.acoes {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.botao-editar,
-.botao-excluir {
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 15px;
-}
-
-.botao-editar {
-    background: #5278ff;
-}
-
-.botao-excluir {
-    background: #e52222;
-}
-
-.nenhum-sensor {
-    padding: 40px;
-    text-align: center;
-    color: #aaa;
-}
-.menu-usuario .icone-usuario {
-    cursor: pointer;
-}
-
-.aba-usuario {
-    position: absolute;
-    top: 45px;
-    right: 0;
-    display: none;
-    width: 180px;
-    padding: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    z-index: 9999;
-}
-
-.menu-usuario:hover .aba-usuario {
-    display: block;
-}
-
-.aba-usuario a {
-    display: block;
-    color: #111111;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.aba-usuario a:hover {
-    color: #555555;
-}
-
-/* ajuste home sensores */
-
-.area-principal {
-    padding: 18px 28px 30px 38px;
-}
-
-.cabecalho-sensor {
-    padding: 0 0 0 0;
-    margin-bottom: 12px;
-}
-
+/* ==========================================================================
+   LISTAGEM DE SENSORES
+   ========================================================================== */
 .conteudo-lista-sensores {
     display: grid !important;
     grid-template-columns: 195px minmax(0, 1fr) !important;
@@ -1199,14 +898,6 @@ textarea:focus{
     align-items: flex-start !important;
     gap: 10px !important;
     margin: 0 !important;
-}
-
-.cartao-sensores-ativos {
-    width: 195px;
-    height: 130px;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
 }
 
 .botao-novo-sensor {
@@ -1225,66 +916,53 @@ textarea:focus{
     box-sizing: border-box;
     padding: 10px;
     margin: 0 !important;
+    background: rgba(20, 20, 20, 0.96);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
 }
 
 .titulo-painel-lista {
     display: none;
 }
 
+.titulo-painel-lista h2 {
+    margin: 0 0 20px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.tabela-sensores {
+    width: 100%;
+    overflow-x: auto;
+}
+
 .cabecalho-tabela,
 .linha-tabela {
-    grid-template-columns:
-        35px
-        1.3fr
-        55px
-        1.1fr
-        55px
-        70px
-        45px
-        70px;
-}
-
-.cabecalho-tabela {
-    min-height: 48px;
-}
-
-.linha-tabela {
-    min-height: 33px;
-}
-
-.status {
-    width: 25px;
-    height: 25px;
-    padding: 0;
-}
-
-.botao-editar,
-.botao-excluir {
-    width: 25px;
-    height: 25px;
-}
-
-
-.painel-lista-sensores {
-    background: rgba(20, 20, 20, 0.96);
-    border-radius: 12px;
-    padding: 10px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+    display: grid;
+    align-items: center;
+    grid-template-columns: 35px 1.5fr 60px 1.2fr 70px 80px 55px 75px;
+    column-gap: 10px;
 }
 
 .cabecalho-tabela {
     height: 45px;
+    min-height: 45px;
     padding: 0 12px;
     background: #242424;
     border-radius: 10px;
+    color: #fff;
     font-size: 10px;
+    font-weight: 900;
 }
 
 .linha-tabela {
     min-height: 42px;
     padding: 0 12px;
     border-bottom: 1px solid #292929;
+    color: #ddd;
     font-size: 10px;
+    font-weight: 600;
     transition: background 0.2s;
 }
 
@@ -1292,18 +970,25 @@ textarea:focus{
     background: #202020;
 }
 
-.cabecalho-tabela,
-.linha-tabela {
-    grid-template-columns:
-        35px
-        1.5fr
-        60px
-        1.2fr
-        70px
-        80px
-        55px
-        75px;
-    column-gap: 10px;
+.status {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    margin: auto;
+    display: inline-block;
+    padding: 0;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.status.ativo {
+    background: #123d1d;
+    color: #35ff68;
+}
+
+.status.inativo {
+    background: #3b3b3b;
+    color: #bbb;
 }
 
 .acoes {
@@ -1320,14 +1005,10 @@ textarea:focus{
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #fff;
+    text-decoration: none;
     border-radius: 6px;
-}
-
-.status {
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
-    margin: auto;
+    font-size: 15px;
 }
 
 .botao-editar {
@@ -1338,7 +1019,15 @@ textarea:focus{
     background: #e60000;
 }
 
+.nenhum-sensor {
+    padding: 40px;
+    text-align: center;
+    color: #aaa;
+}
 
+/* ==========================================================================
+   PAINEL EXCLUIR SENSOR
+   ========================================================================== */
 .painel-excluir-sensor {
     width: 100%;
     min-height: 390px;
@@ -1402,106 +1091,16 @@ textarea:focus{
     color: red;
 }
 
-.grade-formulario-trem {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 38px;
-}
- 
-.grupo-campo-trem {
-    margin-bottom: 20px;
-}
- 
-.rotulo-campo-trem {
-    display: block;
-    margin-bottom: 8px;
-    color: #ffffff;
-    font-weight: bold;
-}
- 
-.obrigatorio {
-    color: #e52222;
-}
- 
-.opcoes-status-trem {
-    margin-top: 14px;
-}
- 
-.opcao-status-trem {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 18px;
-    color: #ffffff;
-    cursor: pointer;
-}
- 
-.opcao-status-trem input[type="radio"] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    opacity: 0;
-}
- 
-.marcador-status {
-    width: 24px;
-    height: 24px;
-    flex: 0 0 24px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: #111111;
-    border: 1px solid #3a3a3a;
-    border-radius: 50%;
-}
- 
-.marcador-status::after {
-    content: "";
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-}
- 
-.opcao-status-trem input[type="radio"]:checked + .marcador-status::after {
-    background: #16db4b;
-}
- 
-.opcao-status-trem input[type="radio"]:focus-visible + .marcador-status {
-    border-color: #4b6fff;
-    box-shadow: 0 0 0 3px rgba(75, 111, 255, 0.35);
-}
- 
-.aviso-cadastro {
-    margin: 0 0 18px;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-weight: bold;
-}
- 
-.aviso-cadastro.sucesso {
-    background: #123d1d;
-    color: #35ff68;
-}
- 
-.aviso-cadastro.falha {
-    background: #3d1212;
-    color: #ff6b6b;
-}
- 
-@media (max-width: 900px) {
-    .grade-formulario-trem {
-        grid-template-columns: 1fr;
-    }
-}
-
+/* ==========================================================================
+   LISTA E GESTÃO DE TRENS
+   ========================================================================== */
 .topo-lista-trens {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
 }
- 
+
 .botao-novo-trem {
     width: auto;
     height: auto;
@@ -1511,11 +1110,10 @@ textarea:focus{
     font-weight: 900;
     transition: filter 0.2s;
 }
- 
+
 .botao-novo-trem:hover {
     filter: brightness(1.15);
 }
- 
 
 .painel-lista-trens {
     height: auto;
@@ -1523,8 +1121,6 @@ textarea:focus{
     padding: 20px 40px;
 }
 
-
- 
 .colunas-trens {
     grid-template-columns: 2.5fr 1.5fr 1fr 1fr 1fr;
     column-gap: 25px;
@@ -1534,7 +1130,6 @@ textarea:focus{
 .colunas-trens span {
     white-space: nowrap;
 }
- 
 
 .status-trem {
     width: auto;
@@ -1543,8 +1138,29 @@ textarea:focus{
     margin: 0;
 }
 
-/* CADASTRO DE TRENS */
+.status-ativa {
+    display: inline-block;
+    padding: 6px 15px;
+    border-radius: 20px;
+    background-color: #d4edda;
+    color: #218838;
+    font-weight: bold;
+    font-size: 13px;
+}
 
+.status-inativa {
+    display: inline-block;
+    padding: 6px 15px;
+    border-radius: 20px;
+    background-color: #f8d7da;
+    color: #c82333;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* ==========================================================================
+   CADASTRO & FORMULÁRIOS DE TRENS
+   ========================================================================== */
 .cadastro-trem {
     padding: 18px 32px 30px 260px;
 }
@@ -1575,17 +1191,33 @@ textarea:focus{
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.65);
 }
 
-.cadastro-trem .grade-formulario-trem {
+.grade-formulario-trem {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0 38px;
+}
+
+.grupo-campo-trem {
+    margin-bottom: 20px;
 }
 
 .cadastro-trem .grupo-campo-trem {
     margin-bottom: 18px;
 }
 
-.cadastro-trem .rotulo-campo-trem {
+.rotulo-campo-trem {
+    display: block;
     margin-bottom: 8px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.cadastro-trem .rotulo-campo-trem {
     font-size: 12px;
+}
+
+.obrigatorio {
+    color: #e52222;
 }
 
 .cadastro-trem input[type="text"],
@@ -1607,6 +1239,72 @@ textarea:focus{
 .cadastro-trem input[type="number"]:focus {
     outline: none;
     border: 1px solid #555555;
+}
+
+.opcoes-status-trem {
+    margin-top: 14px;
+}
+
+.opcao-status-trem {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.opcao-status-trem input[type="radio"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    opacity: 0;
+}
+
+.marcador-status {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #111111;
+    border: 1px solid #3a3a3a;
+    border-radius: 50%;
+}
+
+.marcador-status::after {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+
+.opcao-status-trem input[type="radio"]:checked + .marcador-status::after {
+    background: #16db4b;
+}
+
+.opcao-status-trem input[type="radio"]:focus-visible + .marcador-status {
+    border-color: #4b6fff;
+    box-shadow: 0 0 0 3px rgba(75, 111, 255, 0.35);
+}
+
+.aviso-cadastro {
+    margin: 0 0 18px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.aviso-cadastro.sucesso {
+    background: #123d1d;
+    color: #35ff68;
+}
+
+.aviso-cadastro.falha {
+    background: #3d1212;
+    color: #ff6b6b;
 }
 
 .botoes-cadastro-trem {
@@ -1632,7 +1330,8 @@ textarea:focus{
     justify-content: center;
 }
 
-.botao-salvar-trem {
+.botao-salvar-trem,
+.botao-voltar-trem {
     color: #222222;
     background: #eeeeee;
 }
@@ -1642,42 +1341,15 @@ textarea:focus{
     background: #333333;
 }
 
-.botao-voltar-trem {
-    color: #222222;
-    background: #eeeeee;
-}
-
 .botao-salvar-trem:hover,
 .botao-cancelar-trem:hover,
 .botao-voltar-trem:hover {
     filter: brightness(1.12);
 }
 
-@media (max-width: 900px) {
-
-    .cadastro-trem {
-        padding: 20px;
-    }
-
-    .cadastro-trem .painel-cadastro-sensor {
-        width: 100%;
-    }
-
-}
-
-@media (max-width: 600px) {
-
-    .cadastro-trem .grade-formulario-trem {
-        grid-template-columns: 1fr;
-    }
-
-    .botoes-cadastro-trem {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-}
-
+/* ==========================================================================
+   EDIÇÃO DE TRENS
+   ========================================================================== */
 .conteudo-edicao-trem {
     padding: 18px 40px 32px 239px;
 }
@@ -1801,13 +1473,169 @@ textarea:focus{
     font-size: 13px;
 }
 
+.campo-ano-trem {
+    grid-column: 2;
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (RESPONSIVIDADE CONSOLIDADA)
+   ========================================================================== */
+@media (max-width: 1100px) {
+    .metricas {
+        grid-template-columns: repeat(2, minmax(190px, 1fr));
+        gap: 18px;
+    }
+
+    .grade-dashboard {
+        grid-template-columns: 1fr;
+        grid-template-rows: 202px 150px auto;
+    }
+
+    .cartao-eventos {
+        grid-column: 1;
+        grid-row: 3;
+    }
+}
+
+@media (max-width: 1000px) {
+    .lista-acoes-sensores {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 900px) {
+    .grade-formulario-trem {
+        grid-template-columns: 1fr;
+    }
+
+    .cadastro-trem {
+        padding: 20px;
+    }
+
+    .cadastro-trem .painel-cadastro-sensor,
+    .conteudo-edicao-trem .painel-formulario-trem {
+        width: 100%;
+    }
+
     .conteudo-edicao-trem {
         padding: 18px;
     }
 
-    .painel-formulario-trem {
+    .campo-ano-trem {
+        grid-column: 1;
+    }
+}
+
+@media (max-width: 760px) {
+    .barra-superior {
+        height: auto;
+        min-height: 78px;
+        padding: 16px;
+    }
+
+    .barra-superior h1 {
+        font-size: 27px;
+    }
+
+    .menu-lateral {
+        position: static;
         width: 100%;
+        padding: 12px 0;
+        border-right: 0;
+        border-bottom: 2px solid #7f42ff;
+    }
+
+    .menu-lateral nav {
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 16px;
+        padding: 0 14px;
+    }
+
+    .menu-lateral a {
+        flex: 0 0 auto;
+        font-size: 17px;
+    }
+
+    .menu-lateral a.ativo {
+        width: auto;
+        padding: 7px 12px;
+    }
+
+    .conteudo {
+        padding: 18px;
+    }
+
+    .metricas {
+        grid-template-columns: 1fr;
+    }
+
+    .cartao-eventos li {
+        grid-template-columns: 27px minmax(0, 1fr) auto;
+    }
+
+    .cartao-eventos strong {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+@media (max-width: 700px) {
+    .cartao-sensores-ativos {
+        margin-left: 20px;
+    }
+
+    .cabecalho-sensor {
+        padding-left: 20px;
+    }
+
+    .painel-acoes-sensores {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .lista-acoes-sensores {
+        grid-template-columns: 1fr;
+    }
+
+    .menu-usuario {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .conteudo-lista-sensores {
+        display: grid;
+        grid-template-columns: 195px 1fr;
+        gap: 28px;
+        margin: 0 40px;
+        align-items: start;
+    }
+}
+
+@media (max-width: 650px) {
+    .caixa-login {
+        padding: 26px 20px;
+    }
+
+    #titulo {
+        font-size: 26px;
+    }
+
+    .label-form,
+    .caixa-escrita {
+        font-size: 18px;
+    }
+
+    .conjunto {
+        margin-bottom: 28px;
+    }
+}
+
+@media (max-width: 600px) {
+    .botoes-cadastro-trem {
+        flex-direction: column;
+        align-items: stretch;
     }
 }
 
@@ -1815,39 +1643,10 @@ textarea:focus{
     .painel-formulario-trem {
         padding: 24px 18px;
     }
+}
 
     .acoes-edicao-trem {
         flex-wrap: wrap;
         justify-content: center;
     }
-}
-
-.campo-ano-trem {
-    grid-column: 2;
-}
-
-@media (max-width: 900px) {
-    .campo-ano-trem {
-        grid-column: 1;
-    }
-}
-
-.status-ativa {
-    display: inline-block;
-    padding: 6px 15px;
-    border-radius: 20px;
-    background-color: #d4edda;
-    color: #218838;
-    font-weight: bold;
-    font-size: 13px;
-}
-
-.status-inativa {
-    display: inline-block;
-    padding: 6px 15px;
-    border-radius: 20px;
-    background-color: #f8d7da;
-    color: #c82333;
-    font-weight: bold;
-    font-size: 13px;
 }
