@@ -191,13 +191,13 @@ function e($valor)
                     <?= e($usuario['id_usuario']) ?>
                 </span>
 
-
+<br>
                 <span>
                     E-mail:
                     <?= e($usuario['email']) ?>
                 </span>
 
-
+<br>
                 <span>
                     Tipo:
                     <?php

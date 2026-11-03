@@ -550,7 +550,7 @@ body {
 .cabecalho-tabela,
 .linha-tabela {
     display: grid;
-    grid-template-columns: 80px 1.5fr 1fr 1fr 120px 90px;
+    grid-template-columns: 60px 1.4fr 1fr 1.4fr 1fr 90px 90px 100px;       
     align-items: center;
     padding: 12px 16px;
     font-size: 13px;
@@ -569,6 +569,7 @@ body {
 }
 
 .linha-tabela {
+    grid-template-columns: 60px 1.4fr 1fr 1.4fr 1fr 90px 90px 100px;
     border-bottom: 1px solid var(--border-color);
     transition: background 0.15s;
     background: var(--surface-card);
@@ -931,5 +932,110 @@ textarea::placeholder,
     }
     .barra-superior {
         padding: 0 16px;
+    }
+}
+
+.icone-excluir-sensor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: var(--danger-bg);
+    color: var(--danger);
+    font-size: 24px;
+}
+
+.informacoes-sensor-excluir {
+    margin: 16px 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.botoes-excluir-sensor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.botoes-excluir-sensor a,
+.botoes-excluir-sensor button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.botoes-excluir-sensor .botao-cancelar-cadastro {
+    color: var(--text-main);
+    background: #f1f5f9;
+    border: 1px solid var(--border-color);
+}
+
+.botoes-excluir-sensor .botao-confirmar-exclusao {
+    background: var(--danger);
+    color: #ffffff;
+    border: none;
+}
+
+@media (max-width: 480px) {
+    .botoes-excluir-sensor {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .botoes-excluir-sensor a,
+    .botoes-excluir-sensor button {
+        width: 100%;
+    }
+}
+
+.painel-excluir-sensor {
+    text-align: center;
+}
+
+.icone-excluir-sensor {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.botoes-excluir-sensor {
+    justify-content: center;
+}
+
+.topo-lista-sensores {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    align-items: end;
+    gap: 12px;
+}
+
+.cartao-sensores-ativos {
+    margin: 0;
+}
+
+.botao-novo-sensor {
+    justify-self: end;
+    margin: 0 0 12px;
+}
+
+@media (max-width: 700px) {
+    .topo-lista-sensores {
+        grid-template-columns: 1fr;
+    }
+
+    .botao-novo-sensor {
+        justify-self: start;
+        margin: 0;
     }
 }

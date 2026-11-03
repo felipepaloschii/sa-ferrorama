@@ -157,27 +157,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     Nome:
                     <?php echo htmlspecialchars($rota['nome_rota']); ?>
                 </span>
-
+<br>
                 <span>
                     Modelo do trem:
                     <?php echo htmlspecialchars($rota['modelo_trem']); ?>
                 </span>
-
+<br>
                 <span>
                     Código:
                     <?php echo htmlspecialchars($rota['codigo']); ?>
                 </span>
-
+<br>
                 <span>
                     Tempo estimado:
                     <?php echo htmlspecialchars($rota['tempo_estimado']); ?>
                 </span>
-
+<br>
                 <span>
                     Distância:
                     <?php echo htmlspecialchars($rota['distancia']); ?> km
                 </span>
-
+<br>
                 <span>
                     Status:
                     <?php echo htmlspecialchars($rota['status']); ?>

@@ -152,7 +152,7 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
                         $classeStatus  = isset($rotulosStatus[$statusBanco]) ? $statusBanco : 'inativo';
                         $textoStatus   = $rotulosStatus[$statusBanco] ?? $statusBanco;
                         ?>
-                       <
+                       
 <div class="linha-tabela colunas-trens">
 
     <span>

@@ -30,7 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
 
     if ($stmt->execute()) {
-        echo "Rota cadastrada com sucesso!";
+        header("Location: tela-home-rotas.php");
+        exit();
     } else {
         echo "Erro ao cadastrar rota.";
     }
@@ -123,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                 <div class="botoes-cadastro-trem">
-                    <a href="tela-home-rotas.php" type="submit" class="botao-salvar-trem">Salvar rota</a> 
+                    <button href="tela-home-rotas.php" type="submit" class="botao-salvar-trem">Salvar rota</button>
                     <a href="tela-home-rotas.php" class="botao-voltar-trem">← Voltar para rotas</a>
 
             

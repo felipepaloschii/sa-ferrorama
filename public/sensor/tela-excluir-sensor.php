@@ -176,15 +176,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <span>
                     Nome: <?php echo htmlspecialchars($sensor['nome_sensor']); ?>
                 </span>
-
+                <br>
                 <span>
                     Tipo: <?php echo htmlspecialchars($sensor['tipo_sensor']); ?>
                 </span>
-
+                <br>
                 <span>
                     Localização: <?php echo htmlspecialchars($sensor['localizacao']); ?>
                 </span>
-
+                <br>
                 <span>
                     Status: <?php echo htmlspecialchars($sensor['status_inicial']); ?>
                 </span>

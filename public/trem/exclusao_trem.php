@@ -105,11 +105,17 @@ $rotulosStatus = [
 
                 <div class="informacoes-sensor-excluir">
                     <span>Nome: <?= e($trem['nome']) ?></span>
+                    <br>
                     <span>Modelo: <?= e($trem['modelo']) ?></span>
+                    <br>
                     <span>Localização: <?= e($trem['localizacao']) ?></span>
+                    <br>
                     <span>Código: <?= e($trem['codigo']) ?></span>
+                    <br>
                     <span>Capacidade: <?= e($trem['capacidade']) ?></span>
+                    <br>
                     <span>Ano: <?= e($trem['ano']) ?></span>
+                    <br>
                     <span>Status: <?= e($rotulosStatus[$trem['status']] ?? $trem['status']) ?></span>
                 </div>
 
