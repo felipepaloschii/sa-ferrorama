@@ -79,51 +79,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
     <header class="barra-superior">
-
-        <h1>PIA Enterprise</h1>
-
-        <div class="acoes-superiores">
-
-            <span class="ponto-online"></span>
-
-            <span class="texto-online">
-                Online
-            </span>
-
-            <span class="icone-sino"></span>
-
-            <span class="icone-usuario"></span>
-
-        </div>
-
-    </header>
-
+    <h1>PIA Enterprise</h1>
 
     <aside class="menu-lateral">
-
         <nav>
+            <a href="../../index.php">Dashboard</a>
+            <a class="ativo" href="tela-home-sensor.php">Sensores</a>
+            <a href="../trem/lista_trem.php">Trens</a>
+            <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
-            <a href="../../index.php">
-                Dashboard
-            </a>
-
-            <a class="ativo" href="tela-home-sensor.php">
-                Sensores
-            </a>
-
-            <a href="../../public/trem/cadastro_trem.php">
-                Trens
-            </a>
-
-             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-
-            <a href="../usuario/tela-home-usuario.php">Usuários</a>
-
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+                <a href="../usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
-
         </nav>
-
     </aside>
+</header>
+
+    
 
 
     <main class="area-principal">

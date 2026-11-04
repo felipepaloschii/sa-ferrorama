@@ -61,23 +61,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <header class="barra-superior">
-        <h1>PIA Enterprise</h1>
-
-    </header>
+    <h1>PIA Enterprise</h1>
 
     <aside class="menu-lateral">
         <nav>
             <a href="../../index.php">Dashboard</a>
             <a class="ativo" href="tela-home-sensor.php">Sensores</a>
-            <a href="../../public/trem/cadastro_trem.php">Trens</a>
-            <a href="../../public/rotas/tela-home-rotas.php">Rotas</a>
+            <a href="../trem/lista_trem.php">Trens</a>
+            <a href="../rotas/tela-home-rotas.php">Rotas</a>
+
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-
-            <a href="../usuario/tela-home-usuario.php">Usuários</a>
-
-            <?php endif; ?>        </nav>
+                <a href="../usuario/tela-home-usuario.php">Usuários</a>
+            <?php endif; ?>
+        </nav>
     </aside>
-
+</header>
     <main class="area-principal">
         <section class="cabecalho-cadastro-sensor">
 

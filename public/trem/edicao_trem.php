@@ -111,22 +111,21 @@ function e($valor)
 <body>
     <div class="estrutura-dashboard">
         <header class="barra-superior">
-            <h1>PIA Enterprise</h1>
-        </header>
+    <h1>PIA Enterprise</h1>
 
-        <aside class="menu-lateral">
-            <nav>
-                <a href="../../index.php">Dashboard</a>
-                <a href="../sensor/tela-home-sensor.php">Sensores</a>
-                <a class="ativo" href="lista_trem.php">Trens</a>
-                <a href="../rotas/tela-home-rotas.php">Rotas</a>
-                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+    <aside class="menu-lateral">
+        <nav>
+            <a href="../../index.php">Dashboard</a>
+            <a  href="tela-home-sensor.php">Sensores</a>
+            <a  class="ativo "href="../trem/lista_trem.php">Trens</a>
+            <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
-            <a href="../usuario/tela-home-usuario.php">Usuários</a>
-
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+                <a href="../usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
-            </nav>
-        </aside>
+        </nav>
+    </aside>
+</header>
 
         <main class="conteudo conteudo-edicao-trem">
             <h2>Editar trem</h2>
