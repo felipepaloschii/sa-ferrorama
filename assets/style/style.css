@@ -804,3 +804,12 @@ textarea:focus,
 .botoes-cadastro-sensor {
     margin-top: 20px;
 }
+
+input[type="radio"],
+input[type="checkbox"] {
+    width: auto !important;
+    height: auto !important;
+    display: inline-block !important;
+    margin: 0 8px 0 0 !important;
+    vertical-align: middle;
+}

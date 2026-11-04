@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <h1 class="titulo-pagina">Excluir rota</h1>
 
-                <p class="descricao-pagina">
+                <p class="descricao-sensores">
                     Confirme a exclusão da rota selecionada.
                 </p>
 

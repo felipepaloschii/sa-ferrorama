@@ -122,11 +122,14 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
 
     <main class="area-principal">
         <section class="cabecalho-sensor topo-lista-trens">
-            <h2 class="titulo-sensores">Listagem de trens</h2>
-            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-            <a class="botao-novo-sensor botao-novo-trem" href="cadastro_trem.php">+ Novo Trem</a>
-            <?php endif; ?>
-        </section>
+    <h2 class="titulo-sensores">Listagem de trens</h2>
+
+    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+        <a class="botao-novo-sensor botao-novo-trem" href="cadastro_trem.php">
+            + Novo trem
+        </a>
+    <?php endif; ?>
+</section>
 
         <section class="painel-lista-sensores painel-lista-trens">
             <div class="tabela-sensores">

@@ -120,28 +120,43 @@ function e($valor)
 
     <aside class="menu-lateral">
         <nav>
-            <a  href="../../index.php">Dashboard</a>
-            <a href="public/sensor/tela-home-sensor.php">Sensores</a>
-            <a href="public/trem/lista_trem.php">Trens</a>
-            <a href="public/rotas/tela-home-rotas.php">Rotas</a>
+            <a href="../../index.php">Dashboard</a>
+            <a href="../sensor/tela-home-sensor.php">Sensores</a>
+            <a href="../trem/lista_trem.php">Trens</a>
+            <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-                <a class="ativo" href="public/usuario/tela-home-usuario.php">Usuários</a>
+                <a class="ativo" href="tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
         </nav>
     </aside>
 </header>
+    <main class="area-principal">
 
-    <main class="conteudo conteudo-excluir-trem">
+            <section class="cabecalho-cadastro-sensor">
 
-        <h2>
-            Excluir usuário
-        </h2>
+                <div class="informacoes-pagina">
 
-        <p class="subtitulo-excluir-trem">
-            Confirme a exclusão do usuário
-        </p>
+                    <h1 class="titulo-pagina">
+                        Excluir usuário
+                    </h1>
 
+                    <p class="descricao-sensores">
+                        Confirme a exclusão do usuário selecionado.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="botao-voltar-sensores"
+                    onclick="window.location.href='tela-home-sensor.php'">
+
+                    ← Voltar para sensores
+
+                </button>
+
+            </section>
 
         <section class="painel-excluir-sensor">
 
@@ -240,6 +255,7 @@ function e($valor)
 
                 <button
                     type="button"
+                    class="botao-cancelar-cadastro"
                     onclick="window.location.href='tela-home-usuario.php'"
                 >
 

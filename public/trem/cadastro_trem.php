@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <nav>
             <a href="../../index.php">Dashboard</a>
             <a href="../sensor/tela-home-sensor.php">Sensores</a>
-            <a  class="ativo "href="../trem/lista_trem.php">Trens</a>
+            <a class="ativo" href="lista_trem.php">Trens</a>
             <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
@@ -63,7 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="area-principal cadastro-trem">
         <div class="cabecalho-cadastro-sensor">
             <h2 class="titulo-pagina">Cadastrar novo trem</h2>
-            <p class="descricao-pagina">Preencha as informações para cadastrar um novo trem no sistema.</p>
+                                <a href="lista_trem.php" class="botao-voltar-trem">← Voltar para trens</a>
+
         </div>
 
         <?php if (isset($erro)): ?>
@@ -94,37 +95,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="grupo-campo-trem">
-                        <label class="rotulo-campo-trem">Status Inicial<span class="obrigatorio">*</span></label>
-                        <div class="opcoes-status-trem">
-                            <label class="opcao-status-trem">
-                                <input type="radio" name="status" value="operacao" checked>
-                                <span class="marcador-status"></span>
-                                Em operação
-                            </label>
+    <span class="rotulo-campo-trem">Status Inicial*</span>
 
-                            <label class="opcao-status-trem">
-                                <input type="radio" name="status" value="parado">
-                                <span class="marcador-status"></span>
-                                Parado
-                            </label>
-
-                            <label class="opcao-status-trem">
-                                <input type="radio" name="status" value="manutencao">
-                                <span class="marcador-status"></span>
-                                Manutenção
-                            </label>
-
-                            <label class="opcao-status-trem">
-                                <input type="radio" name="status" value="inativo">
-                                <span class="marcador-status"></span>
-                                Inativo
-                            </label>
-                        </div>
-                    </div>
+    <div class="opcoes-status-trem">
+        <label><input type="radio" name="status" value="operacao" required> Em operação</label>
+        <label><input type="radio" name="status" value="parado"> Parado</label>
+        <label><input type="radio" name="status" value="manutencao"> Manutenção</label>
+        <label><input type="radio" name="status" value="inativo"> Inativo</label>
+    </div>
+</div>
 
                     <div class="grupo-campo-trem">
                         <label class="rotulo-campo-trem" for="capacidade">Capacidade<span class="obrigatorio">*</span></label>
-                        <input type="number" id="capacidade" name="capacidade" placeholder="Ex.: 300" required>
+                        <input type="number" id="capacidade" name="capacidade" step="any" placeholder="Ex.: 300" required>
                     </div>
 
                     <div class="grupo-campo-trem">
@@ -135,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="botoes-cadastro-trem">
                     <button type="submit" class="botao-salvar-trem">Salvar trem</button>
-                    <a href="lista_trem.php" class="botao-voltar-trem">← Voltar para trens</a>
+                    <a href="lista_trem.php" class="botao-voltar-trem">Cancelar</a>
                 </div>
             </form>
         </section>

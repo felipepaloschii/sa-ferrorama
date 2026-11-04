@@ -108,7 +108,7 @@
                         Excluir sensor
                     </h1>
 
-                    <p class="descricao-pagina">
+                    <p class="descricao-sensores">
                         Confirme a exclusão do sensor selecionado.
                     </p>
 

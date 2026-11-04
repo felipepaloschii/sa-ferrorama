@@ -94,9 +94,32 @@ $rotulosStatus = [
     </aside>
 </header>
 
-        <main class="conteudo conteudo-excluir-trem">
-            <h2>Excluir trem</h2>
-            <p class="subtitulo-excluir-trem">Confirme a exclusão do trem relacionado</p>
+       <main class="area-principal">
+
+            <section class="cabecalho-cadastro-sensor">
+
+                <div class="informacoes-pagina">
+
+                    <h1 class="titulo-pagina">
+                        Excluir trem
+                    </h1>
+
+                    <p class="descricao-sensores">
+                        Confirme a exclusão do trem selecionado.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="botao-voltar-sensores"
+                    onclick="window.location.href='tela-home-sensor.php'">
+
+                    ← Voltar para sensores
+
+                </button>
+
+            </section>
 
             <section class="painel-excluir-sensor">
                 <div class="icone-excluir-sensor" aria-hidden="true">🗑</div>
