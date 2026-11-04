@@ -56,8 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </nav>
     </header>
 
-    <main class="area-principal cadastro-trem">
-        <section class="cabecalho-cadastro-sensor">
+            <main class="area-principal cadastro-sensor">
+            <section class="cabecalho-cadastro-sensor">
             <div class="informacoes-pagina">
                 <h1 class="titulo-pagina">Cadastrar novos sensores</h1>
                 <p class="descricao-pagina">Preencha as informações para cadastrar um novo sensor.</p>
@@ -112,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
 
-                <div class="grade-formulario-trem" style="margin-top: 10px;">
+                <div class="grade-formulario-trem grade-status-descricao">
                     <div class="grupo-campo-trem">
                         <label class="rotulo-campo-trem">Status Inicial<span class="obrigatorio">*</span></label>
                         <div class="opcoes-status-trem">
@@ -135,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
 
-                <div class="botoes-cadastro-trem" style="margin-top: 20px;">
+                <div class="botoes-cadastro-trem botoes-cadastro-sensor">
                     <button type="submit" class="botao-salvar-trem">Salvar sensor</button>
                     <button type="button" class="botao-cancelar-trem" onclick="window.location.href='tela-home-sensor.php'">Cancelar</button>
                 </div>

@@ -791,3 +791,16 @@ textarea:focus,
         gap: 12px;
     }
 }
+
+.cadastro-sensor {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.grade-status-descricao {
+    margin-top: 10px;
+}
+
+.botoes-cadastro-sensor {
+    margin-top: 20px;
+}
