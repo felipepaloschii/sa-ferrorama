@@ -1,5 +1,5 @@
 /* ==========================================================================
-   RESET & VARIÁVEIS GLOBAIS
+   SA Ferrorama - Variáveis Globais & Reset
    ========================================================================== */
 :root {
     --bg-dark: #050316;
@@ -29,7 +29,6 @@
 }
 
 body {
-    margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--text-main);
     background-color: var(--bg-light);
@@ -37,7 +36,7 @@ body {
 }
 
 /* ==========================================================================
-   TELA DE LOGIN (NOVO DESIGN ENCAIXADO)
+   TELA DE LOGIN
    ========================================================================== */
 #login-corpo {
     min-height: 100vh;
@@ -59,7 +58,7 @@ body {
 .caixa-login {
     width: 440px;
     max-width: 100%;
-    background-color: #ffffff;
+    background-color: var(--surface-card);
     border-radius: 16px;
     padding: 40px 36px 36px;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
@@ -86,11 +85,11 @@ body {
     text-align: left;
 }
 
-.caixa-login .conjunto {
+.conjunto {
     margin-bottom: 18px;
 }
 
-.caixa-login .label-form {
+.label-form {
     display: block;
     margin: 0 0 6px 0;
     color: #374151;
@@ -98,7 +97,7 @@ body {
     font-weight: 600;
 }
 
-.caixa-login .caixa-escrita {
+.caixa-escrita {
     width: 100%;
     height: 44px;
     padding: 0 14px;
@@ -111,11 +110,11 @@ body {
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.caixa-login .caixa-escrita::placeholder {
+.caixa-escrita::placeholder {
     color: #9ca3af;
 }
 
-.caixa-login .caixa-escrita:focus {
+.caixa-escrita:focus {
     border-color: #2b3a4a;
     box-shadow: 0 0 0 3px rgba(30, 41, 59, 0.15);
 }
@@ -165,7 +164,7 @@ body {
     transform: scale(0.99);
 }
 
-/* Oculta área antiga de criação de conta na tela de login */
+/* Oculta áreas desnecessárias de cadastro no login */
 .toggle,
 .linha,
 .criar-conta {
@@ -173,7 +172,7 @@ body {
 }
 
 /* ==========================================================================
-   BARRA SUPERIOR (HEADER / NAVEGAÇÃO SUPERIOR)
+   BARRA SUPERIOR (HEADER / TOP NAVIGATION)
    ========================================================================== */
 .barra-superior {
     height: 64px;
@@ -189,7 +188,8 @@ body {
 }
 
 .barra-superior h1,
-.marca-header h1 {
+.marca-header h1,
+.logo-topo {
     margin: 0;
     font-size: 18px;
     font-weight: 800;
@@ -197,26 +197,28 @@ body {
     letter-spacing: 0.5px;
 }
 
+.lado-esquerdo {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.navegacao-principal,
 .navegacao-superior,
 .menu-lateral {
-    position: static;
-    width: auto;
-    background: transparent;
-    box-shadow: none;
-    padding: 0;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
+.navegacao-principal nav,
 .navegacao-superior nav,
 .menu-lateral nav {
     display: flex;
-    flex-direction: row;
     gap: 8px;
-    padding: 0;
 }
 
+.navegacao-principal a,
 .navegacao-superior a,
 .menu-lateral a {
     color: #cbd5e1;
@@ -228,17 +230,18 @@ body {
     transition: all 0.2s ease;
 }
 
+.navegacao-principal a:hover,
 .navegacao-superior a:hover,
 .menu-lateral a:hover {
     color: #ffffff;
     background-color: rgba(255, 255, 255, 0.08);
 }
 
+.navegacao-principal a.ativo,
 .navegacao-superior a.ativo,
 .menu-lateral a.ativo {
     background-color: var(--bg-dark-surface);
     color: #ffffff;
-    width: auto;
 }
 
 .acoes-superiores {
@@ -266,18 +269,6 @@ body {
     box-shadow: 0 0 6px var(--success);
 }
 
-.icone-btn,
-.icone-sino {
-    background: none;
-    border: none;
-    color: #cbd5e1;
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .avatar-usuario,
 .icone-usuario {
     width: 34px;
@@ -292,43 +283,8 @@ body {
     color: #ffffff;
 }
 
-.menu-usuario {
-    position: relative;
-    cursor: pointer;
-}
-
-.aba-usuario {
-    display: none;
-    position: absolute;
-    top: 45px;
-    right: 0;
-    background: var(--surface-card);
-    min-width: 160px;
-    border-radius: var(--radius-md);
-    box-shadow: 0 10px 25px rgba(5, 3, 22, 0.12);
-    border: 1px solid var(--border-color);
-    padding: 8px 0;
-    z-index: 100;
-}
-
-.menu-usuario:hover .aba-usuario {
-    display: block;
-}
-
-.aba-usuario a {
-    display: block;
-    padding: 8px 16px;
-    color: var(--text-main);
-    text-decoration: none;
-    font-size: 13px;
-}
-
-.aba-usuario a:hover {
-    background-color: var(--bg-light);
-}
-
 /* ==========================================================================
-   ÁREAS DE CONTEÚDO PRINCIPAL (DASHBOARD, SENSORES E TRENS)
+   ÁREAS DE CONTEÚDO PRINCIPAL & PAINEIS
    ========================================================================== */
 .area-principal,
 .conteudo,
@@ -338,7 +294,6 @@ body {
     margin: 0 auto;
     padding: 28px 32px;
     min-height: calc(100vh - 64px);
-    background: transparent;
 }
 
 .cabecalho-conteudo,
@@ -359,11 +314,10 @@ body {
 }
 
 .descricao-pagina,
-.descricao-sensores,
-.subtitulo-edicao-trem {
+.descricao-sensores {
     color: var(--text-muted);
     font-size: 13px;
-    margin: 0 0 20px 0;
+    margin: 0;
 }
 
 .painel-principal h2,
@@ -431,7 +385,7 @@ body {
 }
 
 /* ==========================================================================
-   GRADE DO DASHBOARD, MAPA E EVENTOS
+   GRADE DO DASHBOARD, MAPAS E EVENTOS
    ========================================================================== */
 .grade-dashboard {
     display: grid;
@@ -443,7 +397,6 @@ body {
 .cartao-mapa,
 .cartao-eventos,
 .painel-tabela,
-.cartao-grafico,
 .painel-lista-sensores,
 .painel-lista-trens,
 .painel-cadastro-sensor,
@@ -462,13 +415,9 @@ body {
     font-weight: 700;
     margin-bottom: 16px;
     color: var(--text-main);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
-.simulacao-mapa,
-.cartao-mapa iframe {
+.simulacao-mapa {
     height: 250px;
     width: 100%;
     border: 2px dashed #cbd5e1;
@@ -492,24 +441,17 @@ body {
     border-radius: 4px;
     font-size: 11px;
     font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 4px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-.lista-eventos,
-.cartao-eventos ul {
+.lista-eventos {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 0;
-    margin: 0;
 }
 
-.item-evento,
-.cartao-eventos li {
+.item-evento {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -520,27 +462,21 @@ body {
     font-size: 13px;
 }
 
-.item-evento.alerta,
-.cartao-eventos li.alerta {
+.item-evento.alerta {
     background: var(--danger-bg);
     border-color: #fecaca;
     color: #991b1b;
 }
 
-.item-evento time,
-.cartao-eventos time {
+.item-evento time {
     font-size: 11px;
     color: var(--text-muted);
     font-weight: 600;
 }
 
 /* ==========================================================================
-   TABELAS DE GESTÃO (SENSORES & TRENS)
+   TABELAS DE GESTÃO
    ========================================================================== */
-.painel-tabela {
-    margin-top: 20px;
-}
-
 .tabela-container,
 .tabela-sensores {
     width: 100%;
@@ -550,14 +486,10 @@ body {
 .cabecalho-tabela,
 .linha-tabela {
     display: grid;
-    grid-template-columns: 60px 1.4fr 1fr 1.4fr 1fr 90px 90px 100px;       
+    grid-template-columns: 80px 1.5fr 1fr 1fr 120px 90px;
     align-items: center;
     padding: 12px 16px;
     font-size: 13px;
-}
-
-.colunas-trens {
-    grid-template-columns: 80px 1.2fr 1fr 1fr 1fr 90px;
 }
 
 .cabecalho-tabela {
@@ -569,7 +501,6 @@ body {
 }
 
 .linha-tabela {
-    grid-template-columns: 60px 1.4fr 1fr 1.4fr 1fr 90px 90px 100px;
     border-bottom: 1px solid var(--border-color);
     transition: background 0.15s;
     background: var(--surface-card);
@@ -579,12 +510,10 @@ body {
     background-color: #f8fafc;
 }
 
-/* Badges de Status */
+/* Status & Badges */
 .badge-status,
 .status,
-.status-trem,
-.status-ativa,
-.status-inativa {
+.status-trem {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -596,15 +525,13 @@ body {
 }
 
 .badge-status.ativo,
-.status.ativo,
-.status-ativa {
+.status.ativo {
     background-color: var(--accent-blue);
     color: var(--bg-dark);
 }
 
 .badge-status.inativo,
-.status.inativo,
-.status-inativa {
+.status.inativo {
     background-color: #e2e8f0;
     color: var(--text-muted);
 }
@@ -650,14 +577,13 @@ body {
 }
 
 /* ==========================================================================
-   FORMULÁRIOS & BOTÕES GERAIS DO SISTEMA
+   FORMULÁRIOS & BOTÕES GERAIS
    ========================================================================== */
 label,
 .label-form,
 .rotulo-campo-trem,
 .nome-sensor,
 .tipo-sensor,
-.id-sensor,
 .localizacao-sensor,
 .unidade-medida,
 .limite-alerta,
@@ -680,7 +606,6 @@ label,
     margin-bottom: 18px;
 }
 
-/* Campos de entrada padrão dos formulários internos */
 input,
 select,
 textarea,
@@ -692,7 +617,7 @@ textarea,
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     color: var(--text-main);
-    font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -711,113 +636,7 @@ textarea:focus,
     box-shadow: 0 0 0 3px rgba(45, 49, 67, 0.15);
 }
 
-input::placeholder,
-textarea::placeholder,
-.campo-edicao-trem::placeholder {
-    color: #94a3b8;
-}
-
-/* Estrutura dos formulários */
-.grade-formulario-trem {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 24px;
-}
-
-.grupo-tipo-sensor,
-.grupo-id-sensor {
-    width: 49%;
-    display: inline-block;
-    vertical-align: top;
-    margin-bottom: 18px;
-}
-
-.grupo-localizacao-sensor,
-.grupo-unidade-medida,
-.grupo-limite-alerta {
-    width: 32%;
-    display: inline-block;
-    vertical-align: top;
-    margin-bottom: 18px;
-}
-
-.grupo-id-sensor,
-.grupo-unidade-medida,
-.grupo-limite-alerta {
-    margin-left: 1%;
-}
-
-.opcoes-status-trem,
-.opcoes-status-sensor {
-    margin-top: 10px;
-}
-
-.opcao-status-trem,
-.opcao-status-ativo,
-.opcao-status-inativo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    color: var(--text-main);
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.opcao-status-trem input[type="radio"] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-}
-
-.marcador-status {
-    width: 18px;
-    height: 18px;
-    flex: 0 0 18px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: #ffffff;
-    border: 1px solid var(--border-color);
-    border-radius: 50%;
-}
-
-.marcador-status::after {
-    content: "";
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-}
-
-.opcao-status-trem input[type="radio"]:checked + .marcador-status::after {
-    background: var(--success);
-}
-
-/* Feedback e Avisos */
-.aviso-cadastro {
-    margin-bottom: 16px;
-    padding: 12px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.aviso-cadastro.sucesso {
-    background: var(--success-bg);
-    color: var(--success);
-    border: 1px solid #86efac;
-}
-
-.aviso-cadastro.falha,
-.aviso-edicao-trem,
-.erro-excluir-sensor {
-    background: var(--danger-bg);
-    color: var(--danger);
-    border: 1px solid #fca5a5;
-}
-
-/* Botões do Sistema */
+/* Botões */
 .botao-primario,
 .botao-envio,
 .botao-salvar-sensor,
@@ -853,8 +672,7 @@ textarea::placeholder,
 .botao-cancelar-cadastro,
 .botao-cancelar-trem,
 .botao-voltar-trem,
-.botao-voltar-sensores,
-.botao-edicao-escuro {
+.botao-voltar-sensores {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -887,14 +705,13 @@ textarea::placeholder,
 }
 
 /* ==========================================================================
-   RESPONSIVIDADE (MEDIA QUERIES)
+   RESPONSIVIDADE
    ========================================================================== */
 @media (max-width: 992px) {
     .metricas {
         grid-template-columns: repeat(2, 1fr);
     }
-    .grade-dashboard,
-    .grade-formulario-trem {
+    .grade-dashboard {
         grid-template-columns: 1fr;
     }
 }
@@ -906,15 +723,18 @@ textarea::placeholder,
         padding: 16px;
         gap: 12px;
     }
-    .navegacao-superior,
-    .menu-lateral {
+    .lado-esquerdo {
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+    .navegacao-principal,
+    .navegacao-superior {
         flex-direction: row;
         overflow-x: auto;
         width: 100%;
     }
-    .area-principal,
-    .conteudo,
-    .cadastro-trem {
+    .area-principal {
         padding: 16px;
     }
     .metricas {
@@ -923,119 +743,5 @@ textarea::placeholder,
     .cabecalho-tabela,
     .linha-tabela {
         min-width: 600px;
-    }
-}
-
-@media (max-width: 480px) {
-    .caixa-login {
-        padding: 30px 20px;
-    }
-    .barra-superior {
-        padding: 0 16px;
-    }
-}
-
-.icone-excluir-sensor {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 52px;
-    height: 52px;
-    margin: 0 auto 16px;
-    border-radius: 50%;
-    background: var(--danger-bg);
-    color: var(--danger);
-    font-size: 24px;
-}
-
-.informacoes-sensor-excluir {
-    margin: 16px 0;
-    color: var(--text-muted);
-    line-height: 1.6;
-}
-
-.botoes-excluir-sensor {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 24px;
-}
-
-.botoes-excluir-sensor a,
-.botoes-excluir-sensor button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 38px;
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    font: inherit;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.botoes-excluir-sensor .botao-cancelar-cadastro {
-    color: var(--text-main);
-    background: #f1f5f9;
-    border: 1px solid var(--border-color);
-}
-
-.botoes-excluir-sensor .botao-confirmar-exclusao {
-    background: var(--danger);
-    color: #ffffff;
-    border: none;
-}
-
-@media (max-width: 480px) {
-    .botoes-excluir-sensor {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .botoes-excluir-sensor a,
-    .botoes-excluir-sensor button {
-        width: 100%;
-    }
-}
-
-.painel-excluir-sensor {
-    text-align: center;
-}
-
-.icone-excluir-sensor {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.botoes-excluir-sensor {
-    justify-content: center;
-}
-
-.topo-lista-sensores {
-    display: grid;
-    grid-template-columns: 1fr 100px;
-    align-items: end;
-    gap: 12px;
-}
-
-.cartao-sensores-ativos {
-    margin: 0;
-}
-
-.botao-novo-sensor {
-    justify-self: end;
-    margin: 0 0 12px;
-}
-
-@media (max-width: 700px) {
-    .topo-lista-sensores {
-        grid-template-columns: 1fr;
-    }
-
-    .botao-novo-sensor {
-        justify-self: start;
-        margin: 0;
     }
 }
