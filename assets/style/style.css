@@ -770,3 +770,25 @@ textarea:focus,
     border-bottom: 1px solid var(--border-color);
     background: var(--surface-card);
 }
+
+.painel-excluir-sensor {
+    text-align: center;
+}
+
+.informacoes-sensor-excluir {
+    display: table;
+    margin: 16px auto;
+    padding: 12px 18px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-light);
+}
+
+.botoes-excluir-sensor {
+    justify-content: center;
+}
+
+.botoes-excluir-sensor .botao-cancelar-cadastro {
+    background: #333;
+    color: #fff;
+}
