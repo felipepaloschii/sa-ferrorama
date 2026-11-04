@@ -94,11 +94,6 @@ $rotasAtivas = mysqli_fetch_assoc(mysqli_query(
 
             </div>
 
-            <div class="grade-dashboard">
-
-                <section class="cartao-grafico">
-                    <canvas id="grafico-sensores"></canvas>
-                </section>
 
               
 
