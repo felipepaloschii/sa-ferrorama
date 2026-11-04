@@ -118,6 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </button>
             </form>
 
+            
             <div id="mensagem">
                <?php echo htmlspecialchars($mensagem); ?>
             </div>
@@ -132,7 +133,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </section>
     </main>
 
-    <script src="script/login.js"></script>
 </body>
 
 </html>

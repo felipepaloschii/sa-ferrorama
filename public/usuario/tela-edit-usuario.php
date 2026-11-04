@@ -265,12 +265,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 </div>
 
+                <br>
 
                 <div class="area-botoes-formulario">
 
                     <button
                         type="submit"
-                        class="botao-salvar-sensor">
+                        class="botao-salvar-sensor"
+                        onclick="window.location.href='tela-home-usuario.php'">
 
                         Salvar alterações
 

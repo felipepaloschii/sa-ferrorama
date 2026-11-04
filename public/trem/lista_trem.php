@@ -110,7 +110,7 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
         <nav>
             <a href="../../index.php">Dashboard</a>
             <a href="../sensor/tela-home-sensor.php">Sensores</a>
-            <a  class="ativo "href="lista_trem.php">Trens</a>
+            <a class="ativo" href="lista_trem.php">Trens</a>
             <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>

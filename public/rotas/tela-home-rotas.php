@@ -44,7 +44,7 @@ require_once '../../infra/conexao.php';
         <h1>PIA Enterprise</h1>
         <nav class="navegacao-principal">
             <a href="../../index.php">Dashboard</a>
-            <a  href="../sensor/tela-home-sensor.php">Sensores</a>
+            <a href="../sensor/tela-home-sensor.php">Sensores</a>
             <a href="../trem/lista_trem.php">Trens</a>
             <a class="ativo" href="tela-home-rotas.php">Rotas</a>
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>

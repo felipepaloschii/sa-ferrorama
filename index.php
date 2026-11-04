@@ -46,7 +46,7 @@ $rotasAtivas = mysqli_fetch_assoc(mysqli_query(
 
     <aside class="menu-lateral">
         <nav>
-            <a class="ativo" href="../../index.php">Dashboard</a>
+            <a class="ativo" href="index.php">Dashboard</a>
             <a href="public/sensor/tela-home-sensor.php">Sensores</a>
             <a href="public/trem/lista_trem.php">Trens</a>
             <a href="public/rotas/tela-home-rotas.php">Rotas</a>
