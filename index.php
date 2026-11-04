@@ -100,45 +100,7 @@ $rotasAtivas = mysqli_fetch_assoc(mysqli_query(
                     <canvas id="grafico-sensores"></canvas>
                 </section>
 
-                <section class="cartao-eventos">
-
-                    <h3>Eventos Recentes</h3>
-
-                    <ul>
-
-                        <li>
-                            <span class="icone-evento alet"></span>
-                            <strong></strong>
-                            <time></time>
-                        </li>
-
-                        <li>
-                            <span class="icone-evento alert"></span>
-                            <strong></strong>
-                            <time></time>
-                        </li>
-
-                        <li>
-                            <span class="icone-evento atenco"></span>
-                            <strong></strong>
-                            <time></time>
-                        </li>
-
-                        <li>
-                            <span class="icone-evento informaco"></span>
-                            <strong></strong>
-                            <time></time>
-                        </li>
-
-                        <li>
-                            <span class="icone-evento informaca"></span>
-                            <strong></strong>
-                            <time></time>
-                        </li>
-
-                    </ul>
-
-                </section>
+              
 
                 <section class="cartao-mapa">
 

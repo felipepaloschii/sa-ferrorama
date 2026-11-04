@@ -746,3 +746,27 @@ textarea:focus,
     }
 }
 
+.cabecalho-tabela,
+.linha-tabela {
+    display: grid;
+    grid-template-columns: 50px minmax(150px, 1.5fr) minmax(100px, 1fr)
+        minmax(180px, 1.5fr) 80px 70px 80px 90px;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.cabecalho-tabela {
+    background-color: var(--accent-light);
+    color: var(--bg-dark);
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    margin-bottom: 4px;
+}
+
+.linha-tabela {
+    border-bottom: 1px solid var(--border-color);
+    background: var(--surface-card);
+}

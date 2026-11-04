@@ -40,42 +40,18 @@ require_once '../../infra/conexao.php';
 
 <body>
 
-    <header class="barra-superior">
-
+   <header class="barra-superior">
         <h1>PIA Enterprise</h1>
-
-    </header>
-
-
-    <aside class="menu-lateral">
-
-        <nav>
-
-            <a href="../../index.php">
-                Dashboard
-            </a>
-
-            <a href="../sensor/tela-home-sensor.php">
-                Sensores
-            </a>
-
-            <a href="../trem/lista_trem.php">
-                Trens
-            </a>
-
-            <a class="ativo" href="tela-home-rotas.php">
-                Rotas
-            </a>
-
+        <nav class="navegacao-principal">
+            <a href="../../index.php">Dashboard</a>
+            <a  href="../sensor/tela-home-sensor.php">Sensores</a>
+            <a href="../trem/lista_trem.php">Trens</a>
+            <a class="ativo" href="tela-home-rotas.php">Rotas</a>
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-
-            <a href="../usuario/tela-home-usuario.php">Usuários</a>
-
+                <a href="../usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
-
         </nav>
-
-    </aside>
+    </header>
 
 
     <main class="area-principal">

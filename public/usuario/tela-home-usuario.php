@@ -95,7 +95,7 @@ while ($linha = $resultado->fetch_assoc()) {
                
             </div>
 
-             
+             <br>
 
         <section class="painel-lista-sensores">
             <div class="titulo-painel-lista">
