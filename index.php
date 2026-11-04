@@ -42,34 +42,21 @@ $rotasAtivas = mysqli_fetch_assoc(mysqli_query(
 <body id="home-corpo">
 
     <header class="barra-superior">
-        <h1>PIA Enterprise</h1>
-
-        <div class="acoes-superiores">
-           <div class="menu-usuario">
-
-        <span class="icone-usuario"></span>
-
-        <div class="aba-usuario">
-        <a href="public/logout/logout.php">Encerrar sessão</a>
-        </div>
-
-</div>
-        </div>
-    </header>
+    <h1>PIA Enterprise</h1>
 
     <aside class="menu-lateral">
         <nav>
-            <a class="ativo" href="index.php">Dashboard</a>
-            <a class="#" href="public/sensor/tela-home-sensor.php">Sensores</a>
-             <a href="public/trem/lista_trem.php">Trens</a>
+            <a class="ativo" href="../../index.php">Dashboard</a>
+            <a href="public/sensor/tela-home-sensor.php">Sensores</a>
+            <a href="public/trem/lista_trem.php">Trens</a>
             <a href="public/rotas/tela-home-rotas.php">Rotas</a>
+
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-
-            <a href="public/usuario/tela-home-usuario.php">Usuários</a>
-
+                <a href="public/usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
         </nav>
     </aside>
+</header>
 
     <main class="conteudo">
 

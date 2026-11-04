@@ -120,55 +120,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
 
-    <header class="barra-superior">
-
-        <h1>PIA Enterprise</h1>
-
-        <div class="acoes-superiores">
-
-            <span class="ponto-online"></span>
-
-            <span class="texto-online">
-                Online
-            </span>
-
-            <span class="icone-sino"></span>
-
-            <span class="icone-usuario"></span>
-
-        </div>
-
-    </header>
+   <header class="barra-superior">
+    <h1>PIA Enterprise</h1>
 
     <aside class="menu-lateral">
-
         <nav>
+            <a href="../../index.php">Dashboard</a>
+            <a href="public/sensor/tela-home-sensor.php">Sensores</a>
+            <a href="public/trem/lista_trem.php">Trens</a>
+            <a href="public/rotas/tela-home-rotas.php">Rotas</a>
 
-            <a href="../../index.php">
-                Dashboard
-            </a>
-
-            <a href="../sensor/tela-home-sensor.php">
-                Sensores
-            </a>
-
-            <a href="../trem/lista_trem.php">
-                Trens
-            </a>
-
-            <a href="../rotas/tela-home-rotas.php">
-                Rotas
-            </a>
-
-           <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-
-            <a class="ativo" href="tela-home-usuario.php">Usuários</a>
-
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+                <a class="ativo" href="public/usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
-
         </nav>
-
     </aside>
+</header>
 
     <main class="area-principal">
 

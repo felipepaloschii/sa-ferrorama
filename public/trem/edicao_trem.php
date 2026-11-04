@@ -116,7 +116,7 @@ function e($valor)
     <aside class="menu-lateral">
         <nav>
             <a href="../../index.php">Dashboard</a>
-            <a  href="tela-home-sensor.php">Sensores</a>
+            <a href="../sensor/tela-home-sensor.php">Sensores</a>
             <a  class="ativo "href="../trem/lista_trem.php">Trens</a>
             <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
