@@ -50,31 +50,20 @@ if ($resultado) {
 
 <header class="barra-superior">
     <h1>PIA Enterprise</h1>
-</header>
 
-<aside class="menu-lateral">
-    <nav>
-        <a href="../../index.php">Dashboard</a>
+    <aside class="menu-lateral">
+        <nav>
+            <a href="../../index.php">Dashboard</a>
+            <a class="ativo" href="tela-home-sensor.php">Sensores</a>
+            <a href="../trem/lista_trem.php">Trens</a>
+            <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
-        <a class="ativo" href="tela-home-sensor.php">
-            Sensores
-        </a>
-
-        <a href="../trem/lista_trem.php">
-            Trens
-        </a>
-
-        <a href="../rotas/tela-home-rotas.php">
-            Rotas
-        </a>
-
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-
-            <a href="../usuario/tela-home-usuario.php">Usuários</a>
-
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+                <a href="../usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
-    </nav>
-</aside>
+        </nav>
+    </aside>
+</header>
 
 <main class="area-principal">
 
@@ -86,44 +75,23 @@ if ($resultado) {
             </h1>
 
             <p class="descricao-sensores">
-                Gerencie os sensores do sistema ferroviário
+               
             </p>
+        </div>
+
+         <div class="topo-lista-sensores">
+            
+
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+            <a class="botao-novo-sensor botao-novo-trem" href="tela-cadastro-sensor.php">+ Novo Sensor</a>
+            <?php endif; ?>
+         
+
         </div>
 
     </section>
 
 
-    <section class="conteudo-lista-sensores">
-
-        <div class="topo-lista-sensores">
-
-            <div class="cartao-sensores-ativos">
-
-                <div class="icone-sensor">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-
-                <div class="informacoes-sensor">
-
-                    <h2>
-                        Sensores Ativos
-                    </h2>
-
-                    <strong>
-                        <?php echo $quantidade_ativos; ?>
-                    </strong>
-
-                </div>
-
-            </div>
-
-            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-            <a class="botao-novo-sensor botao-novo-trem" href="tela-cadastro-sensor.php">+ Novo Sensor</a>
-            <?php endif; ?>
-
-        </div>
 
 
         <section class="painel-lista-sensores">

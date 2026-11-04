@@ -7,6 +7,27 @@ if (!isset($_SESSION['usuario'])) {
 }
 ?>
 
+<?php
+require_once 'infra/conexao.php';
+
+$sensoresAtivos = mysqli_fetch_assoc(mysqli_query(
+    $conexao,
+    "SELECT COUNT(*) AS total FROM sensor
+     WHERE LOWER(TRIM(status_inicial)) = 'ativo'"
+))['total'];
+
+$trensAtivos = mysqli_fetch_assoc(mysqli_query(
+    $conexao,
+    "SELECT COUNT(*) AS total FROM trem
+     WHERE status = 'operacao'"
+))['total'];
+
+$rotasAtivas = mysqli_fetch_assoc(mysqli_query(
+    $conexao,
+    "SELECT COUNT(*) AS total FROM rotas
+     WHERE status = 'ativo'"
+))['total'];
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -55,29 +76,22 @@ if (!isset($_SESSION['usuario'])) {
         <section class="painel-principal">
 
             <h2>Dashboard</h2>
-
             <div class="metricas">
 
-                <article class="cartao-metrica">
-                    <h3>Status do trem</h3>
+            <article class="cartao-metrica">
+                <h3>Sensores ativos</h3>
+                <p class="valor-metrica"><strong><?= $sensoresAtivos ?></strong></p>
+            </article>
 
-                    <div class="linha-metrica">
-                        <strong class="verde">ATIVO</strong>
-                        <span class="icone-check"></span>
-                    </div>
-                </article>
+            <article class="cartao-metrica">
+                <h3>Trens ativos</h3>
+                <p class="valor-metrica"><strong><?= $trensAtivos ?></strong></p>
+            </article>
 
-                <article class="cartao-metrica">
-                    <h3>Velocidade</h3>
-
-                    <div class="linha-metrica">
-                        <strong class="ciano">
-                            80<span>Km/h</span>
-                        </strong>
-
-                        <span class="icone-velocidade"></span>
-                    </div>
-                </article>
+            <article class="cartao-metrica">
+                <h3>Rotas ativas</h3>
+                <p class="valor-metrica"><strong><?= $rotasAtivas ?></strong></p>
+            </article>
 
                <article class="cartao-metrica">
                 <h3>Clima em Joinville</h3>
@@ -90,14 +104,6 @@ if (!isset($_SESSION['usuario'])) {
                 <small id="clima-atualizado"></small>
                 </article>
 
-                <article class="cartao-metrica">
-                    <h3>Vibração</h3>
-
-                    <div class="linha-metrica">
-                        <strong class="verde">Normal</strong>
-                        <span class="linha-vibracao"></span>
-                    </div>
-                </article>
 
             </div>
 
