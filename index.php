@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: public/usuario/tela-login.php");
+    header("Location: public/landing.php");
     exit;
 }
 ?>
@@ -79,13 +79,15 @@ if (!isset($_SESSION['usuario'])) {
                     </div>
                 </article>
 
-                <article class="cartao-metrica">
-                    <h3>Temperatura</h3>
+               <article class="cartao-metrica">
+                <h3>Clima em Joinville</h3>
 
-                    <div class="linha-metrica">
-                        <strong class="vermelho">75&deg;C</strong>
-                        <span class="termometro"></span>
-                    </div>
+                <div class="linha-metrica">
+                <strong class="ciano" id="clima-temperatura">-- °C</strong>
+                </div>
+
+                <p id="clima-condicao">Carregando clima...</p>
+                <small id="clima-atualizado"></small>
                 </article>
 
                 <article class="cartao-metrica">
@@ -165,6 +167,7 @@ if (!isset($_SESSION['usuario'])) {
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script/grafico.js"></script>
+    <script src="script/clima.js"></script>
 
 </body>
 
