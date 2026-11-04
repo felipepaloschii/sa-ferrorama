@@ -1,6 +1,3 @@
-/* ==========================================================================
-   SA Ferrorama - Variáveis Globais & Reset
-   ========================================================================== */
 :root {
     --bg-dark: #050316;
     --bg-dark-surface: #2d3143;
@@ -29,20 +26,18 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: "Barlow", Arial, sans-serif;
     color: var(--text-main);
     background-color: var(--bg-light);
     line-height: 1.5;
 }
 
-/* ==========================================================================
-   TELA DE LOGIN
-   ========================================================================== */
+/* LOGIN */
 #login-corpo {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: 
+    background:
         linear-gradient(rgba(11, 13, 23, 0.72), rgba(11, 13, 23, 0.72)),
         url("../img/fundo_certo.png") center / cover no-repeat;
 }
@@ -74,10 +69,10 @@ body {
 }
 
 .subtitulo {
+    margin-bottom: 28px;
+    color: #374151;
     font-size: 14px;
     font-weight: 500;
-    color: #374151;
-    margin-bottom: 28px;
 }
 
 #form-login {
@@ -91,7 +86,7 @@ body {
 
 .label-form {
     display: block;
-    margin: 0 0 6px 0;
+    margin: 0 0 6px;
     color: #374151;
     font-size: 13px;
     font-weight: 600;
@@ -136,8 +131,8 @@ body {
 
 #mensagem a:hover,
 .link-recuperar:hover {
-    text-decoration: underline;
     color: #4b5563;
+    text-decoration: underline;
 }
 
 #botao-envio {
@@ -164,16 +159,13 @@ body {
     transform: scale(0.99);
 }
 
-/* Oculta áreas desnecessárias de cadastro no login */
 .toggle,
 .linha,
 .criar-conta {
     display: none !important;
 }
 
-/* ==========================================================================
-   BARRA SUPERIOR (HEADER / TOP NAVIGATION)
-   ========================================================================== */
+/* CABEÇALHO E NAVEGAÇÃO */
 .barra-superior {
     height: 64px;
     background-color: var(--bg-dark);
@@ -191,9 +183,9 @@ body {
 .marca-header h1,
 .logo-topo {
     margin: 0;
+    color: #ffffff;
     font-size: 18px;
     font-weight: 800;
-    color: #ffffff;
     letter-spacing: 0.5px;
 }
 
@@ -256,9 +248,9 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    color: var(--success);
     font-size: 13px;
     font-weight: 600;
-    color: var(--success);
 }
 
 .ponto-online {
@@ -278,22 +270,20 @@ body {
     border: 2px solid var(--accent-light);
     display: grid;
     place-items: center;
+    color: #ffffff;
     font-size: 12px;
     font-weight: bold;
-    color: #ffffff;
 }
 
-/* ==========================================================================
-   ÁREAS DE CONTEÚDO PRINCIPAL & PAINEIS
-   ========================================================================== */
+/* CONTEÚDO */
 .area-principal,
 .conteudo,
 .cadastro-trem,
 .conteudo-edicao-trem {
     max-width: 1400px;
+    min-height: calc(100vh - 64px);
     margin: 0 auto;
     padding: 28px 32px;
-    min-height: calc(100vh - 64px);
 }
 
 .cabecalho-conteudo,
@@ -307,31 +297,29 @@ body {
 
 .titulo-pagina,
 .titulo-sensores {
+    margin: 0 0 4px;
+    color: var(--text-main);
     font-size: 22px;
     font-weight: 800;
-    color: var(--text-main);
-    margin: 0 0 4px 0;
 }
 
 .descricao-pagina,
 .descricao-sensores {
+    margin: 0;
     color: var(--text-muted);
     font-size: 13px;
-    margin: 0;
 }
 
 .painel-principal h2,
 .conteudo h2,
 .titulo-painel-lista h2 {
+    margin: 0 0 16px;
+    color: var(--text-main);
     font-size: 20px;
     font-weight: 700;
-    color: var(--text-main);
-    margin: 0 0 16px 0;
 }
 
-/* ==========================================================================
-   MÉTRICAS & KPIS
-   ========================================================================== */
+/* MÉTRICAS */
 .metricas {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -340,20 +328,20 @@ body {
 }
 
 .cartao-metrica {
-    background: var(--surface-card);
-    border-radius: var(--radius-md);
     padding: 18px 20px;
+    background: var(--surface-card);
     border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
     box-shadow: var(--shadow-card);
 }
 
 .cartao-metrica h3 {
-    font-size: 12px;
-    text-transform: uppercase;
-    font-weight: 700;
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
     margin-bottom: 10px;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 .linha-metrica {
@@ -363,16 +351,16 @@ body {
 }
 
 .linha-metrica strong {
+    color: var(--text-main);
     font-size: 30px;
     font-weight: 800;
-    color: var(--text-main);
 }
 
 .subtexto-metrica,
 .verde {
+    color: var(--success);
     font-size: 12px;
     font-weight: 600;
-    color: var(--success);
 }
 
 .subtexto-metrica.atencao,
@@ -384,9 +372,7 @@ body {
     color: #0284c7;
 }
 
-/* ==========================================================================
-   GRADE DO DASHBOARD, MAPAS E EVENTOS
-   ========================================================================== */
+/* DASHBOARD, PAINÉIS E EVENTOS */
 .grade-dashboard {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -403,52 +389,52 @@ body {
 .painel-formulario-trem,
 .cartao-sensores-ativos,
 .painel-excluir-sensor {
-    background: var(--surface-card);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-card);
     padding: 22px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
 }
 
 .titulo-cartao {
-    font-size: 15px;
-    font-weight: 700;
     margin-bottom: 16px;
     color: var(--text-main);
+    font-size: 15px;
+    font-weight: 700;
 }
 
 .simulacao-mapa {
-    height: 250px;
-    width: 100%;
-    border: 2px dashed #cbd5e1;
-    border-radius: var(--radius-md);
-    background-color: #f8fafc;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
     color: var(--text-muted);
     font-size: 13px;
-    position: relative;
-    overflow: hidden;
+    background: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: var(--radius-md);
 }
 
 .trem-pin {
     position: absolute;
-    background: var(--bg-dark);
-    color: #ffffff;
     padding: 4px 10px;
+    color: #ffffff;
+    background: var(--bg-dark);
     border-radius: 4px;
     font-size: 11px;
     font-weight: bold;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .lista-eventos {
-    list-style: none;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    list-style: none;
 }
 
 .item-evento {
@@ -456,27 +442,25 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 12px 14px;
-    border-radius: var(--radius-sm);
     background: var(--bg-light);
     border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
     font-size: 13px;
 }
 
 .item-evento.alerta {
+    color: #991b1b;
     background: var(--danger-bg);
     border-color: #fecaca;
-    color: #991b1b;
 }
 
 .item-evento time {
-    font-size: 11px;
     color: var(--text-muted);
+    font-size: 11px;
     font-weight: 600;
 }
 
-/* ==========================================================================
-   TABELAS DE GESTÃO
-   ========================================================================== */
+/* TABELAS */
 .tabela-container,
 .tabela-sensores {
     width: 100%;
@@ -486,57 +470,65 @@ body {
 .cabecalho-tabela,
 .linha-tabela {
     display: grid;
-    grid-template-columns: 80px 1.5fr 1fr 1fr 120px 90px;
+    grid-template-columns:
+        50px
+        minmax(150px, 1.5fr)
+        minmax(100px, 1fr)
+        minmax(180px, 1.5fr)
+        80px
+        70px
+        80px
+        90px;
     align-items: center;
+    gap: 8px;
     padding: 12px 16px;
     font-size: 13px;
+    white-space: nowrap;
 }
 
 .cabecalho-tabela {
-    background-color: var(--accent-light);
-    color: var(--bg-dark);
-    font-weight: 700;
-    border-radius: var(--radius-sm);
     margin-bottom: 4px;
+    color: var(--bg-dark);
+    background: var(--accent-light);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
 }
 
 .linha-tabela {
+    background: var(--surface-card);
     border-bottom: 1px solid var(--border-color);
     transition: background 0.15s;
-    background: var(--surface-card);
 }
 
 .linha-tabela:hover {
-    background-color: #f8fafc;
+    background: #f8fafc;
 }
 
-/* Status & Badges */
 .badge-status,
 .status,
 .status-trem {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: fit-content;
     padding: 3px 10px;
     border-radius: 12px;
     font-size: 11px;
     font-weight: 700;
-    width: fit-content;
 }
 
 .badge-status.ativo,
 .status.ativo {
-    background-color: var(--accent-blue);
     color: var(--bg-dark);
+    background: var(--accent-blue);
 }
 
 .badge-status.inativo,
 .status.inativo {
-    background-color: #e2e8f0;
     color: var(--text-muted);
+    background: #e2e8f0;
 }
 
-/* Ações em Tabela */
 .acoes {
     display: flex;
     gap: 6px;
@@ -545,29 +537,29 @@ body {
 .botao-acao,
 .botao-editar,
 .botao-excluir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 28px;
     height: 28px;
     border: none;
     border-radius: var(--radius-sm);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
     font-size: 12px;
     text-decoration: none;
+    cursor: pointer;
     transition: opacity 0.2s;
 }
 
 .botao-acao.editar,
 .botao-editar {
-    background-color: var(--accent-blue);
     color: var(--bg-dark);
+    background: var(--accent-blue);
 }
 
 .botao-acao.excluir,
 .botao-excluir {
-    background-color: var(--danger-bg);
     color: var(--danger);
+    background: var(--danger-bg);
 }
 
 .botao-acao:hover,
@@ -576,9 +568,7 @@ body {
     opacity: 0.8;
 }
 
-/* ==========================================================================
-   FORMULÁRIOS & BOTÕES GERAIS
-   ========================================================================== */
+/* FORMULÁRIOS */
 label,
 .label-form,
 .rotulo-campo-trem,
@@ -591,16 +581,15 @@ label,
 .descricao-sensor {
     display: block;
     margin-bottom: 6px;
+    color: var(--text-main);
     font-size: 13px;
     font-weight: 600;
-    color: var(--text-main);
 }
 
 .obrigatorio {
     color: var(--danger);
 }
 
-.conjunto,
 .grupo-campo-trem,
 .grupo-nome-sensor {
     margin-bottom: 18px;
@@ -613,10 +602,10 @@ textarea,
     width: 100%;
     height: 40px;
     padding: 8px 14px;
-    background-color: #ffffff;
+    color: var(--text-main);
+    background: #ffffff;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
-    color: var(--text-main);
     font-size: 14px;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -636,7 +625,7 @@ textarea:focus,
     box-shadow: 0 0 0 3px rgba(45, 49, 67, 0.15);
 }
 
-/* Botões */
+/* BOTÕES */
 .botao-primario,
 .botao-envio,
 .botao-salvar-sensor,
@@ -649,12 +638,12 @@ textarea:focus,
     gap: 8px;
     height: 38px;
     padding: 0 16px;
-    background-color: var(--bg-dark);
     color: #ffffff;
-    font-size: 13px;
-    font-weight: 600;
+    background: var(--bg-dark);
     border: none;
     border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
     text-decoration: none;
     cursor: pointer;
     transition: background 0.2s;
@@ -666,7 +655,7 @@ textarea:focus,
 .botao-salvar-trem:hover,
 .botao-novo-trem:hover,
 .botao-novo-sensor:hover {
-    background-color: var(--bg-dark-surface);
+    background: var(--bg-dark-surface);
 }
 
 .botao-cancelar-cadastro,
@@ -678,8 +667,8 @@ textarea:focus,
     justify-content: center;
     height: 38px;
     padding: 0 16px;
-    background-color: var(--bg-light);
     color: var(--text-main);
+    background: var(--bg-light);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     font-size: 13px;
@@ -692,25 +681,68 @@ textarea:focus,
 .botao-cancelar-trem:hover,
 .botao-voltar-trem:hover,
 .botao-voltar-sensores:hover {
-    background-color: #e2e8f0;
+    background: #e2e8f0;
 }
 
 .botao-confirmar-exclusao {
-    background-color: var(--danger);
+    padding: 8px 16px;
     color: #ffffff;
+    background: var(--danger);
     border: none;
     border-radius: var(--radius-sm);
-    padding: 8px 16px;
     cursor: pointer;
 }
 
-/* ==========================================================================
-   RESPONSIVIDADE
-   ========================================================================== */
+/* EXCLUSÃO DE SENSOR */
+.painel-excluir-sensor {
+    text-align: center;
+}
+
+.informacoes-sensor-excluir {
+    display: grid;
+    gap: 8px;
+    width: min(100%, 520px);
+    margin: 16px auto;
+    padding: 12px 18px;
+    background: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.informacoes-sensor-excluir br {
+    display: none;
+}
+
+.botoes-excluir-sensor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.botoes-excluir-sensor form {
+    margin: 0;
+}
+
+.botoes-excluir-sensor button {
+    min-height: 38px;
+}
+
+.botoes-excluir-sensor .botao-cancelar-cadastro {
+    color: var(--text-main);
+    background: var(--bg-light);
+}
+
+/* RESPONSIVIDADE */
 @media (max-width: 992px) {
     .metricas {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .grade-dashboard {
         grid-template-columns: 1fr;
     }
@@ -723,72 +755,39 @@ textarea:focus,
         padding: 16px;
         gap: 12px;
     }
+
     .lado-esquerdo {
         flex-direction: column;
         gap: 8px;
         width: 100%;
     }
+
     .navegacao-principal,
     .navegacao-superior {
         flex-direction: row;
-        overflow-x: auto;
         width: 100%;
+        overflow-x: auto;
     }
-    .area-principal {
+
+    .area-principal,
+    .conteudo {
         padding: 16px;
     }
+
     .metricas {
         grid-template-columns: 1fr;
     }
+
     .cabecalho-tabela,
     .linha-tabela {
         min-width: 600px;
     }
-}
 
-.cabecalho-tabela,
-.linha-tabela {
-    display: grid;
-    grid-template-columns: 50px minmax(150px, 1.5fr) minmax(100px, 1fr)
-        minmax(180px, 1.5fr) 80px 70px 80px 90px;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 16px;
-    font-size: 13px;
-    white-space: nowrap;
-}
-
-.cabecalho-tabela {
-    background-color: var(--accent-light);
-    color: var(--bg-dark);
-    font-weight: 700;
-    border-radius: var(--radius-sm);
-    margin-bottom: 4px;
-}
-
-.linha-tabela {
-    border-bottom: 1px solid var(--border-color);
-    background: var(--surface-card);
-}
-
-.painel-excluir-sensor {
-    text-align: center;
-}
-
-.informacoes-sensor-excluir {
-    display: table;
-    margin: 16px auto;
-    padding: 12px 18px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    background: var(--bg-light);
-}
-
-.botoes-excluir-sensor {
-    justify-content: center;
-}
-
-.botoes-excluir-sensor .botao-cancelar-cadastro {
-    background: #333;
-    color: #fff;
+    .cabecalho-conteudo,
+    .cabecalho-sensor,
+    .cabecalho-cadastro-sensor {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
 }
