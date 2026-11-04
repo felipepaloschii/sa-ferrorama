@@ -53,26 +53,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <header class="barra-superior">
         <h1>PIA Enterprise</h1>
-    </header>
-
-    <aside class="menu-lateral">
-        <nav>
+        <nav class="navegacao-principal">
             <a href="../../index.php">Dashboard</a>
             <a href="../sensor/tela-home-sensor.php">Sensores</a>
-            <a href="lista_trem.php">Trens</a>
-            <a class= "ativo "href="../rotas/tela-home-rotas.php">Rotas</a>
- <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+            <a href="../trem/lista_trem.php">Trens</a>
+            <a class="ativo" href="tela-home-rotas.php">Rotas</a>
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+                <a href="../usuario/tela-home-usuario.php">Usuários</a>
+            <?php endif; ?>
+        </nav>
+    </header>
 
-            <a href="../usuario/tela-home-usuario.php">Usuários</a>
-
-            <?php endif; ?>        </nav>
-    </aside>
-
-    <main class="area-principal cadastro-trem">
-        <div class="cabecalho-cadastro-sensor">
-            <h2 class="titulo-pagina">Cadastrar nova rota</h2>
-            <p class="descricao-pagina">Preencha as informações para cadastrar um nova rota no sistema.</p>
-        </div>
+            <main class="area-principal cadastro-rota">
+                    <section class="cabecalho-cadastro-sensor">
+            <div class="informacoes-pagina">
+                <h1 class="titulo-pagina">Cadastrar nova rota</h1>
+                <p class="descricao-pagina">Preencha as informações para cadastrar uma nova rota no sistema.</p>
+            </div>
+            <a href="tela-home-rotas.php" class="botao-voltar-sensores">← Voltar para rotas</a>
+        </section>
 
         <?php if (isset($erro)): ?>
             <div class="aviso-cadastro falha"><?php echo $erro; ?></div>
@@ -123,12 +122,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="number" id="distancia" name="distancia" placeholder="Ex.: 50km" required>
                     </div>
 
-                <div class="botoes-cadastro-trem">
-                    <button href="tela-home-rotas.php" type="submit" class="botao-salvar-trem">Salvar rota</button>
-                    <a href="tela-home-rotas.php" class="botao-voltar-trem">← Voltar para rotas</a>
-
-            
-                </div>
+                            <div class="botoes-cadastro-trem botoes-cadastro-sensor">
+                <button type="submit" class="botao-salvar-trem">Salvar rota</button>
+                <a href="tela-home-rotas.php" class="botao-cancelar-trem">Cancelar</a>
+            </div>
             </form>
         </section>
     </main>

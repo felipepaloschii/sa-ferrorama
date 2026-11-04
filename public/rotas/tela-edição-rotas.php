@@ -102,31 +102,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <header class="barra-superior">
         <h1>PIA Enterprise</h1>
-    </header>
-
-    <aside class="menu-lateral">
-        <nav>
+        <nav class="navegacao-principal">
             <a href="../../index.php">Dashboard</a>
-
-            <a href="../sensor/tela-home-sensor.php">
-                Sensores
-            </a>
-
-            <a href="../trem/lista_trem.php">
-                Trens
-            </a>
-
-            <a class="ativo" href="tela-home-rotas.php">
-                Rotas
-            </a>
-
-          <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-
-            <a href="../usuario/tela-home-usuario.php">Usuários</a>
-
+            <a href="../sensor/tela-home-sensor.php">Sensores</a>
+            <a href="../trem/lista_trem.php">Trens</a>
+            <a class="ativo" href="tela-home-rotas.php">Rotas</a>
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+                <a href="../usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
         </nav>
-    </aside>
+    </header>
+    
     <main class="conteudo-edicao-trem">
 
         <h2>Editar rotas</h2>
