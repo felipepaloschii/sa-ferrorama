@@ -301,5 +301,11 @@
             }
         });
     </script>
+
+    <center>
+        <button class="botao-voltar" onclick="window.location.href='landing.php'">
+            ← Voltar para a página inicial
+        </button>
+    </center>
 </body>
 </html>
