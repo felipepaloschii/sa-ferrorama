@@ -39,7 +39,6 @@ if (mysqli_stmt_fetch($consulta)) {
         'email' => $email,
         'tipo' => $tipo
     ];
-
 }
 
 mysqli_stmt_close($consulta);
@@ -69,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         header('Location: tela-home-usuario.php');
         exit;
-
     }
 
     $erro = 'Não foi possível excluir este usuário.';
@@ -99,39 +97,37 @@ function e($valor)
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        content="width=device-width, initial-scale=1.0">
 
     <title>Excluir usuário</title>
 
     <link
         rel="stylesheet"
-        href="../../assets/style/style.css"
-    >
+        href="../../assets/style/style.css">
 
 </head>
 
 <body>
 
-<div class="estrutura-dashboard">
+    <div class="estrutura-dashboard">
 
-    <header class="barra-superior">
-    <h1>PIA Enterprise</h1>
+        <header class="barra-superior">
+            <h1>PIA Enterprise</h1>
 
-    <aside class="menu-lateral">
-        <nav>
-            <a href="../../index.php">Dashboard</a>
-            <a href="../sensor/tela-home-sensor.php">Sensores</a>
-            <a href="../trem/lista_trem.php">Trens</a>
-            <a href="../rotas/tela-home-rotas.php">Rotas</a>
+            <aside class="menu-lateral">
+                <nav>
+                    <a href="../../index.php">Dashboard</a>
+                    <a href="../sensor/tela-home-sensor.php">Sensores</a>
+                    <a href="../trem/lista_trem.php">Trens</a>
+                    <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
-            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-                <a class="ativo" href="tela-home-usuario.php">Usuários</a>
-            <?php endif; ?>
-        </nav>
-    </aside>
-</header>
-    <main class="area-principal">
+                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+                        <a class="ativo" href="tela-home-usuario.php">Usuários</a>
+                    <?php endif; ?>
+                </nav>
+            </aside>
+        </header>
+        <main class="area-principal">
 
             <section class="cabecalho-cadastro-sensor">
 
@@ -158,118 +154,110 @@ function e($valor)
 
             </section>
 
-        <section class="painel-excluir-sensor">
+            <section class="painel-excluir-sensor">
 
-            <div
-                class="icone-excluir-sensor"
-                aria-hidden="true"
-            >
-                🗑
-            </div>
-
-
-            <h2>
-                Tem certeza que deseja excluir este usuário?
-            </h2>
+                <div
+                    class="icone-excluir-sensor"
+                    aria-hidden="true">
+                    🗑
+                </div>
 
 
-            <p>
-                Essa ação não poderá ser desfeita.
-            </p>
+                <h2>
+                    Tem certeza que deseja excluir este usuário?
+                </h2>
 
 
-            <div class="informacoes-sensor-excluir">
-
-                <span>
-                    ID:
-                    <?= e($usuario['id_usuario']) ?>
-                </span>
-
-<br>
-                <span>
-                    E-mail:
-                    <?= e($usuario['email']) ?>
-                </span>
-
-<br>
-                <span>
-                    Tipo:
-                    <?php
-
-                    if ($usuario['tipo'] === 'administrador') {
-
-                        echo 'Administrador';
-
-                    } elseif ($usuario['tipo'] === 'funcionario') {
-
-                        echo 'Funcionário';
-
-                    } else {
-
-                        echo e($usuario['tipo']);
-
-                    }
-
-                    ?>
-                </span>
-
-            </div>
-
-
-            <?php if ($erro !== ''): ?>
-
-                <p class="erro-excluir-sensor">
-
-                    <?= e($erro) ?>
-
+                <p>
+                    Essa ação não poderá ser desfeita.
                 </p>
 
-            <?php endif; ?>
+
+                <div class="informacoes-sensor-excluir">
+
+                    <span>
+                        ID:
+                        <?= e($usuario['id_usuario']) ?>
+                    </span>
+
+                    <br>
+                    <span>
+                        E-mail:
+                        <?= e($usuario['email']) ?>
+                    </span>
+
+                    <br>
+                    <span>
+                        Tipo:
+                        <?php
+
+                        if ($usuario['tipo'] === 'administrador') {
+
+                            echo 'Administrador';
+                        } elseif ($usuario['tipo'] === 'funcionario') {
+
+                            echo 'Funcionário';
+                        } else {
+
+                            echo e($usuario['tipo']);
+                        }
+
+                        ?>
+                    </span>
+
+                </div>
 
 
-            <div class="botoes-excluir-sensor">
+                <?php if ($erro !== ''): ?>
 
-                <form
-                    method="post"
-                    action="tela-excluir-usuario.php"
-                >
+                    <p class="erro-excluir-sensor">
 
-                    <input
-                        type="hidden"
-                        name="id"
-                        value="<?= e($id) ?>"
-                    >
+                        <?= e($erro) ?>
+
+                    </p>
+
+                <?php endif; ?>
+
+
+                <div class="botoes-excluir-sensor">
+
+                    <form
+                        method="post"
+                        action="tela-excluir-usuario.php">
+
+                        <input
+                            type="hidden"
+                            name="id"
+                            value="<?= e($id) ?>">
+
+
+                        <button
+                            class="botao-confirmar-exclusao"
+                            type="submit">
+
+                            Excluir usuário
+
+                        </button>
+
+                    </form>
 
 
                     <button
-                        class="botao-confirmar-exclusao"
-                        type="submit"
-                    >
+                        type="button"
+                        class="botao-cancelar-cadastro"
+                        onclick="window.location.href='tela-home-usuario.php'">
 
-                        Excluir usuário
+                        Cancelar
 
                     </button>
 
-                </form>
+                </div>
 
+            </section>
 
-                <button
-                    type="button"
-                    class="botao-cancelar-cadastro"
-                    onclick="window.location.href='tela-home-usuario.php'"
-                >
+        </main>
 
-                    Cancelar
-
-                </button>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</div>
+    </div>
 
 </body>
 
