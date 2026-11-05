@@ -9,7 +9,7 @@
         :root {
             --noite: #080617;
             --painel: #202c3b;
-            --ambar: #eda52f;
+            --ambar: #dddbff;
             --fundo: #f4f6fa;
             --texto: #f8fafc;
             --suave: #cbd2dc;
@@ -93,7 +93,7 @@
         }
 
         input:focus {
-            outline: 3px solid rgba(237, 165, 47, .3);
+            outline: 3px solid #dddbff;
             border-color: var(--ambar);
         }
 
@@ -123,7 +123,7 @@
         }
 
         button:hover {
-            background: #f7b84f;
+            background: #dddbff;
             transform: translateY(-1px);
         }
 
