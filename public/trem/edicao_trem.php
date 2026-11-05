@@ -15,7 +15,6 @@ if (!$id || $id < 1) {
     exit;
 }
 
-// Busca os dados atuais para preencher o formulário.
 $consulta = mysqli_prepare($conexao, 'SELECT nome_trem, modelo_trem, localizacao_i, codigo, capacidade, ano, status FROM trem WHERE id = ?');
 mysqli_stmt_bind_param($consulta, 'i', $id);
 mysqli_stmt_execute($consulta);
@@ -192,8 +191,8 @@ function e($valor)
                     </div>
 
                     <div class="acoes-edicao-trem">
-                        <button class="botao-edicao-claro" type="submit">Salvar alterações</button>
-                        <a class="botao-edicao-claro" href="lista_trem.php">← Voltar para trens</a>
+                        <button class="botao-salvar-sensor" type="submit">Salvar alterações</button>
+                        <a class="botao-cancelar-cadastro" href="lista_trem.php">← Voltar para trens</a>
                     </div>
                 </form>
             </section>

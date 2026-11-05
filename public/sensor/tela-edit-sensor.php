@@ -353,8 +353,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <button
                         type="submit"
-                        class="botao-salvar-sensor">
-
+                        class="botao-salvar-sensor"
+                        submit="window.location.href='tela-home-sensor.php'">
+                        
                         Salvar alterações
 
                     </button>
