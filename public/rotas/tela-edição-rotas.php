@@ -262,14 +262,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <a
                         href="tela-home-rotas.php"
-                        class="botao-edicao-claro"
+                        class="botao-cancelar-cadastro"
                     >
                         ← Voltar para Rotas
                     </a>
 
                     <button
                         type="submit"
-                        class="botao-edicao-escuro"
+                        class="botao-salvar-sensor"
                     >
                         Salvar
                     </button>
