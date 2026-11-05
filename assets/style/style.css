@@ -39,7 +39,7 @@ body {
     color: #f4f6fa;
     background:
         linear-gradient(rgba(11, 13, 23, 0.72), rgba(11, 13, 23, 0.72)),
-        url("../img/fundo_certo.png") center / cover no-repeat;
+        url("../img/fundo_certo.jfif") center / cover no-repeat;
 }
 
 #login-area {
