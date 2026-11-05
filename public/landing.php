@@ -10,7 +10,7 @@
         :root {
             --noite: #080617;
             --painel: #202c3b;
-            --ambar: #eda52f;
+            --ambar: #cbc9f7;
             --fundo: #f4f6fa;
             --texto: #080617;
             --texto-claro: #f8fafc;

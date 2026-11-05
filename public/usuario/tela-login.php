@@ -125,10 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="linha"></div>
 
-            <div class="toggle" id="toggle">
-             <a href="tela-cadastro-adm.php">Ainda não tem acesso? Criar conta de administrador</a>
-           
-            </div>
+       
 
         </section>
     </main>

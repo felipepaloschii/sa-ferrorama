@@ -32,11 +32,11 @@ body {
     line-height: 1.5;
 }
 
-/* LOGIN */
 #login-corpo {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    color: #f4f6fa;
     background:
         linear-gradient(rgba(11, 13, 23, 0.72), rgba(11, 13, 23, 0.72)),
         url("../img/fundo_certo.png") center / cover no-repeat;
@@ -56,7 +56,7 @@ body {
     background-color: var(--surface-card);
     border-radius: 16px;
     padding: 40px 36px 36px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    box-shadow: #f4f6fa;
     text-align: center;
 }
 
