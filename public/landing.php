@@ -1,111 +1,260 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ferrorama | Mobilidade ferroviária</title>
+    <title>Ferrorama | Gestão ferroviária</title>
     <link rel="stylesheet" href="../assets/style/style.css">
 
     <style>
-        .landing-conteudo {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 48px 24px;
+        :root {
+            --noite: #080617;
+            --painel: #202c3b;
+            --ambar: #eda52f;
+            --fundo: #f4f6fa;
+            --texto: #080617;
+            --texto-claro: #f8fafc;
+            --texto-suave: #cbd2dc;
         }
 
-        .landing-destaque {
-            padding: 48px 32px;
-            border-radius: 16px;
-            background: var(--painel, #202b3a);
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--fundo);
+            color: var(--texto);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .cabecalho-landing {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            background: var(--noite);
+            box-shadow: 0 3px 12px rgba(8, 6, 23, .14);
+        }
+
+        .marca-landing {
+            color: white;
+            font-size: 25px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .conteudo-landing {
+            width: min(1160px, 90%);
+            margin: 58px auto 70px;
+        }
+
+        .hero-landing {
+            padding: 62px 7%;
+            border-radius: 18px;
+            background: var(--painel);
             text-align: center;
+            box-shadow: 0 12px 28px rgba(8, 6, 23, .10);
         }
 
-        .landing-destaque h2 {
-            margin-top: 0;
-            font-size: 2rem;
+        .hero-landing h1 {
+            margin: 0 0 18px;
+            color: var(--texto-claro);
+            font-size: clamp(30px, 4vw, 43px);
+            line-height: 1.2;
         }
 
-        .landing-destaque p {
-            max-width: 700px;
-            margin: 16px auto;
-            line-height: 1.6;
+        .hero-landing h1 span {
+            color: var(--ambar);
         }
 
-        .landing-acoes {
+        .hero-landing p {
+            max-width: 780px;
+            margin: 0 auto;
+            color: var(--texto-suave);
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .botoes-landing {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 24px;
+            gap: 14px;
+            margin-top: 28px;
         }
 
-        .landing-botao {
-            display: inline-block;
-            padding: 12px 22px;
-            border-radius: 8px;
-            background: var(--ambar, #e6a23c);
-            color: #171717;
+        .botao-landing {
+            min-height: 52px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 25px;
+            border: 2px solid var(--ambar);
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: 700;
             text-decoration: none;
-            font-weight: bold;
+            transition: background .2s, transform .2s;
         }
 
-        .landing-secoes {
+        .botao-landing:hover {
+            transform: translateY(-2px);
+        }
+
+        .botao-principal {
+            background: var(--ambar);
+            color: var(--noite);
+        }
+
+        .botao-principal:hover {
+            background: #f7b84f;
+        }
+
+        .botao-secundario {
+            background: transparent;
+            color: var(--ambar);
+        }
+
+        .botao-secundario:hover {
+            background: rgba(237, 165, 47, .10);
+        }
+
+        .recursos-landing {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 18px;
-            margin-top: 24px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            margin-top: 28px;
         }
 
-        .landing-secao {
-            padding: 22px;
-            border-radius: 12px;
-            background: var(--painel, #202b3a);
+        .cartao-landing {
+            min-height: 165px;
+            padding: 28px 26px;
+            border-radius: 15px;
+            background: var(--painel);
+            box-shadow: 0 8px 20px rgba(8, 6, 23, .08);
+            transition: transform .2s, box-shadow .2s;
         }
 
-        .landing-secao h3 {
-            margin-top: 0;
+        .cartao-landing:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 13px 25px rgba(8, 6, 23, .14);
+        }
+
+        .cartao-landing h2 {
+            margin: 0 0 10px;
+            color: var(--texto-claro);
+            font-size: 22px;
+        }
+
+        .cartao-landing h2::after {
+            content: "";
+            display: block;
+            width: 42px;
+            height: 3px;
+            margin-top: 10px;
+            border-radius: 4px;
+            background: var(--ambar);
+        }
+
+        .cartao-landing p {
+            margin: 0;
+            color: var(--texto-suave);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 800px) {
+            .recursos-landing {
+                grid-template-columns: 1fr;
+            }
+
+            .conteudo-landing {
+                margin-top: 32px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .conteudo-landing {
+                width: 92%;
+            }
+
+            .hero-landing {
+                padding: 40px 22px;
+            }
+
+            .hero-landing p {
+                font-size: 16px;
+            }
+
+            .botoes-landing {
+                flex-direction: column;
+            }
+
+            .botao-landing {
+                width: 100%;
+            }
+
+            .cartao-landing {
+                min-height: auto;
+                padding: 24px 22px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <header class="barra-superior">
-        <h1>Ferrorama</h1>
+    <header class="cabecalho-landing">
+        <a class="marca-landing" href="landing.php">PIA Enterprise</a>
     </header>
 
-    <main class="landing-conteudo">
-        <section class="landing-destaque">
-            <h2>Gestão ferroviária em um só lugar</h2>
+    <main class="conteudo-landing">
+        <section class="hero-landing">
+            <h1>Gestão ferroviária <span>em um só lugar</span></h1>
+
             <p>
-                O Ferrorama é um projeto de gerenciamento ferroviário
-                desenvolvido para organizar informações sobre trens, rotas
-                e sensores, apoiando o acompanhamento das operações.
+                O Ferrorama reúne as informações de trens, rotas e sensores
+                em um só sistema, facilitando o acompanhamento e a organização
+                das operações ferroviárias.
             </p>
 
-            <div class="landing-acoes">
-                <a class="landing-botao" href="usuario/tela-login.php">
+            <div class="botoes-landing">
+                <a class="botao-landing botao-principal" href="usuario/tela-login.php">
                     Acessar o sistema
                 </a>
-                <a class="landing-botao" href="cep.php">
+
+                <a class="botao-landing botao-secundario"
+                   href="cep.php"
+                   target="_blank"
+                   rel="noopener">
                     Consultar CEP
                 </a>
             </div>
         </section>
 
-        <section class="landing-secoes">
-            <article class="landing-secao">
-                <h3>Trens</h3>
-                <p>Consulte e organize os registros dos trens cadastrados.</p>
+        <section class="recursos-landing" aria-label="Recursos do sistema">
+            <article class="cartao-landing">
+                <h2>Trens</h2>
+                <p>
+                    Consulte os trens cadastrados e mantenha as informações
+                    organizadas em um só lugar.
+                </p>
             </article>
 
-            <article class="landing-secao">
-                <h3>Rotas</h3>
-                <p>Visualize as rotas e informações relacionadas às viagens.</p>
+            <article class="cartao-landing">
+                <h2>Rotas</h2>
+                <p>
+                    Visualize as rotas e consulte os dados relacionados
+                    às viagens.
+                </p>
             </article>
 
-            <article class="landing-secao">
-                <h3>Sensores</h3>
-                <p>Acompanhe os registros de sensores disponíveis no sistema.</p>
+            <article class="cartao-landing">
+                <h2>Sensores</h2>
+                <p>
+                    Acompanhe os registros dos sensores e tenha as informações
+                    disponíveis para consulta.
+                </p>
             </article>
         </section>
     </main>

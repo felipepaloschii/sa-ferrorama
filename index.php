@@ -51,9 +51,13 @@ $rotasAtivas = mysqli_fetch_assoc(mysqli_query(
             <a href="public/trem/lista_trem.php">Trens</a>
             <a href="public/rotas/tela-home-rotas.php">Rotas</a>
 
+            
+
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
                 <a href="public/usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
+
+            <a href="public/logout/logout.php">Sair</a>
         </nav>
     </aside>
 </header>
