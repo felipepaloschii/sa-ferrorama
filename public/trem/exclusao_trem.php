@@ -1,4 +1,8 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
 
@@ -15,24 +19,35 @@ if (!$id || $id < 1) {
     exit;
 }
 
-$consulta = mysqli_prepare($conexao, 'SELECT nome_trem, modelo_trem, localizacao_i, codigo, capacidade, ano, status FROM trem WHERE id = ?');
-mysqli_stmt_bind_param($consulta, 'i', $id);
-mysqli_stmt_execute($consulta);
-mysqli_stmt_bind_result($consulta, $nome, $modelo, $localizacao, $codigo, $capacidade, $ano, $status);
+// Consulta usando LEFT JOIN para buscar o e-mail do usuário responsável cadastrado na tabela usuario
+$consulta = mysqli_prepare($conexao, '
+    SELECT t.id, t.nome_trem, t.modelo_trem, t.localizacao_i, t.codigo, t.capacidade, t.ano, t.status, t.id_usuario, u.email 
+    FROM trem t 
+    LEFT JOIN usuario u ON t.id_usuario = u.id_usuario 
+    WHERE t.id = ?
+');
 
-if (mysqli_stmt_fetch($consulta)) {
-    $trem = [
-        'nome' => $nome,
-        'modelo' => $modelo,
-        'localizacao' => $localizacao,
-        'codigo' => $codigo,
-        'capacidade' => $capacidade,
-        'ano' => $ano,
-        'status' => $status,
-    ];
+if ($consulta) {
+    mysqli_stmt_bind_param($consulta, 'i', $id);
+    mysqli_stmt_execute($consulta);
+    $resultadoConsulta = mysqli_stmt_get_result($consulta);
+    
+    if ($resultadoConsulta && $dadosTrem = mysqli_fetch_assoc($resultadoConsulta)) {
+        $trem = [
+            'id'          => $dadosTrem['id'],
+            'nome'        => $dadosTrem['nome_trem'],
+            'modelo'      => $dadosTrem['modelo_trem'],
+            'localizacao' => $dadosTrem['localizacao_i'],
+            'codigo'      => $dadosTrem['codigo'],
+            'capacidade'  => $dadosTrem['capacidade'],
+            'ano'         => $dadosTrem['ano'],
+            'status'      => $dadosTrem['status'],
+            'id_usuario'  => $dadosTrem['id_usuario'],
+            'email'       => $dadosTrem['email'] ?? null
+        ];
+    }
+    mysqli_stmt_close($consulta);
 }
-
-mysqli_stmt_close($consulta);
 
 if (!$trem) {
     header('Location: lista_trem.php');
@@ -40,29 +55,37 @@ if (!$trem) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $exclusao = mysqli_prepare($conexao, 'DELETE FROM trem WHERE id = ?');
-    mysqli_stmt_bind_param($exclusao, 'i', $id);
+    if (!empty($trem['id_usuario']) && $trem['id_usuario'] > 0) {
+        $erro = 'Este trem não pode ser excluído pois está atribuído a um usuário responsável.';
+    } else {
+        $exclusao = mysqli_prepare($conexao, 'DELETE FROM trem WHERE id = ?');
+        
+        if ($exclusao) {
+            mysqli_stmt_bind_param($exclusao, 'i', $id);
 
-    if (mysqli_stmt_execute($exclusao)) {
-        mysqli_stmt_close($exclusao);
-        header('Location: lista_trem.php');
-        exit;
+            if (mysqli_stmt_execute($exclusao)) {
+                mysqli_stmt_close($exclusao);
+                header('Location: lista_trem.php');
+                exit;
+            } else {
+                $erro = 'Não foi possível excluir este trem. Verifique se existem rotas ou registros vinculados a ele.';
+            }
+            mysqli_stmt_close($exclusao);
+        } else {
+            $erro = 'Erro ao processar a exclusão no banco de dados.';
+        }
     }
-
-    $erro = 'Não foi possível excluir este trem. Verifique se existem rotas vinculadas a ele.';
-    mysqli_stmt_close($exclusao);
 }
 
-function e($valor)
-{
+function e($valor) {
     return htmlspecialchars((string) $valor, ENT_QUOTES, 'UTF-8');
 }
 
 $rotulosStatus = [
-    'operacao' => 'Em operação',
-    'parado' => 'Parado',
+    'operacao'   => 'Em operação',
+    'parado'     => 'Parado',
     'manutencao' => 'Manutenção',
-    'inativo' => 'Inativo',
+    'inativo'    => 'Inativo',
 ];
 ?>
 <!DOCTYPE html>
@@ -71,91 +94,74 @@ $rotulosStatus = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excluir trem</title>
+    <title>Excluir Trem - PIA Enterprise</title>
     <link rel="stylesheet" href="../../assets/style/style.css">
 </head>
 
 <body>
-    <div class="estrutura-dashboard">
-       <header class="barra-superior">
-    <h1>PIA Enterprise</h1>
-
-    <aside class="menu-lateral">
-        <nav>
-            <a href="../../index.php">Dashboard</a>
-            <a href="../sensor/tela-home-sensor.php">Sensores</a>
-            <a  class="ativo "href="../trem/lista_trem.php">Trens</a>
-            <a href="../rotas/tela-home-rotas.php">Rotas</a>
-
-            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-                <a href="../usuario/tela-home-usuario.php">Usuários</a>
-            <?php endif; ?>
-        </nav>
-    </aside>
-</header>
-
-       <main class="area-principal">
-
-            <section class="cabecalho-cadastro-sensor">
-
-                <div class="informacoes-pagina">
-
-                    <h1 class="titulo-pagina">
-                        Excluir trem
-                    </h1>
-
-                    <p class="descricao-sensores">
-                        Confirme a exclusão do trem selecionado.
-                    </p>
-
-                </div>
-
-
-                <button
-                    class="botao-voltar-sensores"
-                    onclick="window.location.href='tela-home-sensor.php'">
-
-                    ← Voltar para sensores
-
-                </button>
-
-            </section>
-
-            <section class="painel-excluir-sensor">
-                <div class="icone-excluir-sensor" aria-hidden="true">🗑</div>
-                <h2>Tem certeza que deseja excluir este trem?</h2>
-                <p>Essa ação não poderá ser desfeita.</p>
-
-                <div class="informacoes-sensor-excluir">
-                    <span>Nome: <?= e($trem['nome']) ?></span>
-                    <br>
-                    <span>Modelo: <?= e($trem['modelo']) ?></span>
-                    <br>
-                    <span>Localização: <?= e($trem['localizacao']) ?></span>
-                    <br>
-                    <span>Código: <?= e($trem['codigo']) ?></span>
-                    <br>
-                    <span>Capacidade: <?= e($trem['capacidade']) ?></span>
-                    <br>
-                    <span>Ano: <?= e($trem['ano']) ?></span>
-                    <br>
-                    <span>Status: <?= e($rotulosStatus[$trem['status']] ?? $trem['status']) ?></span>
-                </div>
-
-                <?php if ($erro !== ''): ?>
-                    <p class="erro-excluir-sensor"><?= e($erro) ?></p>
+    <header class="barra-superior">
+        <div class="lado-esquerdo">
+            <h1 class="logo-topo">PIA Enterprise</h1>
+            <nav class="navegacao-principal">
+                <a href="../../index.php">Dashboard</a>
+                <a href="../sensor/tela-home-sensor.php">Sensores</a>
+                <a class="ativo" href="lista_trem.php">Trens</a>
+                <a href="../rotas/tela-home-rotas.php">Rotas</a>
+                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+                    <a href="../usuario/tela-home-usuario.php">Usuários</a>
                 <?php endif; ?>
+            </nav>
+        </div>
 
-                <div class="botoes-excluir-sensor">
-                    <form method="post" action="exclusao_trem.php">
-                        <input type="hidden" name="id" value="<?= e($id) ?>">
-                        <button class="botao-confirmar-exclusao" type="submit">Excluir trem</button>
-                    </form>
-                   
+        <div class="acoes-superiores">
+            <div class="status-online">
+                <span class="ponto-online"></span>
+                <span>Online</span>
+            </div>
+            <div class="avatar-usuario" title="Usuário">U</div>
+        </div>
+    </header>
+
+    <main class="area-principal">
+        <div class="cabecalho-cadastro-sensor">
+            <div class="informacoes-pagina">
+                <h1 class="titulo-pagina">Excluir trem</h1>
+                <p class="descricao-sensores">Confirme os dados do trem antes de prosseguir com a exclusão.</p>
+            </div>
+            <a href="lista_trem.php" class="botao-voltar-sensores">← Voltar para trens</a>
+        </div>
+
+        <section class="painel-excluir-sensor">
+            <div class="icone-excluir-sensor" aria-hidden="true">🗑</div>
+            <h2>Tem certeza que deseja excluir este trem?</h2>
+            <p>Essa ação não poderá ser desfeita.</p>
+
+            <div class="informacoes-sensor-excluir" style="margin: 20px 0; line-height: 1.8;">
+                <span><strong>Nome:</strong> <?= e($trem['nome']) ?></span><br>
+                <span><strong>Modelo:</strong> <?= e($trem['modelo']) ?></span><br>
+                <span><strong>Usuário responsável:</strong> <?= !empty($trem['email']) ? e($trem['email']) : 'Nenhum usuário atribuído' ?></span><br>
+                <span><strong>Localização:</strong> <?= e($trem['localizacao']) ?></span><br>
+                <span><strong>Código:</strong> <?= e($trem['codigo']) ?></span><br>
+                <span><strong>Capacidade:</strong> <?= e($trem['capacidade']) ?></span><br>
+                <span><strong>Ano:</strong> <?= e($trem['ano']) ?></span><br>
+                <span><strong>Status:</strong> <?= e($rotulosStatus[$trem['status']] ?? $trem['status']) ?></span>
+            </div>
+
+            <?php if ($erro !== ''): ?>
+                <div class="aviso-cadastro falha" style="margin-bottom: 20px; padding: 12px; background: var(--danger-bg, #fee2e2); color: var(--danger, #ef4444); border-radius: var(--radius-sm, 6px);">
+                    <?= e($erro) ?>
                 </div>
-            </section>
-        </main>
-    </div>
+            <?php endif; ?>
+
+            <div class="botoes-excluir-sensor">
+                <form method="post" action="exclusao_trem.php?id=<?= e($id) ?>">
+                    <input type="hidden" name="id" value="<?= e($id) ?>">
+                    <button class="botao-confirmar-exclusao" type="submit">Excluir trem</button>
+                    <a href="lista_trem.php" class="botao-voltar-trem" style="margin-left: 10px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; height: 38px; padding: 0 16px;">Cancelar</a>
+                </form>
+            </div>
+        </section>
+    </main>
 </body>
 
 </html>

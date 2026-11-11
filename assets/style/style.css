@@ -883,6 +883,8 @@ textarea:focus,
 }
 
 .informacoes-sensor-excluir {
+    align-items: center;
+    justify-content: center;
     display: grid;
     gap: 8px;
     width: min(100%, 520px);
@@ -995,4 +997,63 @@ input[type="checkbox"] {
     display: inline-block !important;
     margin: 0 8px 0 0 !important;
     vertical-align: middle;
+}
+/* Padronização unificada para inputs e selects de formulário */
+input,
+select,
+textarea,
+.campo-edicao-trem,
+.select-usuario {
+    width: 100%;
+    height: 42px;
+    padding: 8px 14px;
+    background-color: #ffffff;
+    color: var(--text-main, #111827);
+    border: 1px solid var(--border-color, #d7dce4);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Efeito de foco igual aos outros campos */
+input:focus,
+select:focus,
+textarea:focus,
+.campo-edicao-trem:focus,
+.select-usuario:focus {
+    border-color: var(--bg-dark, #0b0b1e);
+    box-shadow: 0 0 0 3px rgba(11, 11, 30, 0.15);
+}
+
+/* Estilização avançada opcional para o dropdown de funcionários (caso utilize o suporte a base-select) */
+@supports (appearance: base-select) {
+    .select-usuario,
+    .select-usuario::picker(select) {
+        appearance: base-select;
+    }
+
+    .select-usuario::picker(select) {
+        margin-top: 6px;
+        padding: 6px;
+        max-height: 280px;
+        background: #fff;
+        border: 1px solid var(--border-color, #dcdfe6);
+        border-radius: 12px;
+        box-shadow: 0 12px 28px rgba(5, 5, 20, .18);
+    }
+
+    .select-usuario option {
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #1b1b2b;
+        cursor: pointer;
+    }
+
+    .select-usuario option:hover,
+    .select-usuario option:focus {
+        background: var(--bg-dark, #0b0b1e);
+        color: #fff;
+    }
 }

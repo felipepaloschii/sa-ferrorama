@@ -1,10 +1,13 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
 
 $usuarios = [];
-$resUsuarios = $conexao->query("SELECT id_usuario, email FROM usuario ORDER BY email");
+$resUsuarios = $conexao->query("SELECT id_usuario, email, tipo FROM usuario ORDER BY email");
 if ($resUsuarios) {
     $usuarios = $resUsuarios->fetch_all(MYSQLI_ASSOC);
 }
@@ -19,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status        = $_POST['status'];
     $id_usuario    = (int) ($_POST['id_usuario'] ?? 0);
 
+    // valida no servidor se o usuário realmente existe
     $check = $conexao->prepare("SELECT 1 FROM usuario WHERE id_usuario = ?");
     $check->bind_param("i", $id_usuario);
     $check->execute();
@@ -53,36 +57,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Trem</title>
+    <title>Cadastrar Trem - PIA Enterprise</title>
     <link rel="stylesheet" href="../../assets/style/style.css">
 </head>
 
 <body>
-   <header class="barra-superior">
-    <h1>PIA Enterprise</h1>
+    <header class="barra-superior">
+        <div class="lado-esquerdo">
+            <h1 class="logo-topo">PIA Enterprise</h1>
+            <nav class="navegacao-principal">
+                <a href="../../index.php">Dashboard</a>
+                <a href="../sensor/tela-home-sensor.php">Sensores</a>
+                <a class="ativo" href="lista_trem.php">Trens</a>
+                <a href="../rotas/tela-home-rotas.php">Rotas</a>
+                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+                    <a href="../usuario/tela-home-usuario.php">Usuários</a>
+                <?php endif; ?>
+            </nav>
+        </div>
 
-    <aside class="menu-lateral">
-        <nav>
-            <a href="../../index.php">Dashboard</a>
-            <a href="../sensor/tela-home-sensor.php">Sensores</a>
-            <a class="ativo" href="lista_trem.php">Trens</a>
-            <a href="../rotas/tela-home-rotas.php">Rotas</a>
-
-            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-                <a href="../usuario/tela-home-usuario.php">Usuários</a>
-            <?php endif; ?>
-        </nav>
-    </aside>
-</header>
+        <div class="acoes-superiores">
+            <div class="status-online">
+                <span class="ponto-online"></span>
+                <span>Online</span>
+            </div>
+            <div class="avatar-usuario" title="Usuário">U</div>
+        </div>
+    </header>
 
     <main class="area-principal cadastro-trem">
         <div class="cabecalho-cadastro-sensor">
-            <h2 class="titulo-pagina">Cadastrar novo trem</h2>
-                                <a href="lista_trem.php" class="botao-voltar-trem">← Voltar para trens</a>
-
+            <div class="informacoes-pagina">
+                <h2 class="titulo-pagina">Cadastrar novo trem</h2>
+                <p class="descricao-pagina">Preencha as informações para cadastrar um novo trem no sistema.</p>
+            </div>
+            <a href="lista_trem.php" class="botao-voltar-trem">← Voltar para trens</a>
         </div>
 
         <?php if (isset($erro)): ?>
@@ -113,15 +126,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="grupo-campo-trem">
-    <span class="rotulo-campo-trem">Status Inicial*</span>
+                        <label class="rotulo-campo-trem" for="id_usuario">Usuário responsável<span class="obrigatorio">*</span></label>
+                        <select id="id_usuario" name="id_usuario" class="select-usuario" required>
+                            <option value="">Selecione um usuário...</option>
+                            <?php foreach ($usuarios as $u): ?>
+                                <option value="<?= (int) $u['id_usuario'] ?>"
+                                    <?= ((int) ($_POST['id_usuario'] ?? 0) === (int) $u['id_usuario']) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($u['email']) ?>
+                                    (<?= $u['tipo'] === 'administrador' ? 'Admin' : 'Funcionário' ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-    <div class="opcoes-status-trem">
-        <label><input type="radio" name="status" value="operacao" required> Em operação</label>
-        <label><input type="radio" name="status" value="parado"> Parado</label>
-        <label><input type="radio" name="status" value="manutencao"> Manutenção</label>
-        <label><input type="radio" name="status" value="inativo"> Inativo</label>
-    </div>
-</div>
+                    <div class="grupo-campo-trem">
+                        <span class="rotulo-campo-trem">Status Inicial*</span>
+                        <div class="opcoes-status-trem">
+                            <label class="opcao-status-trem">
+                                <input type="radio" name="status" value="operacao" required>
+                                <span class="marcador-status"></span> Em operação
+                            </label>
+                            <label class="opcao-status-trem">
+                                <input type="radio" name="status" value="parado">
+                                <span class="marcador-status"></span> Parado
+                            </label>
+                            <label class="opcao-status-trem">
+                                <input type="radio" name="status" value="manutencao">
+                                <span class="marcador-status"></span> Manutenção
+                            </label>
+                            <label class="opcao-status-trem">
+                                <input type="radio" name="status" value="inativo">
+                                <span class="marcador-status"></span> Inativo
+                            </label>
+                        </div>
+                    </div>
 
                     <div class="grupo-campo-trem">
                         <label class="rotulo-campo-trem" for="capacidade">Capacidade<span class="obrigatorio">*</span></label>
@@ -142,4 +180,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
     </main>
 </body>
+
 </html>
