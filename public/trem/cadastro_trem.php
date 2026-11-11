@@ -3,6 +3,12 @@
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
 
+$usuarios = [];
+$resUsuarios = $conexao->query("SELECT id_usuario, email FROM usuario ORDER BY email");
+if ($resUsuarios) {
+    $usuarios = $resUsuarios->fetch_all(MYSQLI_ASSOC);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome_trem = $_POST['nome_trem'];
     $modelo_trem = $_POST['modelo_trem'];
