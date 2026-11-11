@@ -10,31 +10,43 @@ if ($resUsuarios) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome_trem = $_POST['nome_trem'];
-    $modelo_trem = $_POST['modelo_trem'];
+    $nome_trem     = $_POST['nome_trem'];
+    $modelo_trem   = $_POST['modelo_trem'];
     $localizacao_i = $_POST['localizacao_i'];
-    $codigo = $_POST['codigo'];
-    $capacidade = $_POST['capacidade'];
-    $ano = $_POST['ano'];
-    $status = $_POST['status'];
+    $codigo        = $_POST['codigo'];
+    $capacidade    = $_POST['capacidade'];
+    $ano           = $_POST['ano'];
+    $status        = $_POST['status'];
+    $id_usuario    = (int) ($_POST['id_usuario'] ?? 0);
 
-    $sql = "INSERT INTO trem (nome_trem, modelo_trem, localizacao_i, codigo, capacidade, ano, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $check = $conexao->prepare("SELECT 1 FROM usuario WHERE id_usuario = ?");
+    $check->bind_param("i", $id_usuario);
+    $check->execute();
+    $check->store_result();
+    $usuarioExiste = $check->num_rows > 0;
+    $check->close();
 
-    $stmt = $conexao->prepare($sql);
-
-    if ($stmt) {
-        $stmt->bind_param("ssssiss", $nome_trem, $modelo_trem, $localizacao_i, $codigo, $capacidade, $ano, $status);
-
-        if ($stmt->execute()) {
-            header("Location: lista_trem.php");
-            exit;
-        }
-
-        $erro = "Não foi possível cadastrar o trem.";
-        $stmt->close();
+    if (!$usuarioExiste) {
+        $erro = "Selecione um usuário válido da lista.";
     } else {
-        $erro = "Erro ao preparar o cadastro.";
+        $sql = "INSERT INTO trem (nome_trem, modelo_trem, localizacao_i, codigo, capacidade, ano, status, id_usuario)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = $conexao->prepare($sql);
+
+        if ($stmt) {
+            $stmt->bind_param("ssssdssi", $nome_trem, $modelo_trem, $localizacao_i, $codigo, $capacidade, $ano, $status, $id_usuario);
+
+            if ($stmt->execute()) {
+                header("Location: lista_trem.php");
+                exit;
+            }
+
+            $erro = "Não foi possível cadastrar o trem.";
+            $stmt->close();
+        } else {
+            $erro = "Erro ao preparar o cadastro.";
+        }
     }
 }
 ?>
