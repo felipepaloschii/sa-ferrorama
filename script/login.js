@@ -1,72 +1,42 @@
-const max_tentativas = 5;
-const tempo_bloqueio = 60000;
 
+document.addEventListener("DOMContentLoaded", () => {
 
-document.getElementById("form-login").onsubmit = (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById("email").value.trim();
-    const senha = document.getElementById("senha").value;
+    const formulario = document.getElementById("form-login");
+    const email = document.getElementById("email");
+    const senha = document.getElementById("senha");
     const mensagem = document.getElementById("mensagem");
 
-    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    mensagem.textContent = "";
-    mensagem.className = "";
-
-
-    const bloqueadoate = Number(localStorage.getItem("bloqueadoate")) || 0;
-    if (Date.now() < bloqueadoate) {
-        const tempoRestante = Math.ceil((bloqueadoate - Date.now()) / 1000);
-        mensagem.textContent = `Você está temporariamente bloqueado. Tente novamente em ${tempoRestante} segundos.`;
-        mensagem.className = "erro";
+    if (!formulario || !email || !senha) {
         return;
     }
 
-    if (!email || !senha) {
-        mensagem.textContent = "Preencha todos os campos.";
-        mensagem.className = "erro";
-        return;
-    }
+    formulario.addEventListener("submit", (event) => {
 
-    if (!regexEmail.test(email)) {
-        mensagem.textContent = "Digite um e-mail válido.";
-        mensagem.className = "erro";
-        return;
-    }
+        const emailValor = email.value.trim();
+        const senhaValor = senha.value;
 
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-    const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+        mensagem.textContent = "";
+        mensagem.className = "";
 
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!usuario) {
-        const tentativas = (Number(localStorage.getItem("tentativas")) || 0) + 1;
+        if (!emailValor || !senhaValor) {
+            event.preventDefault();
 
-        if (tentativas >= max_tentativas) {
-            localStorage.setItem("bloqueadoate", Date.now() + tempo_bloqueio);
-            localStorage.removeItem("tentativas");
-            mensagem.textContent = "Você excedeu o número máximo de tentativas. Tente novamente em 1 minuto.";
-            mensagem.className = "erro";
-        } else {
-            localStorage.setItem("tentativas", tentativas);
-            mensagem.textContent = `E-mail ou senha incorretos. Tentativa ${tentativas} de ${max_tentativas}.`;
-            mensagem.className = "erro";
+            mensagem.textContent = "Preencha todos os campos.";
+            mensagem.className = "alerta-login";
+            return;
         }
 
-        mensagem.className = "erro";
-        return;
-    }
-     
-    localStorage.removeItem("tentativas");
-    localStorage.removeItem("bloqueadoate");
-    localStorage.setItem("usuarioLogado", JSON.stringify(usuario));
-    window.location.href = "index.php";
-};
+        if (!regexEmail.test(emailValor)) {
+            event.preventDefault();
 
-const toggle = document.getElementById("toggle");
-if (toggle) {
-    toggle.style.cursor = "pointer";
-    toggle.onclick = () => {
-        window.location.href = "public/usuario/tela-cadastro-usuario.php";
-    };
-}
+            mensagem.textContent = "Digite um e-mail válido.";
+            mensagem.className = "alerta-login";
+            return;
+        }
+
+
+    });
+
+});

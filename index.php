@@ -25,7 +25,7 @@ $trensAtivos = mysqli_fetch_assoc(mysqli_query(
 $rotasAtivas = mysqli_fetch_assoc(mysqli_query(
     $conexao,
     "SELECT COUNT(*) AS total FROM rotas
-     WHERE status = 'ativo'"
+     WHERE status = 'ativa'"
 ))['total'];
 ?>
 
