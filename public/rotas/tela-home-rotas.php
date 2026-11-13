@@ -35,6 +35,7 @@ $resultado = mysqli_query(
     <title>Listagem de Rotas</title>
 
     <link rel="stylesheet" href="../../assets/style/style.css">
+    <script src="../../script/confirmar-exclusao.js" defer></script>
 </head>
 
 <body>

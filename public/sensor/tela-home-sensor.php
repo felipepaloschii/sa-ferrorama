@@ -44,6 +44,7 @@ if ($resultado) {
     <title>Tela de Sensores</title>
 
     <link rel="stylesheet" href="../../assets/style/style.css">
+    <script src="../../script/confirmar-exclusao.js" defer></script>
 </head>
 
 <body>

@@ -90,6 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Excluir Rota - PIA Enterprise</title>
 
     <link rel="stylesheet" href="../../assets/style/style.css">
+    <script src="../../script/confirmar-exclusao.js" defer></script>
 </head>
 
 <body id="home-corpo">
