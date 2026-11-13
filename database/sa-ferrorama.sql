@@ -1,44 +1,62 @@
-    CREATE DATABASE sa_ferrorama_db;
-    USE sa_ferrorama_db;
 
-    CREATE TABLE usuario (
-        id_usuario int primary key auto_increment,
-        email varchar(100) not null unique,
-        senha varchar(100) not null,
-        tipo ENUM('administrador', 'funcionario') not null default 'funcionario'
-    );
+CREATE DATABASE IF NOT EXISTS sa_ferrorama_db;
+USE sa_ferrorama_db;
 
-    CREATE TABLE sensor (
+CREATE TABLE usuario (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    tipo ENUM('administrador', 'funcionario')
+        DEFAULT 'funcionario'
+);
 
-        id int primary key auto_increment,  
-        nome_sensor varchar (100)  not null,
-        tipo_sensor varchar (100) not null,
-        localizacao varchar (150) not null,
-        unidade_medida varchar (20) not null,
-        limite_alerta decimal (10,2) not null,
-        status_inicial text, 
-        descricao text
+CREATE TABLE trem (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_trem VARCHAR(100) NOT NULL,
+    modelo_trem VARCHAR(100) NOT NULL,
+    localizacao_i VARCHAR(150) NOT NULL,
+    codigo VARCHAR(30) NOT NULL UNIQUE,
+    capacidade DECIMAL(10,2) NOT NULL,
+    ano YEAR NOT NULL,
+    status ENUM('operacao', 'parado', 'manutencao', 'inativo')
+        DEFAULT 'parado',
+    id_usuario INT NULL,
 
-    );
-    
-    CREATE TABLE IF NOT EXISTS trem (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        nome_trem VARCHAR(100) NOT NULL,
-        modelo_trem VARCHAR(100) NOT NULL,
-        localizacao_i VARCHAR(150) NOT NULL,
-        codigo VARCHAR(30) NOT NULL UNIQUE,
-        capacidade DECIMAL(10,2) NOT NULL,
-        ano VARCHAR(4) NOT NULL,
-        status ENUM('operacao', 'parado', 'manutencao', 'inativo') NOT NULL DEFAULT 'parado'
-    );
-
+    FOREIGN KEY (id_usuario)
+        REFERENCES usuario(id_usuario)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
 
 CREATE TABLE rotas (
     id_rota INT AUTO_INCREMENT PRIMARY KEY,
-    nome_rota VARCHAR(100) NOT NULL,
-    modelo_trem VARCHAR(100) NOT NULL,
-    tempo_estimado VARCHAR(50) NOT NULL,
-    codigo VARCHAR(50) NOT NULL UNIQUE,
+    nome_rota VARCHAR(150) NOT NULL,
+    modelo_trem VARCHAR(100) NULL,
+    tempo_estimado VARCHAR(60) NOT NULL,
+    codigo VARCHAR(30) NOT NULL UNIQUE,
     distancia DECIMAL(10,2) NOT NULL,
-    status ENUM('Ativa', 'Inativa') NOT NULL DEFAULT 'Ativa'
+    status ENUM('Ativa', 'Inativa') DEFAULT 'Ativa',
+    id_trem INT NULL,
+
+    FOREIGN KEY (id_trem)
+        REFERENCES trem(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE sensor (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_sensor VARCHAR(100) NOT NULL,
+    tipo_sensor VARCHAR(60) NOT NULL,
+    localizacao VARCHAR(150) NOT NULL,
+    id_rota INT NOT NULL,
+    unidade_medida VARCHAR(20) NOT NULL,
+    limite_alerta DECIMAL(10,2) NULL,
+    status_inicial ENUM('Ativo', 'Inativo') DEFAULT 'Ativo',
+    descricao TEXT NULL,
+
+    FOREIGN KEY (id_rota)
+        REFERENCES rotas(id_rota)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
