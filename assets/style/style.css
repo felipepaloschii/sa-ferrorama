@@ -1057,3 +1057,27 @@ textarea:focus,
         color: #fff;
     }
 }
+
+    /* Centralização de todas as telas de exclusão */
+    .area-principal:has(.painel-excluir-sensor) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .area-principal:has(.painel-excluir-sensor) .cabecalho-cadastro-sensor {
+        width: 100%;
+        max-width: 850px;
+    }
+
+    .painel-excluir-sensor {
+        width: 100%;
+        max-width: 600px;
+        box-sizing: border-box;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .botoes-excluir-sensor {
+        justify-content: center;
+    }

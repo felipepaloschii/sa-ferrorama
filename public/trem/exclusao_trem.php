@@ -96,31 +96,23 @@ $rotulosStatus = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excluir Trem - PIA Enterprise</title>
     <link rel="stylesheet" href="../../assets/style/style.css">
+
 </head>
 
 <body>
     <header class="barra-superior">
-        <div class="lado-esquerdo">
-            <h1 class="logo-topo">PIA Enterprise</h1>
-            <nav class="navegacao-principal">
-                <a href="../../index.php">Dashboard</a>
-                <a href="../sensor/tela-home-sensor.php">Sensores</a>
-                <a class="ativo" href="lista_trem.php">Trens</a>
-                <a href="../rotas/tela-home-rotas.php">Rotas</a>
-                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-                    <a href="../usuario/tela-home-usuario.php">Usuários</a>
-                <?php endif; ?>
-            </nav>
-        </div>
-
-        <div class="acoes-superiores">
-            <div class="status-online">
-                <span class="ponto-online"></span>
-                <span>Online</span>
-            </div>
-            <div class="avatar-usuario" title="Usuário">U</div>
-        </div>
+        <h1>PIA Enterprise</h1>
+        <nav class="navegacao-principal">
+            <a href="../../index.php">Dashboard</a>
+            <a href="../sensor/tela-home-sensor.php">Sensores</a>
+            <a href="lista_trem.php">Trens</a>
+            <a class="ativo" href="../rotas/tela-home-rotas.php">Rotas</a>
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+                <a href="../usuario/tela-home-usuario.php">Usuários</a>
+            <?php endif; ?>
+        </nav>
     </header>
+
 
     <main class="area-principal">
         <div class="cabecalho-cadastro-sensor">
