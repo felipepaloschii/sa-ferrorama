@@ -1,8 +1,10 @@
+
 <?php
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
 
 $erro = '';
+$tipoErro = '';
 $trens = [];
 
 $consultaTrens = $conexao->query(
@@ -31,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $trem = null;
     $tremExiste = true;
 
-    // Só verifica o trem quando um foi selecionado.
     if ($id_trem !== null) {
         $consulta = $conexao->prepare(
             "SELECT modelo_trem FROM trem WHERE id = ?"
@@ -80,11 +81,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $status
             );
 
-            if ($stmt->execute()) {
-                header("Location: tela-home-rotas.php");
-                exit;
-            } else {
-                $erro = "Erro ao cadastrar rota. Verifique se o código já existe.";
+            try {
+                if ($stmt->execute()) {
+                    header("Location: tela-home-rotas.php");
+                    exit;
+                }
+            } catch (mysqli_sql_exception $e) {
+                if ($e->getCode() === 1062) {
+                    $erro = 'Esse código já está cadastrado em outra rota. Informe um código diferente.';
+                    $tipoErro = 'duplicado';
+                } else {
+                    $erro = 'Não foi possível cadastrar a rota.';
+                }
             }
 
             $stmt->close();
@@ -141,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </section>
 
         <?php if ($erro !== ''): ?>
-            <div class="erro-excluir-sensor">
+            <div class="<?= $tipoErro === 'duplicado' ? 'erro-duplicado' : 'aviso-cadastro falha' ?>">
                 <?= htmlspecialchars($erro) ?>
             </div>
         <?php endif; ?>
