@@ -701,17 +701,7 @@ body {
     font-weight: 700;
 }
 
-.badge-status.ativo,
-.status.ativo {
-    color: var(--bg-dark);
-    background: var(--accent-blue);
-}
 
-.badge-status.inativo,
-.status.inativo {
-    color: var(--text-muted);
-    background: #e2e8f0;
-}
 
 .acoes {
     display: flex;
@@ -1094,3 +1084,4 @@ textarea:focus,
     text-align: center;
     max-width: 520px;
 }
+
