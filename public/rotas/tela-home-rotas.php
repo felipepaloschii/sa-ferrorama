@@ -1,5 +1,5 @@
-<?php
 
+<?php
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
@@ -15,10 +15,12 @@ if (
 
 require_once '../../infra/conexao.php';
 
-    $resultado = mysqli_query(
+$resultado = mysqli_query(
     $conexao,
-    "SELECT * FROM rotas ORDER BY id_rota"
-
+    "SELECT rotas.*, trem.nome_trem
+     FROM rotas
+     LEFT JOIN trem ON rotas.id_trem = trem.id
+     ORDER BY rotas.id_rota"
 );
 
 ?>
@@ -27,32 +29,30 @@ require_once '../../infra/conexao.php';
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Listagem de Rotas</title>
 
     <link rel="stylesheet" href="../../assets/style/style.css">
-
 </head>
 
 <body>
 
-   <header class="barra-superior">
+    <header class="barra-superior">
         <h1>PIA Enterprise</h1>
+
         <nav class="navegacao-principal">
             <a href="../../index.php">Dashboard</a>
             <a href="../sensor/tela-home-sensor.php">Sensores</a>
             <a href="../trem/lista_trem.php">Trens</a>
             <a class="ativo" href="tela-home-rotas.php">Rotas</a>
-            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+
+            <?php if ($_SESSION['tipo'] === 'administrador'): ?>
                 <a href="../usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
         </nav>
     </header>
-
 
     <main class="area-principal">
 
@@ -63,126 +63,112 @@ require_once '../../infra/conexao.php';
             </h2>
 
             <?php if ($_SESSION['tipo'] === 'administrador'): ?>
-            
-            <a
-                class="botao-novo-sensor botao-novo-trem"
-                href="tela-cadastro-rotas.php"
-            >
-                + Nova Rota
-            </a>
+
+                <a
+                    class="botao-novo-sensor botao-novo-trem"
+                    href="tela-cadastro-rotas.php"
+                >
+                    + Nova Rota
+                </a>
 
             <?php endif; ?>
 
         </section>
 
-
         <section class="painel-lista-sensores painel-lista-trens">
 
             <div class="tabela-sensores">
 
-
                 <div class="cabecalho-tabela colunas-rotas">
 
                     <span>ID</span>
-
                     <span>Nome</span>
-
-                    <span>Trem</span>
-
-                    <span>Tempo Estimado</span>
-
+                    <span>Trem responsável</span>
+                    <span>Tempo estimado</span>
                     <span>Código</span>
-
                     <span>Distância</span>
-
                     <span>Status</span>
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-                    <span>Ações</span>
-          <?php endif; ?>
+
+                    <?php if ($_SESSION['tipo'] === 'administrador'): ?>
+                        <span>Ações</span>
+                    <?php endif; ?>
+
                 </div>
 
-
                 <?php if ($resultado && mysqli_num_rows($resultado) > 0): ?>
-
 
                     <?php while ($rota = mysqli_fetch_assoc($resultado)): ?>
 
                         <div class="linha-tabela colunas-rotas">
 
-
                             <span>
                                 <?= htmlspecialchars($rota['id_rota']) ?>
                             </span>
-
 
                             <span>
                                 <?= htmlspecialchars($rota['nome_rota']) ?>
                             </span>
 
-
                             <span>
-                                <?= htmlspecialchars($rota['modelo_trem']) ?>
+                                <?= htmlspecialchars(
+                                    $rota['nome_trem'] ?? $rota['modelo_trem']
+                                ) ?>
                             </span>
-
 
                             <span>
                                 <?= htmlspecialchars($rota['tempo_estimado']) ?>
                             </span>
 
-
                             <span>
                                 <?= htmlspecialchars($rota['codigo']) ?>
                             </span>
 
+                            <span>
+                                <?= htmlspecialchars($rota['distancia']) ?> km
+                            </span>
 
                             <span>
-                                <?= htmlspecialchars($rota['distancia']) ?>
-                            </span>
 
-<span>
+                                <?php if ($rota['status'] === 'Ativa'): ?>
 
-    <?php if ($rota['status'] == 'Ativa'): ?>
+                                    <span class="status-ativa">
+                                        Ativa
+                                    </span>
 
-        <span class="status-ativa">
-            Ativa
-        </span>
+                                <?php else: ?>
 
-    <?php else: ?>
+                                    <span class="status-inativa">
+                                        Inativa
+                                    </span>
 
-        <span class="status-inativa">
-            Inativa
-        </span>
-
-    <?php endif; ?>
-
-</span>
-                     
-<?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-    <span class="acoes">
-        <a
-            href="tela-edição-rotas.php?id=<?= (int) $rota['id_rota'] ?>"
-            class="botao-editar"
-            aria-label="Editar rota"
-        >E</a>
-
-        <a
-            href="tela_exclusão-rotas.php?id=<?= (int) $rota['id_rota'] ?>"
-            class="botao-excluir"
-            aria-label="Excluir rota"
-            onclick="return confirm('Tem certeza que deseja excluir esta rota?');"
-        >D</a>
-    </span>
-<?php endif; ?>
-
-
+                                <?php endif; ?>
 
                             </span>
 
+                            <?php if ($_SESSION['tipo'] === 'administrador'): ?>
+
+                                <span class="acoes">
+
+                                    <a
+                                        href="tela-edição-rotas.php?id=<?= (int) $rota['id_rota'] ?>"
+                                        class="botao-editar"
+                                        aria-label="Editar rota"
+                                    >E</a>
+
+                                    <a
+                                        href="tela_exclusão-rotas.php?id=<?= (int) $rota['id_rota'] ?>"
+                                        class="botao-excluir"
+                                        aria-label="Excluir rota"
+                                        onclick="return confirm('Tem certeza que deseja excluir esta rota?');"
+                                    >D</a>
+
+                                </span>
+
+                            <?php endif; ?>
 
                         </div>
 
                     <?php endwhile; ?>
-
 
                 <?php else: ?>
 
@@ -192,7 +178,6 @@ require_once '../../infra/conexao.php';
 
                 <?php endif; ?>
 
-
             </div>
 
         </section>
@@ -200,5 +185,4 @@ require_once '../../infra/conexao.php';
     </main>
 
 </body>
-
 </html>
