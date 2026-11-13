@@ -180,22 +180,17 @@ $resultado = mysqli_query($conexao, "SELECT * FROM `$tabela` ORDER BY `{$col['id
                             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
                                 <span class="acoes">
 
-                                    <button
-                                        type="button"
-                                        class="botao-editar"
-                                        onclick="window.location.href='edicao_trem.php?id=<?= (int) $trem['id'] ?>'">
-                                        E
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        class="botao-excluir"
-                                        onclick="if (confirm('Tem certeza que deseja excluir este trem?')) {
-                    window.location.href='exclusao_trem.php?id=<?= (int) $trem['id'] ?>';
-                }">
-                                        D
-                                    </button>
-
+                                   <a
+                                    href="edicao_trem.php?id=<?php echo $trem['id']; ?>"
+                                    class="botao-editar"
+                                    title="Editar"
+                                >
+                                  E  
+                                </a>
+                                <a
+                                    href="exclusao_trem.php?id=<?php echo $trem['id']; ?>"
+                                    class="botao-excluir"
+                                    title="Excluir" >D </a>
                                 </span>
                             <?php endif; ?>
 
