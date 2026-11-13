@@ -1,10 +1,8 @@
 
 <?php
 
-
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
-
 
 $erro = '';
 
@@ -30,31 +28,53 @@ if ($resultado->num_rows == 0) {
 }
 
 $rota = $resultado->fetch_assoc();
-
 $stmt->close();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $sql = "DELETE FROM rotas WHERE id_rota = ?";
+    // Verifica se existe algum trem utilizando o modelo da rota
+    $sql = "SELECT COUNT(*) AS total
+            FROM trem
+            WHERE modelo_trem = ?";
 
     $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("s", $rota['modelo_trem']);
+    $stmt->execute();
 
-    if ($stmt) {
+    $resultado = $stmt->get_result();
+    $verificacao = $resultado->fetch_assoc();
 
-        $stmt->bind_param("i", $id);
+    $rotaEmUso = $verificacao['total'] > 0;
 
-        if ($stmt->execute() && $stmt->affected_rows > 0) {
-            $stmt->close();
-            header('Location: tela-home-rotas.php');
-            exit;
-        } else {
-            $erro = 'Não foi possível excluir a rota.';
-        }
+    $stmt->close();
 
-        $stmt->close();
+    if ($rotaEmUso) {
+
+        $erro = 'Não é possível excluir esta rota, pois existe um trem associado a ela.';
 
     } else {
-        $erro = 'Erro ao preparar a exclusão da rota.';
+
+        $sql = "DELETE FROM rotas WHERE id_rota = ?";
+
+        $stmt = $conexao->prepare($sql);
+
+        if ($stmt) {
+
+            $stmt->bind_param("i", $id);
+
+            if ($stmt->execute() && $stmt->affected_rows > 0) {
+                $stmt->close();
+                header('Location: tela-home-rotas.php');
+                exit;
+            } else {
+                $erro = 'Não foi possível excluir a rota.';
+            }
+
+            $stmt->close();
+
+        } else {
+            $erro = 'Erro ao preparar a exclusão da rota.';
+        }
     }
 }
 
@@ -76,11 +96,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <header class="barra-superior">
         <h1>PIA Enterprise</h1>
+
         <nav class="navegacao-principal">
             <a href="../../index.php">Dashboard</a>
             <a href="../sensor/tela-home-sensor.php">Sensores</a>
             <a href="../trem/lista_trem.php">Trens</a>
             <a class="ativo" href="tela-home-rotas.php">Rotas</a>
+
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
                 <a href="../usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
@@ -130,32 +152,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <span>
                     Nome:
-                    <?php echo htmlspecialchars($rota['nome_rota']); ?>
+                    <?= htmlspecialchars($rota['nome_rota']); ?>
                 </span>
-<br>
+                <br>
+
                 <span>
                     Modelo do trem:
-                    <?php echo htmlspecialchars($rota['modelo_trem']); ?>
+                    <?= htmlspecialchars($rota['modelo_trem']); ?>
                 </span>
-<br>
+                <br>
+
                 <span>
                     Código:
-                    <?php echo htmlspecialchars($rota['codigo']); ?>
+                    <?= htmlspecialchars($rota['codigo']); ?>
                 </span>
-<br>
+                <br>
+
                 <span>
                     Tempo estimado:
-                    <?php echo htmlspecialchars($rota['tempo_estimado']); ?>
+                    <?= htmlspecialchars($rota['tempo_estimado']); ?>
                 </span>
-<br>
+                <br>
+
                 <span>
                     Distância:
-                    <?php echo htmlspecialchars($rota['distancia']); ?> km
+                    <?= htmlspecialchars($rota['distancia']); ?> km
                 </span>
-<br>
+                <br>
+
                 <span>
                     Status:
-                    <?php echo htmlspecialchars($rota['status']); ?>
+                    <?= htmlspecialchars($rota['status']); ?>
                 </span>
 
             </div>
@@ -163,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php if ($erro != ''): ?>
 
                 <p class="erro-excluir-sensor">
-                    <?php echo htmlspecialchars($erro); ?>
+                    <?= htmlspecialchars($erro); ?>
                 </p>
 
             <?php endif; ?>
