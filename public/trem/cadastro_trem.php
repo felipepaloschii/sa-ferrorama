@@ -1,3 +1,4 @@
+
 <?php
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
@@ -8,6 +9,7 @@ require_once '../../infra/conexao.php';
 
 $usuarios = [];
 $erro = '';
+$tipoErro = '';
 
 $resUsuarios = $conexao->query(
     "SELECT id_usuario, email, tipo FROM usuario ORDER BY email"
@@ -79,12 +81,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $id_usuario
                 );
 
-                if ($stmt->execute()) {
-                    header("Location: lista_trem.php");
-                    exit;
+                try {
+                    if ($stmt->execute()) {
+                        header("Location: lista_trem.php");
+                        exit;
+                    }
+                } catch (mysqli_sql_exception $e) {
+                    if ($e->getCode() === 1062) {
+                        $erro = 'Esse código já está cadastrado em outro trem. Informe um código diferente.';
+                        $tipoErro = 'duplicado';
+                    } else {
+                        $erro = 'Não foi possível cadastrar o trem.';
+                    }
                 }
 
-                $erro = "Não foi possível cadastrar o trem.";
                 $stmt->close();
             } else {
                 $erro = "Erro ao preparar o cadastro.";
@@ -107,21 +117,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
     <header class="barra-superior">
-            <h1>PIA Enterprise</h1>
+        <h1>PIA Enterprise</h1>
 
-            <aside class="menu-lateral">
-                <nav>
-                    <a href="../../index.php">Dashboard</a>
-                    <a href="../sensor/tela-home-sensor.php">Sensores</a>
-                    <a class="ativo" href="lista_trem.php">Trens</a>
-                    <a href="../rotas/tela-home-rotas.php">Rotas</a>
+        <aside class="menu-lateral">
+            <nav>
+                <a href="../../index.php">Dashboard</a>
+                <a href="../sensor/tela-home-sensor.php">Sensores</a>
+                <a class="ativo" href="lista_trem.php">Trens</a>
+                <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
-                    <?php if ($_SESSION['tipo'] === 'administrador'): ?>
-                        <a href="../usuario/tela-home-usuario.php">Usuários</a>
-                    <?php endif; ?>
-                </nav>
-            </aside>
-        </header>
+                <?php if ($_SESSION['tipo'] === 'administrador'): ?>
+                    <a href="../usuario/tela-home-usuario.php">Usuários</a>
+                <?php endif; ?>
+            </nav>
+        </aside>
+    </header>
+
     <main class="area-principal cadastro-trem">
 
         <div class="cabecalho-cadastro-sensor">
@@ -138,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <?php if ($erro !== ''): ?>
-            <div class="erro-excluir-sensor">
+            <div class="<?= $tipoErro === 'duplicado' ? 'erro-duplicado' : 'aviso-cadastro falha' ?>">
                 <?= htmlspecialchars($erro) ?>
             </div>
         <?php endif; ?>
