@@ -131,13 +131,13 @@ $resultado = mysqli_query(
 
                                 <?php if ($rota['status'] === 'Ativa'): ?>
 
-                                    <span class="status-ativa">
+                                    <span class="status ativo">
                                         Ativa
                                     </span>
 
                                 <?php else: ?>
 
-                                    <span class="status-inativa">
+                                    <span class="status inativo">
                                         Inativa
                                     </span>
 

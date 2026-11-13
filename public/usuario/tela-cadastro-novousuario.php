@@ -54,9 +54,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     );
 
                     try {
-                        if ($stmt2->execute()) {
-                            $mensagem = 'Novo usuário cadastrado com sucesso!';
-                        }
+                       if ($stmt2->execute()) {
+                        header('Location: tela-home-usuario.php');
+                        exit;
+                    }
                     } catch (mysqli_sql_exception $e) {
                         if ($e->getCode() === 1062) {
                             $erro = 'Este e-mail já está cadastrado. Informe outro e-mail.';
@@ -241,7 +242,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <button
                         type="submit"
-                        class="botao-salvar-trem">
+                        class="botao-salvar-trem"
+                        onclick="window.location.href='tela-home-usuario.php'">
 
                         Salvar usuário
 
