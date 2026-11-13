@@ -1,4 +1,3 @@
-
 <?php
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
@@ -7,7 +6,6 @@ $mensagem = '';
 $erro = '';
 $rotas = [];
 
-// Busca as rotas cadastradas para associar ao sensor.
 $sqlRotas = "SELECT id_rota, nome_rota, codigo
              FROM rotas
              ORDER BY nome_rota";
@@ -20,48 +18,82 @@ if ($resultadoRotas) {
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
     $nome_sensor = trim($_POST['nome_sensor'] ?? '');
     $tipo_sensor = trim($_POST['tipo_sensor'] ?? '');
     $localizacao = trim($_POST['localizacao'] ?? '');
-    $id_rota = filter_input(INPUT_POST, 'id_rota', FILTER_VALIDATE_INT);
+
+    $id_rota = ($_POST['id_rota'] ?? '') !== ''
+        ? filter_var($_POST['id_rota'], FILTER_VALIDATE_INT)
+        : null;
+
     $unidade_medida = trim($_POST['unidade_medida'] ?? '');
     $limite_alerta = (float) ($_POST['limite_alerta'] ?? 0);
     $status_inicial = $_POST['status_inicial'] ?? '';
     $descricao = trim($_POST['descricao'] ?? '');
 
-    if (!$id_rota) {
-        $erro = 'Selecione uma rota para o sensor.';
+    if (
+        $nome_sensor === '' ||
+        $tipo_sensor === '' ||
+        $localizacao === '' ||
+        $unidade_medida === '' ||
+        !in_array($status_inicial, ['Ativo', 'Inativo'], true) ||
+        ($id_rota !== null && $id_rota === false)
+    ) {
+        $erro = 'Preencha todos os campos obrigatórios corretamente.';
     } else {
-        $sql = "INSERT INTO sensor
-                (nome_sensor, tipo_sensor, localizacao, id_rota,
-                 unidade_medida, limite_alerta, status_inicial, descricao)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        $stmt = $conexao->prepare($sql);
+        $rotaExiste = true;
 
-        if ($stmt) {
-            $stmt->bind_param(
-                "sssisdss",
-                $nome_sensor,
-                $tipo_sensor,
-                $localizacao,
-                $id_rota,
-                $unidade_medida,
-                $limite_alerta,
-                $status_inicial,
-                $descricao
+        // Só verifica a rota se uma tiver sido selecionada.
+        if ($id_rota !== null) {
+            $check = $conexao->prepare(
+                "SELECT 1 FROM rotas WHERE id_rota = ?"
             );
 
-            if ($stmt->execute()) {
-                $mensagem = 'Novo sensor cadastrado com sucesso!';
-            } else {
-                $erro = 'Não foi possível cadastrar o sensor.';
-            }
+            $check->bind_param("i", $id_rota);
+            $check->execute();
+            $check->store_result();
 
-            $stmt->close();
+            $rotaExiste = $check->num_rows > 0;
+            $check->close();
+        }
+
+        if (!$rotaExiste) {
+            $erro = 'A rota selecionada não existe.';
         } else {
-            $erro = 'Erro ao preparar o cadastro do sensor.';
+
+            $sql = "INSERT INTO sensor
+                    (nome_sensor, tipo_sensor, localizacao, id_rota,
+                     unidade_medida, limite_alerta, status_inicial, descricao)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $stmt = $conexao->prepare($sql);
+
+            if ($stmt) {
+                $stmt->bind_param(
+                    "sssisdss",
+                    $nome_sensor,
+                    $tipo_sensor,
+                    $localizacao,
+                    $id_rota,
+                    $unidade_medida,
+                    $limite_alerta,
+                    $status_inicial,
+                    $descricao
+                );
+
+                if ($stmt->execute()) {
+                    $mensagem = 'Novo sensor cadastrado com sucesso!';
+                } else {
+                    $erro = 'Não foi possível cadastrar o sensor.';
+                }
+
+                $stmt->close();
+            } else {
+                $erro = 'Erro ao preparar o cadastro do sensor.';
+            }
         }
     }
 }
@@ -97,8 +129,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <main class="area-principal cadastro-sensor">
 
         <section class="cabecalho-cadastro-sensor">
+
             <div class="informacoes-pagina">
                 <h1 class="titulo-pagina">Cadastrar novos sensores</h1>
+
                 <p class="descricao-pagina">
                     Preencha as informações para cadastrar um novo sensor.
                 </p>
@@ -110,17 +144,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 onclick="window.location.href='tela-home-sensor.php'">
                 Voltar para sensores
             </button>
+
         </section>
 
-        <?php if ($mensagem != ''): ?>
+        <?php if ($mensagem !== ''): ?>
             <div class="aviso-cadastro sucesso">
-                <?= htmlspecialchars($mensagem); ?>
+                <?= htmlspecialchars($mensagem) ?>
             </div>
         <?php endif; ?>
 
-        <?php if ($erro != ''): ?>
+        <?php if ($erro !== ''): ?>
             <div class="aviso-cadastro falha">
-                <?= htmlspecialchars($erro); ?>
+                <?= htmlspecialchars($erro) ?>
             </div>
         <?php endif; ?>
 
@@ -139,6 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         name="nome_sensor"
                         class="campo-edicao-trem"
                         placeholder="Ex.: Sensor de Temp. 01"
+                        value="<?= htmlspecialchars($_POST['nome_sensor'] ?? '') ?>"
                         required>
                 </div>
 
@@ -155,6 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             name="tipo_sensor"
                             class="campo-edicao-trem"
                             placeholder="Ex.: Temperatura"
+                            value="<?= htmlspecialchars($_POST['tipo_sensor'] ?? '') ?>"
                             required>
                     </div>
 
@@ -169,26 +206,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             name="localizacao"
                             class="campo-edicao-trem"
                             placeholder="Ex.: Trecho Industrial"
+                            value="<?= htmlspecialchars($_POST['localizacao'] ?? '') ?>"
                             required>
                     </div>
 
                     <div class="grupo-campo-trem">
                         <label class="rotulo-campo-trem" for="id_rota">
-                            Rota associada<span class="obrigatorio">*</span>
+                            Rota associada
                         </label>
 
                         <select
                             name="id_rota"
                             id="id_rota"
-                            class="campo-edicao-trem"
-                            required>
+                            class="campo-edicao-trem">
 
-                            <option value="">Selecione uma rota</option>
+                            <option value="">Sem rota associada</option>
 
                             <?php foreach ($rotas as $rota): ?>
-                                <option value="<?= (int) $rota['id_rota']; ?>">
-                                    <?= htmlspecialchars($rota['nome_rota']); ?>
-                                    (<?= htmlspecialchars($rota['codigo']); ?>)
+                                <option
+                                    value="<?= (int) $rota['id_rota'] ?>"
+                                    <?= (($_POST['id_rota'] ?? '') == $rota['id_rota']) ? 'selected' : '' ?>>
+
+                                    <?= htmlspecialchars($rota['nome_rota']) ?>
+                                    (<?= htmlspecialchars($rota['codigo']) ?>)
+
                                 </option>
                             <?php endforeach; ?>
 
@@ -213,6 +254,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="GPS">GPS</option>
                             <option value="kWh">kWh</option>
                             <option value="m">m</option>
+
                         </select>
                     </div>
 
@@ -227,7 +269,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             id="limite_alerta"
                             name="limite_alerta"
                             class="campo-edicao-trem"
-                            placeholder="Ex.: 75.00">
+                            placeholder="Ex.: 75.00"
+                            value="<?= htmlspecialchars($_POST['limite_alerta'] ?? '') ?>">
                     </div>
 
                 </div>
@@ -246,8 +289,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     type="radio"
                                     name="status_inicial"
                                     value="Ativo"
-                                    checked
+                                    <?= ($_POST['status_inicial'] ?? 'Ativo') === 'Ativo' ? 'checked' : '' ?>
                                     required>
+
                                 <span class="marcador-status"></span>
                                 Ativo
                             </label>
@@ -256,7 +300,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input
                                     type="radio"
                                     name="status_inicial"
-                                    value="Inativo">
+                                    value="Inativo"
+                                    <?= ($_POST['status_inicial'] ?? '') === 'Inativo' ? 'checked' : '' ?>>
+
                                 <span class="marcador-status"></span>
                                 Inativo
                             </label>
@@ -273,12 +319,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             name="descricao"
                             id="descricao"
                             class="campo-edicao-trem textarea-descricao-sensor"
-                            placeholder="Detalhes adicionais..."></textarea>
+                            placeholder="Detalhes adicionais..."><?= htmlspecialchars($_POST['descricao'] ?? '') ?></textarea>
                     </div>
 
                 </div>
 
                 <div class="botoes-cadastro-trem botoes-cadastro-sensor">
+
                     <button type="submit" class="botao-salvar-trem">
                         Salvar sensor
                     </button>
@@ -289,6 +336,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         onclick="window.location.href='tela-home-sensor.php'">
                         Cancelar
                     </button>
+
                 </div>
 
             </form>

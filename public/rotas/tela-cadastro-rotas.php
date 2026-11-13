@@ -1,4 +1,3 @@
-
 <?php
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
@@ -19,61 +18,79 @@ if ($consultaTrens) {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $nome_rota = trim($_POST['nome_rota'] ?? '');
-    $id_trem = (int) ($_POST['id_trem'] ?? 0);
+
+    $id_trem = ($_POST['id_trem'] ?? '') !== ''
+        ? (int) $_POST['id_trem']
+        : null;
+
     $tempo_estimado = trim($_POST['tempo_estimado'] ?? '');
     $codigo = trim($_POST['codigo'] ?? '');
     $distancia = (float) ($_POST['distancia'] ?? 0);
     $status = $_POST['status'] ?? '';
 
-    $consulta = $conexao->prepare(
-        "SELECT modelo_trem FROM trem WHERE id = ?"
-    );
+    $trem = null;
+    $tremExiste = true;
 
-    $consulta->bind_param("i", $id_trem);
-    $consulta->execute();
+    // Só verifica o trem quando um foi selecionado.
+    if ($id_trem !== null) {
+        $consulta = $conexao->prepare(
+            "SELECT modelo_trem FROM trem WHERE id = ?"
+        );
 
-    $resultadoTrem = $consulta->get_result();
-    $trem = $resultadoTrem->fetch_assoc();
-    $consulta->close();
+        $consulta->bind_param("i", $id_trem);
+        $consulta->execute();
+
+        $resultadoTrem = $consulta->get_result();
+        $trem = $resultadoTrem->fetch_assoc();
+
+        $consulta->close();
+
+        $tremExiste = (bool) $trem;
+    }
 
     if (
         $nome_rota === '' ||
-        !$trem ||
+        !$tremExiste ||
         $tempo_estimado === '' ||
         $codigo === '' ||
         $distancia <= 0 ||
         !in_array($status, ['Ativa', 'Inativa'], true)
     ) {
-        $erro = "Preencha todos os campos corretamente.";
+        $erro = "Preencha todos os campos obrigatórios corretamente.";
     } else {
 
-        $modelo_trem = $trem['modelo_trem'];
+        $modelo_trem = $trem['modelo_trem'] ?? null;
 
         $sql = "INSERT INTO rotas
-        (id_trem, nome_rota, modelo_trem, tempo_estimado, codigo, distancia, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?)";
+                (id_trem, nome_rota, modelo_trem, tempo_estimado,
+                 codigo, distancia, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $conexao->prepare($sql);
 
-        $stmt->bind_param(
-            "issssds",
-            $id_trem,
-            $nome_rota,
-            $modelo_trem,
-            $tempo_estimado,
-            $codigo,
-            $distancia,
-            $status
-        );
+        if ($stmt) {
+            $stmt->bind_param(
+                "issssds",
+                $id_trem,
+                $nome_rota,
+                $modelo_trem,
+                $tempo_estimado,
+                $codigo,
+                $distancia,
+                $status
+            );
 
-        if ($stmt->execute()) {
-            header("Location: tela-home-rotas.php");
-            exit;
+            if ($stmt->execute()) {
+                header("Location: tela-home-rotas.php");
+                exit;
+            } else {
+                $erro = "Erro ao cadastrar rota. Verifique se o código já existe.";
+            }
+
+            $stmt->close();
         } else {
-            $erro = "Erro ao cadastrar rota. Verifique se o código já existe.";
+            $erro = "Erro ao preparar o cadastro da rota.";
         }
-
-        $stmt->close();
     }
 }
 ?>
@@ -111,6 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <div class="informacoes-pagina">
                 <h1 class="titulo-pagina">Cadastrar nova rota</h1>
+
                 <p class="descricao-pagina">
                     Preencha as informações para cadastrar uma nova rota no sistema.
                 </p>
@@ -145,30 +163,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             name="nome_rota"
                             placeholder="Ex.: Rota Joinville → Barra Velha"
                             value="<?= htmlspecialchars($_POST['nome_rota'] ?? '') ?>"
-                            required
-                        >
+                            required>
                     </div>
 
                     <div class="grupo-campo-trem">
                         <label class="rotulo-campo-trem" for="id_trem">
-                            Trem responsável<span class="obrigatorio">*</span>
+                            Trem responsável
                         </label>
 
                         <select
                             id="id_trem"
                             name="id_trem"
-                            class="select-usuario"
-                            required
-                        >
-                            <option value="">Selecione um trem...</option>
+                            class="select-usuario">
+
+                            <option value="">Sem trem associado</option>
 
                             <?php foreach ($trens as $t): ?>
                                 <option
                                     value="<?= (int) $t['id'] ?>"
-                                    <?= ((int) ($_POST['id_trem'] ?? 0) === (int) $t['id']) ? 'selected' : '' ?>
-                                >
+                                    <?= (($_POST['id_trem'] ?? '') == $t['id']) ? 'selected' : '' ?>>
+
                                     <?= htmlspecialchars($t['nome_trem']) ?>
                                     (<?= htmlspecialchars($t['modelo_trem']) ?>)
+
                                 </option>
                             <?php endforeach; ?>
 
@@ -186,8 +203,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             name="tempo_estimado"
                             placeholder="Ex.: 45 minutos"
                             value="<?= htmlspecialchars($_POST['tempo_estimado'] ?? '') ?>"
-                            required
-                        >
+                            required>
                     </div>
 
                     <div class="grupo-campo-trem">
@@ -201,8 +217,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             name="codigo"
                             placeholder="Ex.: RT-016"
                             value="<?= htmlspecialchars($_POST['codigo'] ?? '') ?>"
-                            required
-                        >
+                            required>
                     </div>
 
                     <div class="grupo-campo-trem">
@@ -218,7 +233,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     name="status"
                                     value="Ativa"
                                     <?= ($_POST['status'] ?? 'Ativa') === 'Ativa' ? 'checked' : '' ?>
-                                >
+                                    required>
+
                                 <span class="marcador-status"></span>
                                 Ativa
                             </label>
@@ -228,8 +244,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     type="radio"
                                     name="status"
                                     value="Inativa"
-                                    <?= ($_POST['status'] ?? '') === 'Inativa' ? 'checked' : '' ?>
-                                >
+                                    <?= ($_POST['status'] ?? '') === 'Inativa' ? 'checked' : '' ?>>
+
                                 <span class="marcador-status"></span>
                                 Inativa
                             </label>
@@ -250,13 +266,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             min="0.1"
                             placeholder="Ex.: 50"
                             value="<?= htmlspecialchars($_POST['distancia'] ?? '') ?>"
-                            required
-                        >
+                            required>
                     </div>
 
                 </div>
 
                 <div class="botoes-cadastro-trem botoes-cadastro-sensor">
+
                     <button type="submit" class="botao-salvar-trem">
                         Salvar rota
                     </button>
@@ -264,6 +280,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <a href="tela-home-rotas.php" class="botao-cancelar-trem">
                         Cancelar
                     </a>
+
                 </div>
 
             </form>

@@ -32,14 +32,14 @@ $stmt->close();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Verifica o trem vinculado diretamente à rota
-    $idTrem = (int) ($rota['id_trem'] ?? 0);
-
     $rotaEmUso = false;
+
+    // Verifica se existe um trem associado à rota
+    $idTrem = (int) ($rota['id_trem'] ?? 0);
 
     if ($idTrem > 0) {
 
-        $sql = "SELECT id FROM trem WHERE id = ?";
+        $sql = "SELECT id FROM trem WHERE id = ? LIMIT 1";
 
         $stmt = $conexao->prepare($sql);
         $stmt->bind_param("i", $idTrem);
@@ -47,16 +47,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $resultadoTrem = $stmt->get_result();
 
-        $rotaEmUso = $resultadoTrem->num_rows > 0;
+        if ($resultadoTrem->num_rows > 0) {
+            $rotaEmUso = true;
+            $erro = 'Não é possível excluir esta rota, pois existe um trem vinculado a ela.';
+        }
 
         $stmt->close();
     }
 
-    if ($rotaEmUso) {
+    // Verifica se existe algum sensor associado à rota
+    if (!$rotaEmUso) {
 
-        $erro = 'Não é possível excluir esta rota, pois existe um trem vinculado a ela.';
+        $sql = "SELECT id FROM sensor WHERE id_rota = ? LIMIT 1";
 
-    } else {
+        $stmt = $conexao->prepare($sql);
+
+        if ($stmt) {
+
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+
+            $resultadoSensor = $stmt->get_result();
+
+            if ($resultadoSensor->num_rows > 0) {
+                $rotaEmUso = true;
+                $erro = 'Não é possível excluir esta rota, pois existe um sensor vinculado a ela.';
+            }
+
+            $stmt->close();
+
+        } else {
+
+            $erro = 'Erro ao verificar os sensores associados à rota.';
+            $rotaEmUso = true;
+        }
+    }
+
+    // Exclui somente se não houver associações
+    if (!$rotaEmUso) {
 
         $sql = "DELETE FROM rotas WHERE id_rota = ?";
 
@@ -230,5 +258,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </main>
 
 </body>
-
 </html>
