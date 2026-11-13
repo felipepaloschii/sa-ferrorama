@@ -160,7 +160,7 @@ $resultado = mysqli_query(
                                         href="tela_exclusão-rotas.php?id=<?= (int) $rota['id_rota'] ?>"
                                         class="botao-excluir"
                                         aria-label="Excluir rota"
-                                        onclick="return confirm('Tem certeza que deseja excluir esta rota?');"
+                                        
                                     >D</a>
 
                                 </span>
