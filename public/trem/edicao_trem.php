@@ -9,9 +9,9 @@ require_once '../../infra/conexao.php';
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $erro = '';
-$trem = null;
-$usuarios = [];
+$tipoErro = '';
 
+// Recupera o ID enviado pelo formulário
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 }
@@ -22,6 +22,8 @@ if (!$id || $id < 1) {
 }
 
 // Busca os usuários disponíveis
+$usuarios = [];
+
 $resultadoUsuarios = $conexao->query(
     "SELECT id_usuario, email, tipo FROM usuario ORDER BY email"
 );
@@ -30,7 +32,7 @@ if ($resultadoUsuarios) {
     $usuarios = $resultadoUsuarios->fetch_all(MYSQLI_ASSOC);
 }
 
-// Busca os dados do trem, incluindo o responsável
+// Busca os dados do trem
 $consulta = $conexao->prepare(
     "SELECT nome_trem, modelo_trem, localizacao_i, codigo,
             capacidade, ano, status, id_usuario
@@ -60,7 +62,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $trem['capacidade'] = trim($_POST['capacidade'] ?? '');
     $trem['ano'] = trim($_POST['ano'] ?? '');
     $trem['status'] = $_POST['status'] ?? '';
-    $trem['id_usuario'] = (int) ($_POST['id_usuario'] ?? 0);
+
+    // Permite deixar o trem sem usuário associado
+    $usuarioSelecionado = trim($_POST['id_usuario'] ?? '');
+
+    if ($usuarioSelecionado === '') {
+        $trem['id_usuario'] = null;
+    } else {
+        $trem['id_usuario'] = filter_var(
+            $usuarioSelecionado,
+            FILTER_VALIDATE_INT
+        );
+    }
 
     $statusValidos = ['operacao', 'parado', 'manutencao', 'inativo'];
 
@@ -74,24 +87,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         !is_numeric($trem['capacidade']) ||
         !preg_match('/^\d{4}$/', $trem['ano']) ||
         !in_array($trem['status'], $statusValidos, true) ||
-        $trem['id_usuario'] < 1
+        ($usuarioSelecionado !== '' && $trem['id_usuario'] === false)
     ) {
         $erro = 'Preencha todos os campos com valores válidos.';
+        $tipoErro = 'normal';
     } else {
-        // Confere se o usuário selecionado existe
-        $verifica = $conexao->prepare(
-            "SELECT id_usuario FROM usuario WHERE id_usuario = ?"
-        );
+        $usuarioExiste = true;
 
-        $verifica->bind_param("i", $trem['id_usuario']);
-        $verifica->execute();
-        $verifica->store_result();
+        // Confere o usuário somente se algum foi selecionado
+        if ($trem['id_usuario'] !== null) {
+            $verifica = $conexao->prepare(
+                "SELECT id_usuario FROM usuario WHERE id_usuario = ?"
+            );
 
-        $usuarioExiste = $verifica->num_rows > 0;
-        $verifica->close();
+            $verifica->bind_param("i", $trem['id_usuario']);
+            $verifica->execute();
+            $verifica->store_result();
+
+            $usuarioExiste = $verifica->num_rows > 0;
+            $verifica->close();
+        }
 
         if (!$usuarioExiste) {
             $erro = 'Selecione um usuário responsável válido.';
+            $tipoErro = 'normal';
         } else {
             $sql = "UPDATE trem SET
                         nome_trem = ?,
@@ -119,16 +138,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id
             );
 
-            if ($atualizacao->execute()) {
-                $atualizacao->close();
-                header('Location: lista_trem.php');
-                exit;
-            }
+            try {
+                if ($atualizacao->execute()) {
+                    $atualizacao->close();
+                    header('Location: lista_trem.php');
+                    exit;
+                }
 
-            if ($conexao->errno === 1062) {
-                $erro = 'Esse código já está sendo usado por outro trem.';
-            } else {
                 $erro = 'Não foi possível salvar as alterações. Tente novamente.';
+                $tipoErro = 'normal';
+
+            } catch (mysqli_sql_exception $e) {
+                if ($e->getCode() === 1062) {
+                    $erro = 'Esse código já está cadastrado em outro trem. Informe um código diferente.';
+                    $tipoErro = 'duplicado';
+                } else {
+                    $erro = 'Não foi possível salvar as alterações. Tente novamente.';
+                    $tipoErro = 'normal';
+                }
             }
 
             $atualizacao->close();
@@ -175,6 +202,7 @@ function e($valor)
         <main class="conteudo conteudo-edicao-trem">
 
             <h2>Editar trem</h2>
+
             <p class="subtitulo-edicao-trem">
                 Preencha as informações para editar o trem cadastrado.
             </p>
@@ -182,7 +210,9 @@ function e($valor)
             <section class="painel-formulario-trem">
 
                 <?php if ($erro !== ''): ?>
-                    <p class="erro-excluir-sensor"><?= e($erro) ?></p>
+                    <p class="<?= $tipoErro === 'duplicado' ? 'erro-duplicado' : 'aviso-edicao-trem' ?>">
+                        <?= e($erro) ?>
+                    </p>
                 <?php endif; ?>
 
                 <form method="post" action="edicao_trem.php?id=<?= e($id) ?>">
@@ -195,6 +225,7 @@ function e($valor)
                             <label class="rotulo-campo-trem" for="nome_trem">
                                 Nome do trem<span class="obrigatorio">*</span>
                             </label>
+
                             <input class="campo-edicao-trem" type="text"
                                 id="nome_trem" name="nome_trem" maxlength="100"
                                 value="<?= e($trem['nome_trem']) ?>" required>
@@ -204,6 +235,7 @@ function e($valor)
                             <label class="rotulo-campo-trem" for="modelo_trem">
                                 Modelo<span class="obrigatorio">*</span>
                             </label>
+
                             <input class="campo-edicao-trem" type="text"
                                 id="modelo_trem" name="modelo_trem" maxlength="100"
                                 value="<?= e($trem['modelo_trem']) ?>" required>
@@ -213,6 +245,7 @@ function e($valor)
                             <label class="rotulo-campo-trem" for="localizacao_i">
                                 Localização inicial<span class="obrigatorio">*</span>
                             </label>
+
                             <input class="campo-edicao-trem" type="text"
                                 id="localizacao_i" name="localizacao_i" maxlength="150"
                                 value="<?= e($trem['localizacao_i']) ?>" required>
@@ -222,6 +255,7 @@ function e($valor)
                             <label class="rotulo-campo-trem" for="codigo">
                                 Código<span class="obrigatorio">*</span>
                             </label>
+
                             <input class="campo-edicao-trem" type="text"
                                 id="codigo" name="codigo" maxlength="30"
                                 value="<?= e($trem['codigo']) ?>" required>
@@ -229,13 +263,16 @@ function e($valor)
 
                         <div class="grupo-campo-trem">
                             <label class="rotulo-campo-trem" for="id_usuario">
-                                Usuário responsável<span class="obrigatorio">*</span>
+                                Usuário responsável
                             </label>
 
                             <select id="id_usuario" name="id_usuario"
-                                class="select-usuario" required>
+                                class="select-usuario">
 
-                                <option value="">Selecione um usuário...</option>
+                                <option value=""
+                                    <?= $trem['id_usuario'] === null ? 'selected' : '' ?>>
+                                    Nenhum usuário
+                                </option>
 
                                 <?php foreach ($usuarios as $u): ?>
                                     <option value="<?= (int) $u['id_usuario'] ?>"
@@ -282,6 +319,7 @@ function e($valor)
                             <label class="rotulo-campo-trem" for="capacidade">
                                 Capacidade<span class="obrigatorio">*</span>
                             </label>
+
                             <input class="campo-edicao-trem" type="number"
                                 id="capacidade" name="capacidade" min="0" step="0.01"
                                 value="<?= e($trem['capacidade']) ?>" required>
@@ -291,6 +329,7 @@ function e($valor)
                             <label class="rotulo-campo-trem" for="ano">
                                 Ano<span class="obrigatorio">*</span>
                             </label>
+
                             <input class="campo-edicao-trem" type="text"
                                 id="ano" name="ano" maxlength="4" pattern="[0-9]{4}"
                                 value="<?= e($trem['ano']) ?>" required>
@@ -299,6 +338,7 @@ function e($valor)
                     </div>
 
                     <div class="acoes-edicao-trem">
+
                         <button class="botao-salvar-sensor" type="submit">
                             Salvar alterações
                         </button>
@@ -306,6 +346,7 @@ function e($valor)
                         <a class="botao-cancelar-cadastro" href="lista_trem.php">
                             Voltar para trens
                         </a>
+
                     </div>
 
                 </form>
