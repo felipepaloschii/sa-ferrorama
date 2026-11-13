@@ -1,3 +1,4 @@
+
 <?php
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
@@ -39,15 +40,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $localizacao === '' ||
         $unidade_medida === '' ||
         !in_array($status_inicial, ['Ativo', 'Inativo'], true) ||
-        ($id_rota !== null && $id_rota === false)
+        ($id_rota !== null && ($id_rota === false || $id_rota <= 0))
     ) {
         $erro = 'Preencha todos os campos obrigatórios corretamente.';
     } else {
 
         $rotaExiste = true;
 
-        // Só verifica a rota se uma tiver sido selecionada.
         if ($id_rota !== null) {
+
             $check = $conexao->prepare(
                 "SELECT 1 FROM rotas WHERE id_rota = ?"
             );
@@ -61,7 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         if (!$rotaExiste) {
+
             $erro = 'A rota selecionada não existe.';
+
         } else {
 
             $sql = "INSERT INTO sensor
@@ -72,6 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmt = $conexao->prepare($sql);
 
             if ($stmt) {
+
                 $stmt->bind_param(
                     "sssisdss",
                     $nome_sensor,
@@ -85,12 +89,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 );
 
                 if ($stmt->execute()) {
-                    $mensagem = 'Novo sensor cadastrado com sucesso!';
+                    $stmt->close();
+
+                    header("Location: tela-home-sensor.php");
+                    exit;
                 } else {
                     $erro = 'Não foi possível cadastrar o sensor.';
                 }
 
                 $stmt->close();
+
             } else {
                 $erro = 'Erro ao preparar o cadastro do sensor.';
             }
@@ -154,7 +162,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <?php endif; ?>
 
         <?php if ($erro !== ''): ?>
-            <div class="aviso-cadastro falha">
+            <div class="erro-excluir-sensor">
                 <?= htmlspecialchars($erro) ?>
             </div>
         <?php endif; ?>
@@ -220,7 +228,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             id="id_rota"
                             class="campo-edicao-trem">
 
-                            <option value="">Sem rota associada</option>
+                            <option value=""
+                                <?= ($_POST['id_rota'] ?? '') === '' ? 'selected' : '' ?>>
+                                Sem rota associada
+                            </option>
 
                             <?php foreach ($rotas as $rota): ?>
                                 <option
@@ -248,12 +259,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             required>
 
                             <option value="">Selecione</option>
-                            <option value="°C">°C</option>
-                            <option value="km/h">km/h</option>
-                            <option value="mm/s">mm/s</option>
-                            <option value="GPS">GPS</option>
-                            <option value="kWh">kWh</option>
-                            <option value="m">m</option>
+                            <option value="°C" <?= ($_POST['unidade_medida'] ?? '') === '°C' ? 'selected' : '' ?>>°C</option>
+                            <option value="km/h" <?= ($_POST['unidade_medida'] ?? '') === 'km/h' ? 'selected' : '' ?>>km/h</option>
+                            <option value="mm/s" <?= ($_POST['unidade_medida'] ?? '') === 'mm/s' ? 'selected' : '' ?>>mm/s</option>
+                            <option value="GPS" <?= ($_POST['unidade_medida'] ?? '') === 'GPS' ? 'selected' : '' ?>>GPS</option>
+                            <option value="kWh" <?= ($_POST['unidade_medida'] ?? '') === 'kWh' ? 'selected' : '' ?>>kWh</option>
+                            <option value="m" <?= ($_POST['unidade_medida'] ?? '') === 'm' ? 'selected' : '' ?>>m</option>
 
                         </select>
                     </div>

@@ -12,7 +12,7 @@ if (!$id || $id < 1) {
     exit;
 }
 
-// Busca o sensor
+// Busca o sensor e sua rota associada
 $stmt = $conexao->prepare(
     "SELECT sensor.*, rotas.nome_rota, rotas.codigo AS codigo_rota
      FROM sensor
@@ -36,25 +36,51 @@ if (!$sensor) {
 // Confirmação da exclusão
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $stmt = $conexao->prepare(
-        "DELETE FROM sensor WHERE id = ?"
+    // Verifica novamente no banco se existe rota associada
+    $check = $conexao->prepare(
+        "SELECT id_rota FROM sensor WHERE id = ?"
     );
 
-    if ($stmt) {
-        $stmt->bind_param("i", $id);
+    $check->bind_param("i", $id);
+    $check->execute();
 
-        if ($stmt->execute() && $stmt->affected_rows > 0) {
+    $resultadoCheck = $check->get_result();
+    $sensorAtual = $resultadoCheck->fetch_assoc();
+
+    $check->close();
+
+    if (!$sensorAtual) {
+
+        header('Location: tela-home-sensor.php');
+        exit;
+
+    } elseif ($sensorAtual['id_rota'] !== null) {
+
+        $erro = 'Não é possível excluir este sensor, pois ele está associado a uma rota.';
+
+    } else {
+
+        $stmt = $conexao->prepare(
+            "DELETE FROM sensor WHERE id = ?"
+        );
+
+        if ($stmt) {
+            $stmt->bind_param("i", $id);
+
+            if ($stmt->execute() && $stmt->affected_rows > 0) {
+                $stmt->close();
+
+                header('Location: tela-home-sensor.php');
+                exit;
+            } else {
+                $erro = 'Não foi possível excluir o sensor.';
+            }
+
             $stmt->close();
 
-            header('Location: tela-home-sensor.php');
-            exit;
         } else {
-            $erro = 'Não foi possível excluir o sensor.';
+            $erro = 'Erro ao preparar a exclusão do sensor.';
         }
-
-        $stmt->close();
-    } else {
-        $erro = 'Erro ao preparar a exclusão do sensor.';
     }
 }
 
@@ -106,16 +132,14 @@ function e($valor)
         </div>
 
         <a href="tela-home-sensor.php" class="botao-voltar-sensores">
-            ← Voltar para sensores
+            Voltar para sensores
         </a>
 
     </section>
 
     <section class="painel-excluir-sensor">
 
-        <div class="icone-excluir-sensor">
-            🗑
-        </div>
+    
 
         <h2>
             Tem certeza que deseja excluir este sensor?
@@ -144,7 +168,8 @@ function e($valor)
 
             <span>
                 Rota associada:
-                <?php if (!empty($sensor['nome_rota'])): ?>
+
+                <?php if (!empty($sensor['id_rota'])): ?>
                     <?= e($sensor['nome_rota']) ?>
                     (<?= e($sensor['codigo_rota']) ?>)
                 <?php else: ?>

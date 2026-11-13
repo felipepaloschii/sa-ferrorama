@@ -5,6 +5,12 @@ if (!isset($_SESSION['usuario'])) {
     header("Location: public/landing.php");
     exit;
 }
+
+if (!in_array($_SESSION['tipo'] ?? '', ['administrador', 'funcionario'], true)) {
+    session_destroy();
+    header("Location: public/landing.php");
+    exit;
+}
 ?>
 
 <?php
@@ -41,7 +47,7 @@ $rotasAtivas = mysqli_fetch_assoc(mysqli_query(
 
 <body id="home-corpo">
 
-    <header class="barra-superior">
+   <header class="barra-superior">
     <h1>PIA Enterprise</h1>
 
     <aside class="menu-lateral">
@@ -51,13 +57,20 @@ $rotasAtivas = mysqli_fetch_assoc(mysqli_query(
             <a href="public/trem/lista_trem.php">Trens</a>
             <a href="public/rotas/tela-home-rotas.php">Rotas</a>
 
-            
-
-            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+            <?php if ($_SESSION['tipo'] === 'administrador'): ?>
                 <a href="public/usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
 
-            <a href="public/logout/logout.php">Sair</a>
+            <div class="caixa-usuario">
+                <span class="tipo-usuario">
+                    <?= $_SESSION['tipo'] === 'administrador' ? 'Administrador' : 'Funcionário' ?>
+                </span>
+
+                <a class="botao-logout" href="public/logout/logout.php">
+                    Sair
+                </a>
+            </div>
+            </div>
         </nav>
     </aside>
 </header>
@@ -104,7 +117,7 @@ $rotasAtivas = mysqli_fetch_assoc(mysqli_query(
                 <section class="cartao-mapa">
 
                     <iframe
-                        src="https://www.google.com/maps?q=S%C3%A3o%20Paulo&output=embed"
+                        src="https://www.google.com/maps?q=Joinville,SC,Brasil&output=embed"
                         width="100%"
                         height="100%"
                         style="border: 0;"

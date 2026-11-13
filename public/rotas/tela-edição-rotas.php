@@ -173,7 +173,7 @@ function e($valor)
         <section class="painel-formulario-trem">
 
             <?php if ($mensagem !== ''): ?>
-                <p class="aviso-edicao-trem">
+                <p class="erro-excluir-sensor">
                     <?= e($mensagem) ?>
                 </p>
             <?php endif; ?>

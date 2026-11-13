@@ -141,7 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </section>
 
         <?php if ($erro !== ''): ?>
-            <div class="aviso-cadastro falha">
+            <div class="erro-excluir-sensor">
                 <?= htmlspecialchars($erro) ?>
             </div>
         <?php endif; ?>

@@ -49,10 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome_sensor = trim($_POST['nome_sensor'] ?? '');
     $tipo_sensor = trim($_POST['tipo_sensor'] ?? '');
     $localizacao = trim($_POST['localizacao'] ?? '');
-    $id_rota = filter_var(
-        $_POST['id_rota'] ?? '',
-        FILTER_VALIDATE_INT
-    );
+
+    // Permite deixar a rota vazia
+    $id_rota = ($_POST['id_rota'] ?? '') !== ''
+        ? filter_var($_POST['id_rota'], FILTER_VALIDATE_INT)
+        : null;
+
     $unidade_medida = trim($_POST['unidade_medida'] ?? '');
     $limite_alerta = $_POST['limite_alerta'] ?? '';
     $status_inicial = $_POST['status_inicial'] ?? '';
@@ -65,20 +67,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'localização'
     ];
 
-    $rotaExiste = false;
+    // Verifica a rota somente se uma foi selecionada
+    $rotaExiste = true;
 
-    if ($id_rota && $id_rota > 0) {
-        $consultaRota = $conexao->prepare(
-            "SELECT id_rota FROM rotas WHERE id_rota = ?"
-        );
+    if ($id_rota !== null) {
 
-        $consultaRota->bind_param("i", $id_rota);
-        $consultaRota->execute();
+        if ($id_rota === false || $id_rota <= 0) {
+            $rotaExiste = false;
+        } else {
 
-        $resultadoRota = $consultaRota->get_result();
-        $rotaExiste = $resultadoRota->num_rows > 0;
+            $consultaRota = $conexao->prepare(
+                "SELECT id_rota FROM rotas WHERE id_rota = ?"
+            );
 
-        $consultaRota->close();
+            if ($consultaRota) {
+                $consultaRota->bind_param("i", $id_rota);
+                $consultaRota->execute();
+
+                $resultadoRota = $consultaRota->get_result();
+                $rotaExiste = $resultadoRota->num_rows > 0;
+
+                $consultaRota->close();
+            } else {
+                $rotaExiste = false;
+            }
+        }
     }
 
     if (
@@ -90,7 +103,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         !is_numeric($limite_alerta) ||
         !in_array($status_inicial, ['Ativo', 'Inativo'], true)
     ) {
-        $erro = 'Preencha todos os campos corretamente e selecione uma rota válida.';
+
+        $erro = 'Preencha todos os campos obrigatórios corretamente.';
+
     } else {
 
         $limite_alerta = (float) $limite_alerta;
@@ -109,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conexao->prepare($sql);
 
         if ($stmt) {
+
             $stmt->bind_param(
                 "sssisdssi",
                 $nome_sensor,
@@ -123,13 +139,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
 
             if ($stmt->execute()) {
+
+                $stmt->close();
+
                 header('Location: tela-home-sensor.php');
                 exit;
+
             } else {
                 $erro = 'Não foi possível atualizar o sensor.';
             }
 
             $stmt->close();
+
         } else {
             $erro = 'Erro ao preparar a atualização do sensor.';
         }
@@ -194,13 +215,13 @@ function e($valor)
         </div>
 
         <a href="tela-home-sensor.php" class="botao-voltar-sensores">
-            ← Voltar para sensores
+            Voltar para sensores
         </a>
 
     </section>
 
     <?php if ($erro !== ''): ?>
-        <div class="aviso-cadastro falha">
+        <div class="erro-excluir-sensor">
             <?= e($erro) ?>
         </div>
     <?php endif; ?>
@@ -274,21 +295,23 @@ function e($valor)
 
                 <div class="grupo-campo-trem">
                     <label class="rotulo-campo-trem" for="id_rota">
-                        Rota associada<span class="obrigatorio">*</span>
+                        Rota associada
                     </label>
 
                     <select
                         id="id_rota"
                         name="id_rota"
-                        class="campo-edicao-trem"
-                        required>
+                        class="campo-edicao-trem">
 
-                        <option value="">Selecione uma rota</option>
+                        <option value=""
+                            <?= empty($sensor['id_rota']) ? 'selected' : '' ?>>
+                            Sem rota associada
+                        </option>
 
                         <?php foreach ($rotas as $rota): ?>
                             <option
                                 value="<?= (int) $rota['id_rota'] ?>"
-                                <?= ((int) $sensor['id_rota'] === (int) $rota['id_rota']) ? 'selected' : '' ?>>
+                                <?= ((string) ($sensor['id_rota'] ?? '') === (string) $rota['id_rota']) ? 'selected' : '' ?>>
 
                                 <?= e($rota['nome_rota']) ?>
                                 (<?= e($rota['codigo']) ?>)
@@ -346,6 +369,7 @@ function e($valor)
                                 value="Ativo"
                                 <?= $sensor['status_inicial'] === 'Ativo' ? 'checked' : '' ?>
                                 required>
+
                             <span class="marcador-status"></span>
                             Ativo
                         </label>
@@ -356,6 +380,7 @@ function e($valor)
                                 name="status_inicial"
                                 value="Inativo"
                                 <?= $sensor['status_inicial'] === 'Inativo' ? 'checked' : '' ?>>
+
                             <span class="marcador-status"></span>
                             Inativo
                         </label>

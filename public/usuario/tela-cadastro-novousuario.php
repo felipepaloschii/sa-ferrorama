@@ -158,7 +158,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <?php if ($erro != '') { ?>
 
-                <p style="color: red; font-weight: bold;">
+                <p class="erro-excluir-sensor">
 
                     <?php echo $erro; ?>
 

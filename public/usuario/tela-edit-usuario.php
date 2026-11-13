@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 
         <?php if ($erro != ''): ?>
-            <p style="color: red;"><?php echo $erro; ?></p>
+            <p class="erro-excluir-sensor"><?php echo $erro; ?></p>
         <?php endif; ?>
 
         <section class="painel-cadastro-sensor">

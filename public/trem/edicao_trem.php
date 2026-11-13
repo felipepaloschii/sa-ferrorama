@@ -182,7 +182,7 @@ function e($valor)
             <section class="painel-formulario-trem">
 
                 <?php if ($erro !== ''): ?>
-                    <p class="aviso-edicao-trem"><?= e($erro) ?></p>
+                    <p class="erro-excluir-sensor"><?= e($erro) ?></p>
                 <?php endif; ?>
 
                 <form method="post" action="edicao_trem.php?id=<?= e($id) ?>">
