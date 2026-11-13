@@ -1,3 +1,4 @@
+
 <?php
 
 require_once '../../infra/verificar-admin.php';
@@ -5,13 +6,13 @@ require_once '../../infra/conexao.php';
 
 $mensagem = '';
 $erro = '';
+$tipoErro = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
-    $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
-    $tipo = $_POST['tipo'];
+    $email = trim($_POST['email'] ?? '');
+    $senha = $_POST['senha'] ?? '';
+    $tipo = $_POST['tipo'] ?? '';
 
     if (empty($email) || empty($senha) || empty($tipo)) {
 
@@ -35,6 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($resultado->num_rows > 0) {
 
                 $erro = 'Este e-mail já está cadastrado.';
+                $tipoErro = 'duplicado';
+
             } else {
 
                 $sql = "INSERT INTO usuario (email, senha, tipo) VALUES (?, ?, ?)";
@@ -50,15 +53,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $tipo
                     );
 
-                    if ($stmt2->execute()) {
-
-                        $mensagem = 'Novo usuário cadastrado com sucesso!';
-                    } else {
-
-                        $erro = 'Não foi possível cadastrar o usuário.';
+                    try {
+                        if ($stmt2->execute()) {
+                            $mensagem = 'Novo usuário cadastrado com sucesso!';
+                        }
+                    } catch (mysqli_sql_exception $e) {
+                        if ($e->getCode() === 1062) {
+                            $erro = 'Este e-mail já está cadastrado. Informe outro e-mail.';
+                            $tipoErro = 'duplicado';
+                        } else {
+                            $erro = 'Não foi possível cadastrar o usuário.';
+                        }
                     }
 
                     $stmt2->close();
+
                 } else {
 
                     $erro = 'Erro ao preparar o cadastro do usuário.';
@@ -66,6 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             $stmt->close();
+
         } else {
 
             $erro = 'Erro ao verificar o e-mail.';
@@ -114,7 +124,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </aside>
     </header>
 
-
     <main class="area-principal">
 
         <section class="cabecalho-cadastro-sensor">
@@ -131,7 +140,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             </div>
 
-
             <button
                 class="botao-voltar-sensores"
                 onclick="window.location.href='tela-home-usuario.php'">
@@ -142,30 +150,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         </section>
 
-
         <section class="painel-cadastro-sensor">
 
             <?php if ($mensagem != '') { ?>
 
                 <p style="color: green; font-weight: bold;">
-
-                    <?php echo $mensagem; ?>
-
+                    <?php echo htmlspecialchars($mensagem); ?>
                 </p>
 
             <?php } ?>
-
 
             <?php if ($erro != '') { ?>
 
-                <p class="erro-excluir-sensor">
-
-                    <?php echo $erro; ?>
-
-                </p>
+                <div class="<?= $tipoErro === 'duplicado' ? 'erro-duplicado' : 'aviso-cadastro falha' ?>">
+                    <?php echo htmlspecialchars($erro); ?>
+                </div>
 
             <?php } ?>
-
 
             <form
                 class="formulario-cadastro-sensor"
@@ -182,12 +183,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input
                             type="email"
                             name="email"
-                            class="input-nome_sensorsensor">
+                            class="input-nome_sensorsensor"
+                            value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
 
                     </div>
 
                 </div>
-
 
                 <div class="linha-campos-formulario">
 
@@ -204,7 +205,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     </div>
 
-
                     <div class="grupo-nome_sensor-sensor">
 
                         <label class="nome_sensor-sensor">
@@ -219,11 +219,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 Selecione
                             </option>
 
-                            <option value="administrador">
+                            <option value="administrador"
+                                <?= ($_POST['tipo'] ?? '') === 'administrador' ? 'selected' : '' ?>>
                                 Administrador
                             </option>
 
-                            <option value="funcionario">
+                            <option value="funcionario"
+                                <?= ($_POST['tipo'] ?? '') === 'funcionario' ? 'selected' : '' ?>>
                                 Funcionário
                             </option>
 
@@ -239,13 +241,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <button
                         type="submit"
-                        class="botao-salvar-trem"
-                        onclick="window.location.href='tela-home-usuario.php'">
+                        class="botao-salvar-trem">
 
                         Salvar usuário
 
                     </button>
-
 
                     <button
                         type="button"

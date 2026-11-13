@@ -5,6 +5,7 @@ require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
 
 $mensagem = '';
+$tipoErro = '';
 $trens = [];
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -14,7 +15,6 @@ if (!$id || $id < 1) {
     exit;
 }
 
-// Busca os trens cadastrados
 $consultaTrens = $conexao->query(
     "SELECT id, nome_trem, modelo_trem
      FROM trem
@@ -25,7 +25,6 @@ if ($consultaTrens) {
     $trens = $consultaTrens->fetch_all(MYSQLI_ASSOC);
 }
 
-// Busca a rota
 $sql = "SELECT * FROM rotas WHERE id_rota = ?";
 $stmt = $conexao->prepare($sql);
 $stmt->bind_param("i", $id);
@@ -40,7 +39,6 @@ if (!$rota) {
     exit;
 }
 
-// Atualização
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $nome_rota = trim($_POST['nome_rota'] ?? '');
@@ -96,12 +94,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id
         );
 
-        if ($atualizacao->execute()) {
-            $atualizacao->close();
-            header('Location: tela-home-rotas.php');
-            exit;
-        } else {
-            $mensagem = 'Erro ao atualizar a rota. Verifique se o código já existe.';
+        try {
+            if ($atualizacao->execute()) {
+                $atualizacao->close();
+                header('Location: tela-home-rotas.php');
+                exit;
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() === 1062) {
+                $mensagem = 'Esse código já está cadastrado em outra rota. Informe um código diferente.';
+                $tipoErro = 'duplicado';
+            } else {
+                $mensagem = 'Não foi possível atualizar a rota.';
+            }
         }
 
         $atualizacao->close();
@@ -173,7 +178,7 @@ function e($valor)
         <section class="painel-formulario-trem">
 
             <?php if ($mensagem !== ''): ?>
-                <p class="erro-excluir-sensor">
+                <p class="<?= $tipoErro === 'duplicado' ? 'erro-duplicado' : 'aviso-edicao-trem' ?>">
                     <?= e($mensagem) ?>
                 </p>
             <?php endif; ?>
