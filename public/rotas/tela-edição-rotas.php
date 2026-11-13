@@ -169,12 +169,14 @@ function e($valor)
 
     <main class="conteudo-edicao-trem">
 
-        <h2>Editar rotas</h2>
+         <div class="informacoes-pagina">
+            <h1 class="titulo-pagina">Editar rota</h1>
 
-        <p class="subtitulo-edicao-trem">
-            Preencha as informações para editar a rota cadastrada.
-        </p>
-
+            <p class="descricao-pagina">
+                Altere as informações da rota cadastrada.
+            </p>
+        </div>
+        <br>
         <section class="painel-formulario-trem">
 
             <?php if ($mensagem !== ''): ?>
@@ -328,7 +330,7 @@ function e($valor)
                         href="tela-home-rotas.php"
                         class="botao-cancelar-cadastro"
                     >
-                        ← Voltar para rotas
+                         Voltar para rotas
                     </a>
 
                     <button

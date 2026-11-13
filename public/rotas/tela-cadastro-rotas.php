@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
 
             <a href="tela-home-rotas.php" class="botao-voltar-sensores">
-                ← Voltar para rotas
+                 Voltar para rotas
             </a>
 
         </section>

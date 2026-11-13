@@ -165,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 class="botao-voltar-sensores"
                 onclick="window.location.href='tela-home-rotas.php'">
 
-                ← Voltar para rotas
+                 Voltar para rotas
 
             </button>
 

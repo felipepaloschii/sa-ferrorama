@@ -148,7 +148,7 @@ function e($valor)
                     class="botao-voltar-sensores"
                     onclick="window.location.href='tela-home-usuario.php'">
 
-                    ← Voltar para usuários
+                     Voltar para usuários
 
                 </button>
 

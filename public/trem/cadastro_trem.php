@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <a href="lista_trem.php" class="botao-voltar-trem">
-                ← Voltar para trens
+                 Voltar para trens
             </a>
         </div>
 

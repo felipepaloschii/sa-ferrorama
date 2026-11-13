@@ -201,12 +201,15 @@ function e($valor)
 
         <main class="conteudo conteudo-edicao-trem">
 
-            <h2>Editar trem</h2>
+            <div class="informacoes-pagina">
+            <h1 class="titulo-pagina">Editar trem</h1>
 
-            <p class="subtitulo-edicao-trem">
-                Preencha as informações para editar o trem cadastrado.
+            <p class="descricao-pagina">
+                Altere as informações do trem cadastrado.
             </p>
+        </div>
 
+        <br>    
             <section class="painel-formulario-trem">
 
                 <?php if ($erro !== ''): ?>
