@@ -32,25 +32,29 @@ $stmt->close();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Verifica se existe algum trem utilizando o modelo da rota
-    $sql = "SELECT COUNT(*) AS total
-            FROM trem
-            WHERE modelo_trem = ?";
+    // Verifica o trem vinculado diretamente à rota
+    $idTrem = (int) ($rota['id_trem'] ?? 0);
 
-    $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("s", $rota['modelo_trem']);
-    $stmt->execute();
+    $rotaEmUso = false;
 
-    $resultado = $stmt->get_result();
-    $verificacao = $resultado->fetch_assoc();
+    if ($idTrem > 0) {
 
-    $rotaEmUso = $verificacao['total'] > 0;
+        $sql = "SELECT id FROM trem WHERE id = ?";
 
-    $stmt->close();
+        $stmt = $conexao->prepare($sql);
+        $stmt->bind_param("i", $idTrem);
+        $stmt->execute();
+
+        $resultadoTrem = $stmt->get_result();
+
+        $rotaEmUso = $resultadoTrem->num_rows > 0;
+
+        $stmt->close();
+    }
 
     if ($rotaEmUso) {
 
-        $erro = 'Não é possível excluir esta rota, pois existe um trem associado a ela.';
+        $erro = 'Não é possível excluir esta rota, pois existe um trem vinculado a ela.';
 
     } else {
 
@@ -63,16 +67,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("i", $id);
 
             if ($stmt->execute() && $stmt->affected_rows > 0) {
+
                 $stmt->close();
+
                 header('Location: tela-home-rotas.php');
                 exit;
+
             } else {
+
                 $erro = 'Não foi possível excluir a rota.';
             }
 
             $stmt->close();
 
         } else {
+
             $erro = 'Erro ao preparar a exclusão da rota.';
         }
     }

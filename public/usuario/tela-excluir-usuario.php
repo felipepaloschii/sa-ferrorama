@@ -1,3 +1,4 @@
+
 <?php
 
 require_once '../../infra/verificar-admin.php';
@@ -48,7 +49,6 @@ if (!$usuario) {
     exit;
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $exclusao = mysqli_prepare(
@@ -74,7 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     mysqli_stmt_close($exclusao);
 }
-
 
 function e($valor)
 {
@@ -127,6 +126,7 @@ function e($valor)
                 </nav>
             </aside>
         </header>
+
         <main class="area-principal">
 
             <section class="cabecalho-cadastro-sensor">
@@ -143,12 +143,12 @@ function e($valor)
 
                 </div>
 
-
                 <button
+                    type="button"
                     class="botao-voltar-sensores"
-                    onclick="window.location.href='tela-home-sensor.php'">
+                    onclick="window.location.href='tela-home-usuario.php'">
 
-                    ← Voltar para sensores
+                    ← Voltar para usuários
 
                 </button>
 
@@ -159,19 +159,18 @@ function e($valor)
                 <div
                     class="icone-excluir-sensor"
                     aria-hidden="true">
-                    🗑
-                </div>
 
+                    🗑
+
+                </div>
 
                 <h2>
                     Tem certeza que deseja excluir este usuário?
                 </h2>
 
-
                 <p>
                     Essa ação não poderá ser desfeita.
                 </p>
-
 
                 <div class="informacoes-sensor-excluir">
 
@@ -181,43 +180,45 @@ function e($valor)
                     </span>
 
                     <br>
+
                     <span>
                         E-mail:
                         <?= e($usuario['email']) ?>
                     </span>
 
                     <br>
+
                     <span>
                         Tipo:
+
                         <?php
 
                         if ($usuario['tipo'] === 'administrador') {
 
                             echo 'Administrador';
+
                         } elseif ($usuario['tipo'] === 'funcionario') {
 
                             echo 'Funcionário';
+
                         } else {
 
                             echo e($usuario['tipo']);
                         }
 
                         ?>
+
                     </span>
 
                 </div>
 
-
                 <?php if ($erro !== ''): ?>
 
                     <p class="erro-excluir-sensor">
-
                         <?= e($erro) ?>
-
                     </p>
 
                 <?php endif; ?>
-
 
                 <div class="botoes-excluir-sensor">
 
@@ -230,7 +231,6 @@ function e($valor)
                             name="id"
                             value="<?= e($id) ?>">
 
-
                         <button
                             class="botao-confirmar-exclusao"
                             type="submit">
@@ -240,7 +240,6 @@ function e($valor)
                         </button>
 
                     </form>
-
 
                     <button
                         type="button"

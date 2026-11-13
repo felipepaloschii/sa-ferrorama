@@ -1,3 +1,4 @@
+
 <?php
 
 require_once '../../infra/verificar-admin.php';
@@ -6,154 +7,177 @@ require_once '../../infra/conexao.php';
 $quantidade_usuario = 0;
 $usuario = [];
 
-$sql = "SELECT id_usuario, email, senha, tipo FROM usuario ORDER BY id_usuario DESC";
+$sql = "SELECT id_usuario, email, tipo
+        FROM usuario
+        ORDER BY id_usuario DESC";
 
 $resultado = $conexao->query($sql);
 
-$usuarios = [];
-
 if ($resultado) {
 
-while ($linha = $resultado->fetch_assoc()) {
-    $usuario[] = $linha;
-    $quantidade_usuario++;
-}
+    while ($linha = $resultado->fetch_assoc()) {
+        $usuario[] = $linha;
+        $quantidade_usuario++;
+    }
 
 }
 
 ?>
 
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tela de Usuários</title>
-    <link rel="stylesheet" href="../../assets/style/style.css">
 
+    <title>Tela de Usuários</title>
+
+    <link rel="stylesheet" href="../../assets/style/style.css">
 </head>
+
 <body>
 
     <header class="barra-superior">
-    <h1>PIA Enterprise</h1>
+        <h1>PIA Enterprise</h1>
 
-    <aside class="menu-lateral">
-        <nav>
-            <a href="../../index.php">Dashboard</a>
-            <a href="../sensor/tela-home-sensor.php">Sensores</a>
-            <a href="../trem/lista_trem.php">Trens</a>
-            <a href="../rotas/tela-home-rotas.php">Rotas</a>
+        <aside class="menu-lateral">
+            <nav>
+                <a href="../../index.php">Dashboard</a>
+                <a href="../sensor/tela-home-sensor.php">Sensores</a>
+                <a href="../trem/lista_trem.php">Trens</a>
+                <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
-            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-                <a class="ativo" href="tela-home-usuario.php">Usuários</a>
-            <?php endif; ?>
-        </nav>
-    </aside>
-</header>
+                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
+                    <a class="ativo" href="tela-home-usuario.php">Usuários</a>
+                <?php endif; ?>
+            </nav>
+        </aside>
+    </header>
 
     <main class="area-principal">
-      <section class="cabecalho-sensor topo-lista-trens">
 
-    <div>
-        <h2 class="titulo-sensores">
-            Usuários
-        </h2>
+        <section class="cabecalho-sensor topo-lista-trens">
 
-        <p class="descricao-sensores">
-            Gerencie os usuários cadastrados no sistema
-        </p>
-    </div>
+            <div>
+                <h2 class="titulo-sensores">
+                    Usuários
+                </h2>
 
-    <a
-        class="botao-novo-sensor botao-novo-trem"
-        href="tela-cadastro-novousuario.php">
-        + Novo Usuário
-    </a>
+                <p class="descricao-sensores">
+                    Gerencie os usuários cadastrados no sistema
+                </p>
+            </div>
 
-</section>
+            <a
+                class="botao-novo-sensor botao-novo-trem"
+                href="tela-cadastro-novousuario.php">
 
-        <section class= "conteudo-lista-sensor">
-        <div class="topo-lista-sensores">
-            <div class="cartao-sensores-ativos">
-                <div class ="icone-usuario">
+                + Novo Usuário
 
+            </a>
+
+        </section>
+
+        <section class="conteudo-lista-sensor">
+
+            <div class="topo-lista-sensores">
+
+                <div class="cartao-sensores-ativos">
+
+                    <div class="icone-usuario">
                         <span></span>
                         <span></span>
                         <span></span>
+                    </div>
 
-                </div>
-
-                 <div class="informacoes-sensor">
+                    <div class="informacoes-sensor">
 
                         <h2>Usuários Cadastrados</h2>
 
                         <strong>
-                            <?php echo $quantidade_usuario; ?>
+                            <?= $quantidade_usuario; ?>
                         </strong>
+
                     </div>
+
                 </div>
 
-               
             </div>
 
-             <br>
+            <br>
 
-        <section class="painel-lista-sensores">
-            <div class="titulo-painel-lista">
-                <h2>Lista de Usuários</h2>
-            </div>
-            
-            <div class="tabela-sensores">
+            <section class="painel-lista-sensores">
 
-            <div class="cabecalho-tabela">
+                <div class="titulo-painel-lista">
+                    <h2>Lista de Usuários</h2>
+                </div>
 
-             <span>ID</span>
+                <div class="tabela-sensores">
+
+                    <div class="cabecalho-tabela">
+
+                        <span>ID</span>
                         <span>E-mail</span>
-                        <span>Senha</span>
                         <span>Tipo</span>
                         <span>Ações</span>
-            </div>
-            <?php if (count($usuario) > 0) { ?>
 
-    <?php foreach ($usuario as $usuario) { ?>
+                    </div>
 
-        <div class="linha-tabela">
+                    <?php if (count($usuario) > 0): ?>
 
-            <span>
-                <?php echo htmlspecialchars($usuario['id_usuario']); ?>
-            </span>
+                        <?php foreach ($usuario as $linhaUsuario): ?>
 
-            <span>
-                <?php echo htmlspecialchars($usuario['email']); ?>
-            </span>
+                            <div class="linha-tabela">
 
-            <span>
-                <?php echo htmlspecialchars($usuario['senha']); ?>
-            </span>
+                                <span>
+                                    <?= htmlspecialchars($linhaUsuario['id_usuario']); ?>
+                                </span>
 
-            <span>
-               <?php echo htmlspecialchars($usuario['tipo']); ?>
-            </span>
+                                <span>
+                                    <?= htmlspecialchars($linhaUsuario['email']); ?>
+                                </span>
 
-            <span class="acoes">
+                                <span>
+                                    <?= htmlspecialchars($linhaUsuario['tipo']); ?>
+                                </span>
 
-                <a href="tela-edit-usuario.php?id=<?php echo $usuario['id_usuario']; ?>"
-                   class="botao-editar"
-                   title="Editar">E</a>
+                                <span class="acoes">
 
-                <a href="tela-excluir-usuario.php?id=<?php echo $usuario['id_usuario']; ?>"
-                   class="botao-excluir"
-                   title="Excluir" >D</a>
+                                    <a
+                                        href="tela-edit-usuario.php?id=<?= (int) $linhaUsuario['id_usuario']; ?>"
+                                        class="botao-editar"
+                                        title="Editar">
 
-            </span>
+                                        E
 
-        </div>
+                                    </a>
 
-    <?php } ?>
+                                    <a
+                                        href="tela-excluir-usuario.php?id=<?= (int) $linhaUsuario['id_usuario']; ?>"
+                                        class="botao-excluir"
+                                        title="Excluir">
 
-<?php } ?>
+                                        D
 
-            </div>
+                                    </a>
+
+                                </span>
+
+                            </div>
+
+                        <?php endforeach; ?>
+
+                    <?php endif; ?>
+
+                </div>
+
+            </section>
+
         </section>
+
     </main>
+
 </body>
+
 </html>
