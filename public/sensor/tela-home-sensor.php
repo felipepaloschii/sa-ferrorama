@@ -147,9 +147,6 @@ function e($valor)
         <div>
             <h1 class="titulo-sensores">Listagem de Sensores</h1>
 
-            <p class="descricao-sensores">
-                Sensores cadastrados no sistema.
-            </p>
         </div>
 
         <div class="topo-lista-sensores">
