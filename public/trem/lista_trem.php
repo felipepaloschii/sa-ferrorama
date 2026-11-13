@@ -56,7 +56,6 @@ $resultado = mysqli_query($conexao, $sql);
     <title>Listagem de Trens</title>
 
     <link rel="stylesheet" href="../../assets/style/style.css">
-    <script src="../../script/confirmar-exclusao.js" defer></script>
 
     <style>
         .colunas-trens {

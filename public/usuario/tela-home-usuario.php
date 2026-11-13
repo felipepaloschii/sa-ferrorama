@@ -29,7 +29,6 @@ while ($linha = $resultado->fetch_assoc()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tela de Usuários</title>
     <link rel="stylesheet" href="../../assets/style/style.css">
-    <script src="../../script/confirmar-exclusao.js" defer></script>
 
 </head>
 <body>

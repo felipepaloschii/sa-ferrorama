@@ -96,7 +96,6 @@ $rotulosStatus = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excluir Trem - PIA Enterprise</title>
     <link rel="stylesheet" href="../../assets/style/style.css">
-    <script src="../../script/confirmar-exclusao.js" defer></script>
 </head>
 
 <body>
