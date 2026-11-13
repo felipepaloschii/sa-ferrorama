@@ -119,9 +119,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
 
             
-            <div id="mensagem">
-               <?php echo htmlspecialchars($mensagem); ?>
+        <?php if (!empty($mensagem)): ?>
+            <div class="alerta-login" role="alert">
+                <span class="icone-alerta">!</span>
+                <span><?= htmlspecialchars($mensagem); ?></span>
             </div>
+        <?php endif; ?>
 
             <div class="linha"></div>
 
