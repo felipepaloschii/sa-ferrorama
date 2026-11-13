@@ -107,31 +107,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
     <header class="barra-superior">
-        <div class="lado-esquerdo">
-            <h1 class="logo-topo">PIA Enterprise</h1>
+            <h1>PIA Enterprise</h1>
 
-            <nav class="navegacao-principal">
-                <a href="../../index.php">Dashboard</a>
-                <a href="../sensor/tela-home-sensor.php">Sensores</a>
-                <a class="ativo" href="lista_trem.php">Trens</a>
-                <a href="../rotas/tela-home-rotas.php">Rotas</a>
+            <aside class="menu-lateral">
+                <nav>
+                    <a href="../../index.php">Dashboard</a>
+                    <a href="../sensor/tela-home-sensor.php">Sensores</a>
+                    <a class="ativo" href="lista_trem.php">Trens</a>
+                    <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
-                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
-                    <a href="../usuario/tela-home-usuario.php">Usuários</a>
-                <?php endif; ?>
-            </nav>
-        </div>
-
-        <div class="acoes-superiores">
-            <div class="status-online">
-                <span class="ponto-online"></span>
-                <span>Online</span>
-            </div>
-
-            <div class="avatar-usuario" title="Usuário">U</div>
-        </div>
-    </header>
-
+                    <?php if ($_SESSION['tipo'] === 'administrador'): ?>
+                        <a href="../usuario/tela-home-usuario.php">Usuários</a>
+                    <?php endif; ?>
+                </nav>
+            </aside>
+        </header>
     <main class="area-principal cadastro-trem">
 
         <div class="cabecalho-cadastro-sensor">
