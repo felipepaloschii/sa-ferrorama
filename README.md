@@ -134,7 +134,7 @@ Os relacionamentos são definidos por chaves estrangeiras. Alguns vínculos são
 
 Consulte o manual para aprender a acessar e utilizar as funcionalidades do sistema:
 
-[Manual de Utilização — Ferrorama](MANUAL.md)
+[Manual de Utilização — Ferrorama](manual.md)
 
 ## 8. Equipe
 
