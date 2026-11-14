@@ -7,7 +7,6 @@ A Ferrorama é um sistema de gerenciamento ferroviário desenvolvido para facili
 
 O sistema permite organizar informações ferroviárias, acompanhar registros e administrar os recursos disponíveis.
 
-**Imagem 1 — Tela inicial da Ferrorama**
 
 ![Tela inicial da Ferrorama](assets/manual/image.png)
 
@@ -19,9 +18,8 @@ O sistema permite organizar informações ferroviárias, acompanhar registros e 
 4. Acesse o endereço local configurado para a Ferrorama.
 5. Aguarde o carregamento da página inicial.
 
-**Imagem 2 — Página inicial no navegador**
 
-![Página inicial no navegador](assets/manual/image copy.png![alt text](image.png))
+![Página inicial no navegador](assets/manual/imagecopy.png)
 
 ## 3. Como realizar login
 
@@ -31,9 +29,8 @@ O sistema permite organizar informações ferroviárias, acompanhar registros e 
 4. Clique no botão de entrar.
 5. Após a autenticação, o sistema abrirá a área correspondente ao seu perfil.
 
-**Imagem 3 — Tela de login**
 
-![Tela de login](assets/manual/image copy 2.png)
+![Tela de login](assets/manual/imagecopy2.png)
 
 ## 4. Perfis de acesso
 
@@ -47,13 +44,11 @@ Possui acesso às funcionalidades administrativas, incluindo gerenciamento de us
 
 Possui acesso às funcionalidades permitidas pelo sistema, sem acesso às operações exclusivas do administrador.
 
-**Imagem 4 — Dashboard do administrador**
 
-![Dashboard do administrador](assets/manual/image copy 3.png)
+![Dashboard do administrador](assets/manual/imagecopy3.png)
 
-**Imagem 5 — Dashboard do funcionário**
 
-![Dashboard do funcionário](assets/manual/image copy 4.png)
+![Dashboard do funcionário](assets/manual/imagecopy4.png)
 
 ## 5. Navegação pelo sistema
 
@@ -65,9 +60,9 @@ O menu permite acessar as principais áreas:
 - Rotas
 - Usuários
 
-**Imagem 6 — Menu do sistema**
+![Menu](assets/manual/imagecopy5.png)
 
-![Menu![alt text](image.png)](![imagens/menu-lateral.png](<../assets/manual/image copy 5.png>))
+
 
 ## 6. Gerenciamento de usuários
 
@@ -82,17 +77,15 @@ A área de usuários permite administrar as contas cadastradas.
 5. Selecione o tipo de usuário.
 6. Clique em salvar.
 
-**Imagem 7 — Formulário de cadastro de usuário**
 
-![Cadastro de usuário](assets/manual/image copy 6.png)
+![Cadastro de usuário](assets/manual/imagecopy6.png)
 
 ### Consultar usuários
 
 Acesse a listagem para visualizar as contas cadastradas.
 
-**Imagem 8 — Listagem de usuários**
 
-![Listagem de usuários](assets/manual/image copy 7.png)
+![Listagem de usuários](assets/manual/imagecopy7.png)
 
 ### Editar e excluir usuário
 
@@ -100,9 +93,8 @@ Acesse a listagem para visualizar as contas cadastradas.
 2. Selecione a opção de editar ou excluir.
 3. Realize a operação conforme as informações apresentadas na tela.
 
-**Imagem 9 — Edição ou exclusão de usuário**
 
-![Edição ou exclusão de usuário](assets/manual/image copy 8.png)
+![Edição ou exclusão de usuário](assets/manual/imagecopy8.png)
 
 ## 7. Gerenciamento de trens
 
@@ -122,17 +114,15 @@ A área de trens permite registrar e controlar as informações dos veículos fe
 10. Selecione o usuário responsável, quando aplicável.
 11. Salve o cadastro.
 
-**Imagem 10 — Formulário de cadastro de trem**
 
-![Cadastro de trem](assets/manual/image copy 9.png)
+![Cadastro de trem](assets/manual/imagecopy9.png)
 
 ### Consultar trens
 
 Acesse a listagem para visualizar os trens cadastrados.
 
-**Imagem 11 — Listagem de trens**
 
-![Listagem de trens](assets/manual/image copy 10.png)
+![Listagem de trens](assets/manual/imagecopy10.png)
 
 ### Editar e excluir trem
 
@@ -142,9 +132,8 @@ Acesse a listagem para visualizar os trens cadastrados.
 
 Um trem que possui rota vinculada não pode ser excluído enquanto o relacionamento existir.
 
-**Imagem 12 — Edição ou exclusão de trem**
 
-![Edição ou exclusão de trem](assets/manual/image copy 8.png)
+![Edição ou exclusão de trem](assets/manual/imagecopy8.png)
 
 ## 8. Gerenciamento de rotas
 
@@ -165,17 +154,15 @@ A área de rotas permite organizar os trajetos ferroviários.
 
 A associação com um trem é opcional.
 
-**Imagem 13 — Formulário de cadastro de rota**
 
-![Cadastro de rota](assets/manual/image copy 11.png)
+![Cadastro de rota](assets/manual/imagecopy11.png)
 
 ### Consultar rotas
 
 Acesse a listagem para visualizar as rotas cadastradas.
 
-**Imagem 14 — Listagem de rotas**
 
-![Listagem de rotas](assets/manual/image copy 12.png)
+![Listagem de rotas](assets/manual/imagecopy12.png)
 
 ### Editar e excluir rota
 
@@ -185,9 +172,8 @@ Acesse a listagem para visualizar as rotas cadastradas.
 
 Uma rota que possui sensores vinculados não pode ser excluída enquanto o relacionamento existir.
 
-**Imagem 15 — Edição ou exclusão de rota**
 
-![Edição ou exclusão de rota](assets/manual/image copy 8.png)
+![Edição ou exclusão de rota](assets/manual/imagecopy8.png)
 
 ## 9. Gerenciamento de sensores
 
@@ -209,17 +195,15 @@ A área de sensores permite registrar equipamentos responsáveis pelo monitorame
 
 A associação com uma rota é opcional.
 
-**Imagem 16 — Formulário de cadastro de sensor**
 
-![Cadastro de sensor](assets/manual/image copy 13.png)
+![Cadastro de sensor](assets/manual/imagecopy13.png)
 
 ### Consultar sensores
 
 Acesse a listagem para visualizar os sensores cadastrados e seus estados.
 
-**Imagem 17 — Listagem de sensores**
 
-![Listagem de sensores](assets/manual/image copy 14.png)
+![Listagem de sensores](assets/manual/imagecopy14.png)
 
 ### Editar e excluir sensor
 
@@ -227,9 +211,8 @@ Acesse a listagem para visualizar os sensores cadastrados e seus estados.
 2. Selecione editar ou excluir.
 3. Realize a operação desejada.
 
-**Imagem 18 — Edição ou exclusão de sensor**
 
-![Edição ou exclusão de sensor](assets/manual/image copy 8.png)
+![Edição ou exclusão de sensor](assets/manual/imagecopy8.png)
 
 
 
@@ -244,9 +227,8 @@ As informações podem incluir:
 - Quantidade de rotas cadastradas.
 - Informações gerais de gerenciamento.
 
-**Imagem 21 — Dashboard completo**
 
-![Dashboard completo](assets/manual/image copy 15.png)
+![Dashboard completo](assets/manual/imagecopy15.png)
 
 ## 12. Como sair do sistema
 
@@ -255,9 +237,8 @@ As informações podem incluir:
 3. Aguarde o encerramento da sessão.
 4. O sistema retornará à tela de acesso.
 
-**Imagem 22 — Opção de logout**
 
-![Opção de logout](assets/manual/image copy 16.png)
+![Opção de logout](assets/manual/imagecopy16.png)
 
 
 ## 13. Considerações finais
