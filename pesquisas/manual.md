@@ -7,7 +7,6 @@ A Ferrorama é um sistema de gerenciamento ferroviário desenvolvido para facili
 
 O sistema permite organizar informações ferroviárias, acompanhar registros e administrar os recursos disponíveis.
 
-
 ![Tela inicial da Ferrorama](assets/manual/image.png)
 
 ## 2. Como acessar o sistema
@@ -18,7 +17,6 @@ O sistema permite organizar informações ferroviárias, acompanhar registros e 
 4. Acesse o endereço local configurado para a Ferrorama.
 5. Aguarde o carregamento da página inicial.
 
-
 ![Página inicial no navegador](assets/manual/imagecopy.png)
 
 ## 3. Como realizar login
@@ -28,7 +26,6 @@ O sistema permite organizar informações ferroviárias, acompanhar registros e 
 3. Informe sua senha.
 4. Clique no botão de entrar.
 5. Após a autenticação, o sistema abrirá a área correspondente ao seu perfil.
-
 
 ![Tela de login](assets/manual/imagecopy2.png)
 
@@ -44,9 +41,7 @@ Possui acesso às funcionalidades administrativas, incluindo gerenciamento de us
 
 Possui acesso às funcionalidades permitidas pelo sistema, sem acesso às operações exclusivas do administrador.
 
-
 ![Dashboard do administrador](assets/manual/imagecopy3.png)
-
 
 ![Dashboard do funcionário](assets/manual/imagecopy4.png)
 
@@ -62,8 +57,6 @@ O menu permite acessar as principais áreas:
 
 ![Menu](assets/manual/imagecopy5.png)
 
-
-
 ## 6. Gerenciamento de usuários
 
 A área de usuários permite administrar as contas cadastradas.
@@ -77,13 +70,11 @@ A área de usuários permite administrar as contas cadastradas.
 5. Selecione o tipo de usuário.
 6. Clique em salvar.
 
-
 ![Cadastro de usuário](assets/manual/imagecopy6.png)
 
 ### Consultar usuários
 
 Acesse a listagem para visualizar as contas cadastradas.
-
 
 ![Listagem de usuários](assets/manual/imagecopy7.png)
 
@@ -92,7 +83,6 @@ Acesse a listagem para visualizar as contas cadastradas.
 1. Localize o usuário desejado.
 2. Selecione a opção de editar ou excluir.
 3. Realize a operação conforme as informações apresentadas na tela.
-
 
 ![Edição ou exclusão de usuário](assets/manual/imagecopy8.png)
 
@@ -114,13 +104,11 @@ A área de trens permite registrar e controlar as informações dos veículos fe
 10. Selecione o usuário responsável, quando aplicável.
 11. Salve o cadastro.
 
-
 ![Cadastro de trem](assets/manual/imagecopy9.png)
 
 ### Consultar trens
 
 Acesse a listagem para visualizar os trens cadastrados.
-
 
 ![Listagem de trens](assets/manual/imagecopy10.png)
 
@@ -131,7 +119,6 @@ Acesse a listagem para visualizar os trens cadastrados.
 3. Realize a operação desejada.
 
 Um trem que possui rota vinculada não pode ser excluído enquanto o relacionamento existir.
-
 
 ![Edição ou exclusão de trem](assets/manual/imagecopy8.png)
 
@@ -154,13 +141,11 @@ A área de rotas permite organizar os trajetos ferroviários.
 
 A associação com um trem é opcional.
 
-
 ![Cadastro de rota](assets/manual/imagecopy11.png)
 
 ### Consultar rotas
 
 Acesse a listagem para visualizar as rotas cadastradas.
-
 
 ![Listagem de rotas](assets/manual/imagecopy12.png)
 
@@ -171,7 +156,6 @@ Acesse a listagem para visualizar as rotas cadastradas.
 3. Realize a operação desejada.
 
 Uma rota que possui sensores vinculados não pode ser excluída enquanto o relacionamento existir.
-
 
 ![Edição ou exclusão de rota](assets/manual/imagecopy8.png)
 
@@ -195,13 +179,11 @@ A área de sensores permite registrar equipamentos responsáveis pelo monitorame
 
 A associação com uma rota é opcional.
 
-
 ![Cadastro de sensor](assets/manual/imagecopy13.png)
 
 ### Consultar sensores
 
 Acesse a listagem para visualizar os sensores cadastrados e seus estados.
-
 
 ![Listagem de sensores](assets/manual/imagecopy14.png)
 
@@ -211,10 +193,7 @@ Acesse a listagem para visualizar os sensores cadastrados e seus estados.
 2. Selecione editar ou excluir.
 3. Realize a operação desejada.
 
-
 ![Edição ou exclusão de sensor](assets/manual/imagecopy8.png)
-
-
 
 ## 10. Dashboard
 
@@ -227,21 +206,18 @@ As informações podem incluir:
 - Quantidade de rotas cadastradas.
 - Informações gerais de gerenciamento.
 
-
 ![Dashboard completo](assets/manual/imagecopy15.png)
 
-## 12. Como sair do sistema
+## 11. Como sair do sistema
 
 1. Localize a opção de sair ou logout.
 2. Clique nela.
 3. Aguarde o encerramento da sessão.
 4. O sistema retornará à tela de acesso.
 
-
 ![Opção de logout](assets/manual/imagecopy16.png)
 
-
-## 13. Considerações finais
+## 12. Considerações finais
 
 A Ferrorama foi desenvolvida para centralizar o gerenciamento de informações ferroviárias em um único sistema.
 
