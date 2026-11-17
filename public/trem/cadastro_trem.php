@@ -1,25 +1,47 @@
-
+<!-- Identifica se não tem sessão ativa -->
 <?php
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
+// conexão com o banco, confere se o usuário logado é ADMINISTRADOR. Se não for, bloqueia o acesso.
+
 require_once '../../infra/verificar-admin.php';
+
+// conexão com o banco, cria a variável $conexao, que é a ligação com o MySQL.
+
 require_once '../../infra/conexao.php';
 
-$usuarios = [];
-$erro = '';
-$tipoErro = '';
+// Declaração de variáveis com valores vazios
+
+$usuarios = []; //Guarda a lista de usuários, depois vai usar no "Usuário responsável".
+$erro = ''; //Guarda a mensagem deerro, se tiver vazio, não tem erro.
+$tipoErro = ''; //Guarda o tipo do erro (ajuda no CSS da mensagem).
+
+// Busca os usuários no banco, para montar o select depois. A consulta vai trazer o id, email e tipo (adm/func), e ordena os emails por ordem alfabetica.
 
 $resUsuarios = $conexao->query(
     "SELECT id_usuario, email, tipo FROM usuario ORDER BY email"
 );
 
+// Se a consulta deu certo ($resUsuarios não é false).
+
 if ($resUsuarios) {
+    // Transforma o resultado numa array PHP. 
+    // MYSQLI_ASSOC faz as linhas virarem: ['id_usuario' => 1, 'email' => 'a@b.com', 'tipo' => 'administrador'].
     $usuarios = $resUsuarios->fetch_all(MYSQLI_ASSOC);
 }
 
+// Roda só quando o formulário foi ENVIADO (método POST)
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    // Lê os dados enviados.
+    // $_POST é o array com tudo que veio do formulário (atributo "name" de cada campo).
+    // ?? signigica que se o campo não existir, retorna um texto vazio (deixa em branco).
+    // -trim() remove os espaços sobrando no começo e no fim do texto.
+    // (float) e (int) converte o texto para decimal/inteiro.
+    
     $nome_trem     = trim($_POST['nome_trem'] ?? '');
     $modelo_trem   = trim($_POST['modelo_trem'] ?? '');
     $localizacao_i = trim($_POST['localizacao_i'] ?? '');
@@ -28,9 +50,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ano           = (int) ($_POST['ano'] ?? 0);
     $status        = $_POST['status'] ?? '';
 
+    // Se o campo veio preenchido (diferente de vazio), converte para inteiro.
+    // Se veio vazio ("Sem usuário responsável"), guada null (NULL no banco).
+    // Esse ? serve para valor_se_verdadeiro, valor_se_Falso.
+
     $id_usuario = ($_POST['id_usuario'] ?? '') !== ''
         ? (int) $_POST['id_usuario']
         : null;
+
+    
 
     if (
         $nome_trem === '' ||
