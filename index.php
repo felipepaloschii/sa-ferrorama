@@ -1,38 +1,70 @@
-<?php 
+<?php
+
+// inicia a sessao pra conseguir acessar os dados do usuario durante a navegacao
 session_start();
 
+// isset verifica se a variavel existe e nao possui valor null
+// ! inverte a condicao, verificando se o usuario nao esta conectado
 if (!isset($_SESSION['usuario'])) {
+
+    // header envia um redirecionamento pra pagina inicial
     header("Location: public/landing.php");
+
+    // exit encerra a execucao do codigo depois do redirecionamento
     exit;
 }
 
-if (!in_array($_SESSION['tipo'] ?? '', ['administrador', 'funcionario'], true)) {
-    session_destroy();
-    header("Location: public/landing.php");
-    exit;
-}
-?>
+// ?? verifica se o valor existe e nao e null
+// caso contrario, utiliza uma string vazia como valor padrao
+$tipoUsuario = $_SESSION['tipo'] ?? '';
 
-<?php
+// === compara o valor e o tipo da variavel
+// ? : funciona como um if e else
+$identificacao = $tipoUsuario === 'administrador'
+    ? 'Administrador'
+    : 'Funcionário';
+
+// require_once inclui o arquivo de conexao apenas uma vez
+// esse arquivo disponibiliza a variavel $conexao para acessar o banco
 require_once 'infra/conexao.php';
 
-$sensoresAtivos = mysqli_fetch_assoc(mysqli_query(
+// mysqli_query executa a consulta SQL utilizando a conexao com o banco
+// COUNT(*) conta quantos sensores possuem status ativo
+// AS total define o nome da coluna que recebe a contagem
+// LOWER transforma o texto em minusculo e TRIM remove espacos extras
+$consultaSensores = mysqli_query(
     $conexao,
     "SELECT COUNT(*) AS total FROM sensor
      WHERE LOWER(TRIM(status_inicial)) = 'ativo'"
-))['total'];
+);
 
-$trensAtivos = mysqli_fetch_assoc(mysqli_query(
+// mysqli_fetch_assoc transforma o resultado em um array associativo
+// ['total'] acessa o valor da coluna total
+// ?? 0 utiliza zero como valor padrao caso o resultado seja null
+$sensoresAtivos = mysqli_fetch_assoc($consultaSensores)['total'] ?? 0;
+
+// consulta a tabela trem pra contar quantos trens estao em operacao
+$consultaTrens = mysqli_query(
     $conexao,
     "SELECT COUNT(*) AS total FROM trem
      WHERE status = 'operacao'"
-))['total'];
+);
 
-$rotasAtivas = mysqli_fetch_assoc(mysqli_query(
+// pega a quantidade de trens retornada pelo banco
+// ?? 0 define zero caso o resultado seja null
+$trensAtivos = mysqli_fetch_assoc($consultaTrens)['total'] ?? 0;
+
+// consulta a tabela rotas pra contar quantas rotas estao ativas
+$consultaRotas = mysqli_query(
     $conexao,
     "SELECT COUNT(*) AS total FROM rotas
-     WHERE status = 'ativa'"
-))['total'];
+     WHERE status = 'ativo'"
+);
+
+// pega a quantidade de rotas retornada pelo banco
+// ?? 0 define zero caso o resultado seja null
+$rotasAtivas = mysqli_fetch_assoc($consultaRotas)['total'] ?? 0;
+
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +79,7 @@ $rotasAtivas = mysqli_fetch_assoc(mysqli_query(
 
 <body id="home-corpo">
 
-   <header class="barra-superior">
+    <header class="barra-superior">
     <h1>PIA Enterprise</h1>
 
     <aside class="menu-lateral">
@@ -57,20 +89,24 @@ $rotasAtivas = mysqli_fetch_assoc(mysqli_query(
             <a href="public/trem/lista_trem.php">Trens</a>
             <a href="public/rotas/tela-home-rotas.php">Rotas</a>
 
-            <?php if ($_SESSION['tipo'] === 'administrador'): ?>
+            
+
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
                 <a href="public/usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
 
-            <div class="caixa-usuario">
-                <span class="tipo-usuario">
-                    <?= $_SESSION['tipo'] === 'administrador' ? 'Administrador' : 'Funcionário' ?>
-                </span>
+            <div class="menu-conta">
 
-                <a class="botao-logout" href="public/logout/logout.php">
-                    Sair
-                </a>
+            <button type="button" class="botao-conta" onclick="toggleConta()">
+            <?= htmlspecialchars($identificacao) ?>
+                <span class="seta-conta">▼</span>
+            </button>
+
+            <div class="dropdown-conta" id="dropdownConta">
+            <a href="public/logout/logout.php">Sair da conta</a>
             </div>
-            </div>
+
+</div>
         </nav>
     </aside>
 </header>
@@ -117,7 +153,7 @@ $rotasAtivas = mysqli_fetch_assoc(mysqli_query(
                 <section class="cartao-mapa">
 
                     <iframe
-                        src="https://www.google.com/maps?q=Joinville,SC,Brasil&output=embed"
+                        src="https://www.google.com/maps?q=S%C3%A3o%20Paulo&output=embed"
                         width="100%"
                         height="100%"
                         style="border: 0;"

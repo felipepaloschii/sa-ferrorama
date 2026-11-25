@@ -1,25 +1,37 @@
+
 <?php
 
-// Verifica se já existe uma sessão ativa. Caso não exista, inicia uma.
+// verifica se já existe uma sessão ativa
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-// Verifica se o usuário está logado e se possui um tipo de conta definido.
+// verifica se o usuário está conectado e possui um tipo de conta
 if (
     !isset($_SESSION['id_usuario']) ||
     !isset($_SESSION['tipo'])
 ) {
-    // Se não estiver logado, redireciona para a tela de login.
+    // se não estiver conectado, volta para a tela de login
     header('Location: ../usuario/tela-login.php');
     exit;
 }
 
-// Faz a conexão com o banco de dados.
+// verifica se o tipo de conta é válido
+if (!in_array($_SESSION['tipo'], ['administrador', 'funcionario'], true)) {
+    // encerra a sessão se o tipo de conta não for válido
+    session_destroy();
+    header('Location: ../usuario/tela-login.php');
+    exit;
+}
+
+// guarda o tipo de conta em uma variável
+$tipoUsuario = $_SESSION['tipo'] ?? '';
+
+// faz a conexão com o banco de dados
 require_once '../../infra/conexao.php';
 
-// Busca todas as rotas e o nome do trem associado a cada uma.
-// O LEFT JOIN permite mostrar rotas mesmo quando não possuem um trem associado.
+// busca as rotas e o nome do trem relacionado a cada uma
+// o left join permite mostrar rotas mesmo sem um trem associado
 $resultado = mysqli_query(
     $conexao,
     "SELECT rotas.*, trem.nome_trem
@@ -45,35 +57,43 @@ $resultado = mysqli_query(
 <body>
 
     <header class="barra-superior">
+
         <h1>PIA Enterprise</h1>
 
         <aside class="menu-lateral">
+
             <nav>
+
                 <a href="../../index.php">Dashboard</a>
+
                 <a href="../sensor/tela-home-sensor.php">Sensores</a>
+
                 <a href="../trem/lista_trem.php">Trens</a>
+
                 <a class="ativo" href="tela-home-rotas.php">Rotas</a>
 
                 <?php if ($tipoUsuario === 'administrador'): ?>
+
                     <a href="../usuario/tela-home-usuario.php">Usuários</a>
+
                 <?php endif; ?>
 
-                <div class="menu-conta">
-                    <button
-                        type="button"
-                        class="botao-conta"
-                        onclick="toggleConta()"
-                    >
-                        <?= htmlspecialchars($identificacao, ENT_QUOTES, 'UTF-8'); ?>
-                        <span class="seta-conta">▼</span>
-                    </button>
+                <div class="caixa-usuario">
 
-                    <div class="dropdown-conta" id="dropdownConta">
-                        <a href="../logout/logout.php">Sair da conta</a>
-                    </div>
+                    <span class="tipo-usuario">
+                        <?= $tipoUsuario === 'administrador' ? 'Administrador' : 'Funcionário' ?>
+                    </span>
+
+                    <a class="botao-logout" href="../logout/logout.php">
+                        Sair
+                    </a>
+
                 </div>
+
             </nav>
+
         </aside>
+
     </header>
 
     <main class="area-principal">
