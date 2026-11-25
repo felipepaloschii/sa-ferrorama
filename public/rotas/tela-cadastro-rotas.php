@@ -1,26 +1,34 @@
 
 <?php
+
+// Verifica se o usuário é administrador e conecta ao banco de dados.
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
 
+// Variáveis para armazenar mensagens de erro e os trens cadastrados.
 $erro = '';
 $tipoErro = '';
 $trens = [];
 
+// Busca os trens cadastrados para exibi-los no campo de seleção.
 $consultaTrens = $conexao->query(
     "SELECT id, nome_trem, modelo_trem
      FROM trem
      ORDER BY nome_trem"
 );
 
+// Armazena os trens encontrados em uma lista.
 if ($consultaTrens) {
     $trens = $consultaTrens->fetch_all(MYSQLI_ASSOC);
 }
 
+// Verifica se o formulário foi enviado.
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
+    // Recebe os dados preenchidos e remove espaços extras.
     $nome_rota = trim($_POST['nome_rota'] ?? '');
 
+    // Recebe o ID do trem selecionado ou deixa vazio caso nenhum seja escolhido.
     $id_trem = ($_POST['id_trem'] ?? '') !== ''
         ? (int) $_POST['id_trem']
         : null;
@@ -30,9 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $distancia = (float) ($_POST['distancia'] ?? 0);
     $status = $_POST['status'] ?? '';
 
+    // Variáveis utilizadas para verificar se o trem existe.
     $trem = null;
     $tremExiste = true;
 
+    // Se um trem foi selecionado, verifica se ele está cadastrado.
     if ($id_trem !== null) {
         $consulta = $conexao->prepare(
             "SELECT modelo_trem FROM trem WHERE id = ?"
@@ -41,14 +51,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $consulta->bind_param("i", $id_trem);
         $consulta->execute();
 
+        // Guarda as informações do trem encontrado.
         $resultadoTrem = $consulta->get_result();
         $trem = $resultadoTrem->fetch_assoc();
 
         $consulta->close();
 
+        // Verifica se o trem foi encontrado no banco.
         $tremExiste = (bool) $trem;
     }
 
+    // Verifica se todos os campos obrigatórios foram preenchidos corretamente.
     if (
         $nome_rota === '' ||
         !$tremExiste ||
@@ -58,18 +71,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         !in_array($status, ['Ativa', 'Inativa'], true)
     ) {
         $erro = "Preencha todos os campos obrigatórios corretamente.";
+
     } else {
 
+        // Recupera o modelo do trem selecionado.
         $modelo_trem = $trem['modelo_trem'] ?? null;
 
+        // Comando SQL para inserir uma nova rota no banco de dados.
         $sql = "INSERT INTO rotas
                 (id_trem, nome_rota, modelo_trem, tempo_estimado,
                  codigo, distancia, status)
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
 
+        // Prepara o comando SQL.
         $stmt = $conexao->prepare($sql);
 
         if ($stmt) {
+
+            // Define os tipos e envia os valores para o banco de dados.
             $stmt->bind_param(
                 "issssds",
                 $id_trem,
@@ -82,25 +101,40 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             );
 
             try {
+
+                // Executa o cadastro e verifica se deu certo.
                 if ($stmt->execute()) {
+
+                    // Redireciona para a página principal das rotas.
                     header("Location: tela-home-rotas.php");
                     exit;
                 }
+
             } catch (mysqli_sql_exception $e) {
+
+                // Verifica se o erro aconteceu porque o código já está cadastrado.
                 if ($e->getCode() === 1062) {
                     $erro = 'Esse código já está cadastrado em outra rota. Informe um código diferente.';
                     $tipoErro = 'duplicado';
+
                 } else {
+
+                    // Exibe uma mensagem para outros erros no cadastro.
                     $erro = 'Não foi possível cadastrar a rota.';
                 }
             }
 
+            // Fecha o comando SQL.
             $stmt->close();
+
         } else {
+
+            // Informa caso não seja possível preparar o comando SQL.
             $erro = "Erro ao preparar o cadastro da rota.";
         }
     }
 }
+
 ?>
 
 <!DOCTYPE html>

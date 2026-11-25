@@ -1,33 +1,25 @@
-
 <?php
 
-// verifica se a sessão já está iniciada e inicia caso necessário
+// Verifica se já existe uma sessão ativa. Caso não exista, inicia uma.
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-// verifica se o usuário está logado e possui as informações necessárias na sessão
+// Verifica se o usuário está logado e se possui um tipo de conta definido.
 if (
     !isset($_SESSION['id_usuario']) ||
     !isset($_SESSION['tipo'])
 ) {
-    // redireciona para a tela de login caso não esteja conectado
+    // Se não estiver logado, redireciona para a tela de login.
     header('Location: ../usuario/tela-login.php');
     exit;
 }
 
-// inclui o arquivo responsável pela conexão com o banco de dados
+// Faz a conexão com o banco de dados.
 require_once '../../infra/conexao.php';
 
-// verifica o tipo de usuário conectado
-$tipoUsuario = $_SESSION['tipo'] ?? '';
-
-// define o texto que aparece no menu da conta
-$identificacao = $tipoUsuario === 'administrador'
-    ? 'Administrador'
-    : 'Funcionário';
-
-// busca as rotas e o nome do trem relacionado a cada uma
+// Busca todas as rotas e o nome do trem associado a cada uma.
+// O LEFT JOIN permite mostrar rotas mesmo quando não possuem um trem associado.
 $resultado = mysqli_query(
     $conexao,
     "SELECT rotas.*, trem.nome_trem

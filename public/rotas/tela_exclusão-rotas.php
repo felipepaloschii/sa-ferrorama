@@ -1,18 +1,22 @@
-
 <?php
 
+// Verifica se o usuário é administrador e conecta ao banco de dados.
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
 
+// Variável para armazenar mensagens de erro.
 $erro = '';
 
+// Verifica se o ID da rota foi informado corretamente pela URL.
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     header('Location: tela-home-rotas.php');
     exit;
 }
 
+// Guarda o ID da rota.
 $id = (int) $_GET['id'];
 
+// Busca os dados da rota no banco de dados.
 $sql = "SELECT * FROM rotas WHERE id_rota = ?";
 
 $stmt = $conexao->prepare($sql);
@@ -21,24 +25,28 @@ $stmt->execute();
 
 $resultado = $stmt->get_result();
 
+// Verifica se a rota existe.
 if ($resultado->num_rows == 0) {
     $stmt->close();
     header('Location: tela-home-rotas.php');
     exit;
 }
 
+// Armazena os dados da rota encontrada.
 $rota = $resultado->fetch_assoc();
 $stmt->close();
 
+// Verifica se o formulário de exclusão foi enviado.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $rotaEmUso = false;
 
-    // Verifica se existe um trem associado à rota
+    // Verifica se existe um trem associado à rota.
     $idTrem = (int) ($rota['id_trem'] ?? 0);
 
     if ($idTrem > 0) {
 
+        // Procura o trem relacionado à rota.
         $sql = "SELECT id FROM trem WHERE id = ? LIMIT 1";
 
         $stmt = $conexao->prepare($sql);
@@ -47,6 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $resultadoTrem = $stmt->get_result();
 
+        // Se encontrar um trem, impede a exclusão da rota.
         if ($resultadoTrem->num_rows > 0) {
             $rotaEmUso = true;
             $erro = 'Não é possível excluir esta rota, pois existe um trem vinculado a ela.';
@@ -55,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
     }
 
-    // Verifica se existe algum sensor associado à rota
+    // Verifica se existe algum sensor associado à rota.
     if (!$rotaEmUso) {
 
         $sql = "SELECT id FROM sensor WHERE id_rota = ? LIMIT 1";
@@ -69,6 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $resultadoSensor = $stmt->get_result();
 
+            // Se encontrar um sensor, impede a exclusão da rota.
             if ($resultadoSensor->num_rows > 0) {
                 $rotaEmUso = true;
                 $erro = 'Não é possível excluir esta rota, pois existe um sensor vinculado a ela.';
@@ -78,14 +88,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         } else {
 
+            // Informa caso ocorra um erro na consulta dos sensores.
             $erro = 'Erro ao verificar os sensores associados à rota.';
             $rotaEmUso = true;
         }
     }
 
-    // Exclui somente se não houver associações
+    // Permite excluir a rota somente se não houver associações.
     if (!$rotaEmUso) {
 
+        // Comando SQL para excluir a rota pelo ID.
         $sql = "DELETE FROM rotas WHERE id_rota = ?";
 
         $stmt = $conexao->prepare($sql);
@@ -94,10 +106,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $stmt->bind_param("i", $id);
 
+            // Executa a exclusão e verifica se algum registro foi removido.
             if ($stmt->execute() && $stmt->affected_rows > 0) {
 
                 $stmt->close();
 
+                // Volta para a página principal das rotas.
                 header('Location: tela-home-rotas.php');
                 exit;
 
