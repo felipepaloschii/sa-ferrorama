@@ -94,21 +94,15 @@ if ($resultado) {
                     <a class="ativo" href="tela-home-usuario.php">Usuários</a>
                 <?php endif; ?>
 
-                <div class="menu-conta">
+                <div class="caixa-usuario">
 
-                    <button type="button" class="botao-conta" onclick="toggleConta()">
+                    <span class="tipo-usuario">
+                        <?= $tipoUsuario === 'administrador' ? 'Administrador' : 'Funcionário' ?>
+                    </span>
 
-                        <?= htmlspecialchars($identificacao, ENT_QUOTES, 'UTF-8'); ?>
-
-                        <span class="seta-conta">▼</span>
-
-                    </button>
-
-                    <div class="dropdown-conta" id="dropdownConta">
-
-                        <a href="../logout/logout.php">Sair da conta</a>
-
-                    </div>
+                    <a class="botao-logout" href="../logout/logout.php">
+                        Sair
+                    </a>
 
                 </div>
 

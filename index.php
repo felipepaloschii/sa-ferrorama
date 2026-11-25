@@ -95,16 +95,17 @@ $rotasAtivas = mysqli_fetch_assoc($consultaRotas)['total'] ?? 0;
                 <a href="public/usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
 
-            <div class="menu-conta">
+            <div class="caixa-usuario">
 
-            <button type="button" class="botao-conta" onclick="toggleConta()">
-            <?= htmlspecialchars($identificacao) ?>
-                <span class="seta-conta">▼</span>
-            </button>
+                    <span class="tipo-usuario">
+                        <?= $tipoUsuario === 'administrador' ? 'Administrador' : 'Funcionário' ?>
+                    </span>
 
-            <div class="dropdown-conta" id="dropdownConta">
-            <a href="public/logout/logout.php">Sair da conta</a>
-            </div>
+                    <a class="botao-logout" href="../logout/logout.php">
+                        Sair
+                    </a>
+
+                </div>
 
 </div>
         </nav>
