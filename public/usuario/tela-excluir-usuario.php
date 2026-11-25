@@ -1,141 +1,64 @@
 
 
+<
 <?php
 
-// require_once inclui o arquivo de verificacao de administrador apenas uma vez
-// ele verifica se o usuario esta conectado e se possui permissao pra excluir usuarios
-require_once '../../infra/verificar-admin.php';
-
-// inclui o arquivo responsavel pela conexao com o banco de dados
-require_once '../../infra/conexao.php';
-
-// filter_input recebe e valida um dado enviado pelo formulario ou pela URL
-// INPUT_GET indica que o id sera recebido pela URL
-// FILTER_VALIDATE_INT verifica se o valor informado e um numero inteiro valido
-// se o id nao for valido, a variavel recebe false
-$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-
-// cria uma variavel vazia pra armazenar uma possivel mensagem de erro
-$erro = '';
-
-// null indica que nenhum usuario foi encontrado ate o momento
-$usuario = null;
-
-// $_SERVER['REQUEST_METHOD'] informa qual metodo foi utilizado na requisicao
-// === compara o valor e o tipo
-// POST indica que o formulario foi enviado pelo usuario
+// verifica se o formulario foi enviado pelo metodo POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // recebe novamente o id enviado pelo formulario
-    // INPUT_POST indica que o dado vem de um formulario enviado pelo metodo POST
-    // FILTER_VALIDATE_INT verifica se o id e um numero inteiro valido
-    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-}
+    // verifica se o administrador esta tentando excluir a propria conta
+    if ($id == $_SESSION['id_usuario']) {
 
-// ! verifica se a condicao e falsa
-// nesse caso, !$id verifica se o id nao possui um valor valido
-// || significa OU, entao tambem verifica se o id e menor que 1
-if (!$id || $id < 1) {
+        // impede a exclusao da propria conta
+        $erro = 'Você não pode excluir sua própria conta.';
 
-    // header redireciona o usuario pra pagina de listagem
-    header('Location: tela-home-usuario.php');
+    } else {
 
-    // exit encerra a execucao pra impedir que o restante do codigo continue
-    exit;
-}
+        // prepara o comando SQL pra excluir o usuario pelo id
+        $exclusao = mysqli_prepare(
+            $conexao,
+            'DELETE FROM usuario WHERE id_usuario = ?'
+        );
 
-// mysqli_prepare prepara uma consulta SQL pra receber valores com seguranca
-// o ? funciona como um marcador que sera preenchido posteriormente
-// SELECT busca os dados do usuario que possui o id informado
-$consulta = mysqli_prepare(
-    $conexao,
-    'SELECT id_usuario, email, tipo FROM usuario WHERE id_usuario = ?'
-);
+        // verifica se a consulta foi preparada corretamente
+        if ($exclusao) {
 
-// mysqli_stmt_bind_param associa o valor do id ao marcador ? da consulta
-// i indica que o valor enviado e um numero inteiro
-mysqli_stmt_bind_param($consulta, 'i', $id);
+            // associa o id ao marcador da consulta
+            // i indica que o valor e um numero inteiro
+            mysqli_stmt_bind_param(
+                $exclusao,
+                'i',
+                $id
+            );
 
-// executa a consulta preparada no banco de dados
-mysqli_stmt_execute($consulta);
+            // executa a exclusao no banco de dados
+            if (mysqli_stmt_execute($exclusao)) {
 
-// mysqli_stmt_bind_result associa as colunas retornadas pela consulta as variaveis
-// cada coluna do SELECT sera armazenada na variavel correspondente
-mysqli_stmt_bind_result(
-    $consulta,
-    $id_usuario,
-    $email,
-    $tipo
-);
+                // verifica se algum registro foi excluido
+                if (mysqli_stmt_affected_rows($exclusao) > 0) {
 
-// mysqli_stmt_fetch tenta buscar uma linha do resultado
-// if verifica se encontrou um usuario com o id informado
-if (mysqli_stmt_fetch($consulta)) {
+                    // encerra a consulta
+                    mysqli_stmt_close($exclusao);
 
-    // cria um array associativo pra guardar os dados encontrados
-    // cada informacao recebe uma chave que facilita o acesso posteriormente
-    $usuario = [
-        'id_usuario' => $id_usuario,
-        'email' => $email,
-        'tipo' => $tipo
-    ];
-}
+                    // redireciona pra listagem depois da exclusao
+                    header('Location: tela-home-usuario.php');
+                    exit;
+                }
+            }
 
-// mysqli_stmt_close encerra a consulta e libera os recursos utilizados
-mysqli_stmt_close($consulta);
+            // encerra a consulta e libera os recursos
+            mysqli_stmt_close($exclusao);
 
-// verifica se nenhum usuario foi encontrado
-// ! antes da variavel verifica se ela esta sem um valor valido
-if (!$usuario) {
+            // informa que nao foi possivel excluir o usuario
+            $erro = 'Não foi possível excluir este usuário.';
 
-    // volta pra listagem porque nao existe usuario correspondente ao id
-    header('Location: tela-home-usuario.php');
+        } else {
 
-    // encerra a execucao depois do redirecionamento
-    exit;
-}
-
-// verifica novamente se o formulario foi enviado pelo metodo POST
-// essa condicao impede que a exclusao aconteca apenas ao abrir a pagina
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    // prepara o comando SQL responsavel por excluir o usuario
-    // DELETE FROM indica que um registro sera removido da tabela
-    // WHERE limita a exclusao ao usuario que possui o id informado
-    $exclusao = mysqli_prepare(
-        $conexao,
-        'DELETE FROM usuario WHERE id_usuario = ?'
-    );
-
-    // associa o id ao marcador da consulta
-    // i informa que o valor e um numero inteiro
-    mysqli_stmt_bind_param(
-        $exclusao,
-        'i',
-        $id
-    );
-
-    // executa o comando de exclusao no banco
-    // se a execucao funcionar, entra no bloco abaixo
-    if (mysqli_stmt_execute($exclusao)) {
-
-        // encerra a consulta e libera os recursos utilizados
-        mysqli_stmt_close($exclusao);
-
-        // redireciona pra listagem depois da exclusao
-        header('Location: tela-home-usuario.php');
-
-        // encerra o codigo depois do redirecionamento
-        exit;
+            // informa que ocorreu um erro ao preparar a exclusao
+            $erro = 'Erro ao preparar a exclusão do usuário.';
+        }
     }
-
-    // se a exclusao falhar, guarda uma mensagem pra ser exibida na pagina
-    $erro = 'Não foi possível excluir este usuário.';
-
-    // encerra a consulta mesmo quando a exclusao nao funciona
-    mysqli_stmt_close($exclusao);
 }
-
 
 ?>
 
