@@ -1,90 +1,67 @@
 
+
+<
 <?php
 
-require_once '../../infra/verificar-admin.php';
-require_once '../../infra/conexao.php';
-
-$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-
-$erro = '';
-$usuario = null;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-}
-
-if (!$id || $id < 1) {
-    header('Location: tela-home-usuario.php');
-    exit;
-}
-
-$consulta = mysqli_prepare(
-    $conexao,
-    'SELECT id_usuario, email, tipo FROM usuario WHERE id_usuario = ?'
-);
-
-mysqli_stmt_bind_param($consulta, 'i', $id);
-mysqli_stmt_execute($consulta);
-
-mysqli_stmt_bind_result(
-    $consulta,
-    $id_usuario,
-    $email,
-    $tipo
-);
-
-if (mysqli_stmt_fetch($consulta)) {
-
-    $usuario = [
-        'id_usuario' => $id_usuario,
-        'email' => $email,
-        'tipo' => $tipo
-    ];
-}
-
-mysqli_stmt_close($consulta);
-
-if (!$usuario) {
-    header('Location: tela-home-usuario.php');
-    exit;
-}
-
+// verifica se o formulario foi enviado pelo metodo POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $exclusao = mysqli_prepare(
-        $conexao,
-        'DELETE FROM usuario WHERE id_usuario = ?'
-    );
+    // verifica se o administrador esta tentando excluir a propria conta
+    if ($id == $_SESSION['id_usuario']) {
 
-    mysqli_stmt_bind_param(
-        $exclusao,
-        'i',
-        $id
-    );
+        // impede a exclusao da propria conta
+        $erro = 'Você não pode excluir sua própria conta.';
 
-    if (mysqli_stmt_execute($exclusao)) {
+    } else {
 
-        mysqli_stmt_close($exclusao);
+        // prepara o comando SQL pra excluir o usuario pelo id
+        $exclusao = mysqli_prepare(
+            $conexao,
+            'DELETE FROM usuario WHERE id_usuario = ?'
+        );
 
-        header('Location: tela-home-usuario.php');
-        exit;
+        // verifica se a consulta foi preparada corretamente
+        if ($exclusao) {
+
+            // associa o id ao marcador da consulta
+            // i indica que o valor e um numero inteiro
+            mysqli_stmt_bind_param(
+                $exclusao,
+                'i',
+                $id
+            );
+
+            // executa a exclusao no banco de dados
+            if (mysqli_stmt_execute($exclusao)) {
+
+                // verifica se algum registro foi excluido
+                if (mysqli_stmt_affected_rows($exclusao) > 0) {
+
+                    // encerra a consulta
+                    mysqli_stmt_close($exclusao);
+
+                    // redireciona pra listagem depois da exclusao
+                    header('Location: tela-home-usuario.php');
+                    exit;
+                }
+            }
+
+            // encerra a consulta e libera os recursos
+            mysqli_stmt_close($exclusao);
+
+            // informa que nao foi possivel excluir o usuario
+            $erro = 'Não foi possível excluir este usuário.';
+
+        } else {
+
+            // informa que ocorreu um erro ao preparar a exclusao
+            $erro = 'Erro ao preparar a exclusão do usuário.';
+        }
     }
-
-    $erro = 'Não foi possível excluir este usuário.';
-
-    mysqli_stmt_close($exclusao);
-}
-
-function e($valor)
-{
-    return htmlspecialchars(
-        (string) $valor,
-        ENT_QUOTES,
-        'UTF-8'
-    );
 }
 
 ?>
+
 
 <!DOCTYPE html>
 
@@ -183,8 +160,8 @@ function e($valor)
 
                     <span>
                         E-mail:
-                        <?= e($usuario['email']) ?>
-                    </span>
+                    <?= htmlspecialchars($usuario['email'], ENT_QUOTES, 'UTF-8') ?>                    
+                </span>
 
                     <br>
 

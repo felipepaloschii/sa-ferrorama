@@ -49,23 +49,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("ssi", $email, $tipo, $id);
         }
 
-        try {
-            if ($stmt && $stmt->execute()) {
-                header('Location: tela-home-usuario.php');
-                exit;
-            }
-        } catch (mysqli_sql_exception $e) {
-            if ($e->getCode() === 1062) {
-                $erro = 'Este e-mail já está cadastrado por outro usuário. Informe outro e-mail.';
-                $tipoErro = 'duplicado';
-            } else {
-                $erro = 'Não foi possível atualizar o usuário.';
-            }
+       if ($stmt && $stmt->execute()) {
+
+        // redireciona pra listagem depois de salvar as alteracoes
+        header('Location: tela-home-usuario.php');
+        exit;
         }
 
+        // encerra a consulta e libera os recursos utilizados
         if ($stmt) {
             $stmt->close();
         }
+
+        // mostra uma mensagem caso nao consiga atualizar o usuario
+        $erro = 'Não foi possível atualizar o usuário.';
 
         // Mantém os dados digitados no formulário.
         $usuario['email'] = $email;

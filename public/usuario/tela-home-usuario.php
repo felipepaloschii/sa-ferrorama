@@ -1,29 +1,54 @@
 
 <?php
 
+// require_once inclui o arquivo de verificacao de administrador apenas uma vez
+// esse arquivo verifica se existe uma sessao ativa e se o usuario possui permissao de administrador
 require_once '../../infra/verificar-admin.php';
+
+// inclui o arquivo de conexao com o banco de dados
+// ../../ volta duas pastas pra localizar a pasta infra
 require_once '../../infra/conexao.php';
 
+// cria uma variavel com valor inicial zero pra contar quantos usuarios foram encontrados
 $quantidade_usuario = 0;
+
+// cria um array vazio pra armazenar os dados dos usuarios retornados pelo banco
 $usuario = [];
 
+// cria o comando SQL pra buscar os usuarios cadastrados
+// SELECT define quais colunas serao consultadas na tabela
+// FROM indica de qual tabela os dados serao buscados
+// ORDER BY organiza os resultados pelo id_usuario
+// DESC coloca os usuarios mais recentes primeiro
 $sql = "SELECT id_usuario, email, tipo
         FROM usuario
         ORDER BY id_usuario DESC";
 
+// query executa o comando SQL utilizando a conexao com o banco
+// o resultado da consulta fica armazenado na variavel resultado
 $resultado = $conexao->query($sql);
 
+// verifica se a consulta foi executada e retornou um resultado valido
+// if executa o bloco somente quando a condicao e verdadeira
 if ($resultado) {
 
+    // while repete o codigo enquanto existirem linhas pra buscar no resultado
+    // fetch_assoc transforma cada linha em um array associativo
+    // cada coluna pode ser acessada pelo nome, como id_usuario, email e tipo
     while ($linha = $resultado->fetch_assoc()) {
+
+        // [] adiciona a linha atual no final do array usuario
+        // assim todos os usuarios encontrados ficam armazenados pra serem exibidos no HTML
         $usuario[] = $linha;
+
+        // ++ aumenta a quantidade de usuarios em 1 a cada registro encontrado
         $quantidade_usuario++;
+
     }
 
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
