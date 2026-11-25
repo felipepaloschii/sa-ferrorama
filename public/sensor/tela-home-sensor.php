@@ -1,18 +1,35 @@
 
 <?php
+
+// verifica se a sessao ainda nao foi iniciada
+// session_status verifica o estado atual da sessao
+// !== verifica se o estado e diferente de PHP_SESSION_ACTIVE
 if (session_status() !== PHP_SESSION_ACTIVE) {
+
+    // inicia a sessao pra acessar os dados do usuario
     session_start();
 }
 
+// isset verifica se a variavel existe e nao possui valor null
+// ! inverte a verificacao
+// || significa OU, verificando se algum dos dados esta faltando
 if (!isset($_SESSION['id_usuario']) || !isset($_SESSION['tipo'])) {
+
+    // redireciona pra tela de login caso o usuario nao esteja conectado
     header('Location: ../usuario/tela-login.php');
+
+    // encerra a execucao depois do redirecionamento
     exit;
 }
 
+// inclui o arquivo de conexao com o banco de dados
 require_once '../../infra/conexao.php';
 
+// verifica se o tipo do usuario conectado e administrador
+// === compara o valor e o tipo ao mesmo tempo
 $administrador = $_SESSION['tipo'] === 'administrador';
 
+// cria a consulta pra buscar os sensores e os dados das rotas relacionadas
 $sql = "SELECT
             sensor.*,
             rotas.nome_rota,
@@ -21,25 +38,41 @@ $sql = "SELECT
         LEFT JOIN rotas ON sensor.id_rota = rotas.id_rota
         ORDER BY sensor.id DESC";
 
+// LEFT JOIN relaciona as tabelas e permite mostrar sensores sem rota
+// ON define que o id_rota do sensor deve corresponder ao id_rota da rota
+// AS cria um apelido para a coluna codigo da tabela rotas
+// ORDER BY organiza os sensores pelo id em ordem decrescente
+
+// query executa a consulta no banco de dados
 $resultado = $conexao->query($sql);
 
+// cria um array vazio pra armazenar os sensores encontrados
 $sensores = [];
+
+// inicia a quantidade de sensores ativos em zero
 $quantidade_ativos = 0;
 
+// verifica se a consulta foi executada corretamente
 if ($resultado) {
+
+    // while repete o comando enquanto existirem registros
+    // fetch_assoc transforma cada registro em um array associativo
     while ($sensor = $resultado->fetch_assoc()) {
+
+        // adiciona os dados do sensor ao array
         $sensores[] = $sensor;
 
+        // strtolower transforma o texto em letras minusculas
+        // trim remove espacos do inicio e do final
+        // === verifica se o status e exatamente igual a ativo
         if (strtolower(trim($sensor['status_inicial'])) === 'ativo') {
+
+            // ++ aumenta a quantidade de sensores ativos em 1
             $quantidade_ativos++;
         }
     }
 }
 
-function e($valor)
-{
-    return htmlspecialchars((string) ($valor ?? ''), ENT_QUOTES, 'UTF-8');
-}
 ?>
 
 <!DOCTYPE html>
