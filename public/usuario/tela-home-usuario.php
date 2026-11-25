@@ -1,47 +1,57 @@
 
 <?php
 
-// require_once inclui o arquivo de verificacao de administrador apenas uma vez
-// esse arquivo verifica se existe uma sessao ativa e se o usuario possui permissao de administrador
+// require_once inclui o arquivo de verificação de administrador apenas uma vez
+// esse arquivo verifica se existe uma sessão ativa e se o usuário possui permissão de administrador
 require_once '../../infra/verificar-admin.php';
 
-// inclui o arquivo de conexao com o banco de dados
+// inclui o arquivo de conexão com o banco de dados
 // ../../ volta duas pastas pra localizar a pasta infra
 require_once '../../infra/conexao.php';
 
-// cria uma variavel com valor inicial zero pra contar quantos usuarios foram encontrados
+// ?? verifica se o valor existe e não é null
+// caso contrário, utiliza uma string vazia como valor padrão
+$tipoUsuario = $_SESSION['tipo'] ?? '';
+
+// === compara o valor e o tipo da variável
+// ? : funciona como um if e else
+$identificacao = $tipoUsuario === 'administrador'
+    ? 'Administrador'
+    : 'Funcionário';
+
+// cria uma variável com valor inicial zero pra contar quantos usuários foram encontrados
 $quantidade_usuario = 0;
 
-// cria um array vazio pra armazenar os dados dos usuarios retornados pelo banco
+// cria um array vazio pra armazenar os dados dos usuários retornados pelo banco
 $usuario = [];
 
-// cria o comando SQL pra buscar os usuarios cadastrados
-// SELECT define quais colunas serao consultadas na tabela
-// FROM indica de qual tabela os dados serao buscados
+// cria o comando SQL pra buscar os usuários cadastrados
+// SELECT define quais colunas serão consultadas na tabela
+// FROM indica de qual tabela os dados serão buscados
 // ORDER BY organiza os resultados pelo id_usuario
-// DESC coloca os usuarios mais recentes primeiro
-$sql = "SELECT id_usuario, email, tipo
+// DESC coloca os usuários mais recentes primeiro
+$sql = "SELECT id_usuario, email, cep, tipo
         FROM usuario
         ORDER BY id_usuario DESC";
 
-// query executa o comando SQL utilizando a conexao com o banco
-// o resultado da consulta fica armazenado na variavel resultado
+// query executa o comando SQL utilizando a conexão com o banco
+// o resultado da consulta fica armazenado na variável resultado
 $resultado = $conexao->query($sql);
 
-// verifica se a consulta foi executada e retornou um resultado valido
-// if executa o bloco somente quando a condicao e verdadeira
+// verifica se a consulta foi executada e retornou um resultado válido
+// if executa o bloco somente quando a condição é verdadeira
 if ($resultado) {
 
-    // while repete o codigo enquanto existirem linhas pra buscar no resultado
+    // while repete o código enquanto existirem linhas pra buscar no resultado
     // fetch_assoc transforma cada linha em um array associativo
-    // cada coluna pode ser acessada pelo nome, como id_usuario, email e tipo
+    // cada coluna pode ser acessada pelo nome, como id_usuario, email, cep e tipo
     while ($linha = $resultado->fetch_assoc()) {
 
         // [] adiciona a linha atual no final do array usuario
-        // assim todos os usuarios encontrados ficam armazenados pra serem exibidos no HTML
+        // assim todos os usuários encontrados ficam armazenados pra serem exibidos no HTML
         $usuario[] = $linha;
 
-        // ++ aumenta a quantidade de usuarios em 1 a cada registro encontrado
+        // ++ aumenta a quantidade de usuários em 1 a cada registro encontrado
         $quantidade_usuario++;
 
     }
@@ -49,6 +59,7 @@ if ($resultado) {
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -64,20 +75,47 @@ if ($resultado) {
 <body>
 
     <header class="barra-superior">
+
         <h1>PIA Enterprise</h1>
 
         <aside class="menu-lateral">
+
             <nav>
+
                 <a href="../../index.php">Dashboard</a>
+
                 <a href="../sensor/tela-home-sensor.php">Sensores</a>
+
                 <a href="../trem/lista_trem.php">Trens</a>
+
                 <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
                 <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
                     <a class="ativo" href="tela-home-usuario.php">Usuários</a>
                 <?php endif; ?>
+
+                <div class="menu-conta">
+
+                    <button type="button" class="botao-conta" onclick="toggleConta()">
+
+                        <?= htmlspecialchars($identificacao, ENT_QUOTES, 'UTF-8'); ?>
+
+                        <span class="seta-conta">▼</span>
+
+                    </button>
+
+                    <div class="dropdown-conta" id="dropdownConta">
+
+                        <a href="../logout/logout.php">Sair da conta</a>
+
+                    </div>
+
+                </div>
+
             </nav>
+
         </aside>
+
     </header>
 
     <main class="area-principal">
@@ -85,6 +123,7 @@ if ($resultado) {
         <section class="cabecalho-sensor topo-lista-trens">
 
             <div>
+
                 <h2 class="titulo-sensores">
                     Usuários
                 </h2>
@@ -92,6 +131,7 @@ if ($resultado) {
                 <p class="descricao-sensores">
                     Gerencie os usuários cadastrados no sistema
                 </p>
+
             </div>
 
             <a
@@ -144,6 +184,7 @@ if ($resultado) {
 
                         <span>ID</span>
                         <span>E-mail</span>
+                        <span>CEP</span>
                         <span>Tipo</span>
                         <span>Ações</span>
 
@@ -156,15 +197,19 @@ if ($resultado) {
                             <div class="linha-tabela">
 
                                 <span>
-                                    <?= htmlspecialchars($linhaUsuario['id_usuario']); ?>
+                                    <?= htmlspecialchars($linhaUsuario['id_usuario'], ENT_QUOTES, 'UTF-8'); ?>
                                 </span>
 
                                 <span>
-                                    <?= htmlspecialchars($linhaUsuario['email']); ?>
+                                    <?= htmlspecialchars($linhaUsuario['email'], ENT_QUOTES, 'UTF-8'); ?>
                                 </span>
 
                                 <span>
-                                    <?= htmlspecialchars($linhaUsuario['tipo']); ?>
+                                    <?= htmlspecialchars($linhaUsuario['cep'] ?? 'Não informado', ENT_QUOTES, 'UTF-8'); ?>
+                                </span>
+
+                                <span>
+                                    <?= htmlspecialchars($linhaUsuario['tipo'], ENT_QUOTES, 'UTF-8'); ?>
                                 </span>
 
                                 <span class="acoes">
@@ -192,6 +237,10 @@ if ($resultado) {
                             </div>
 
                         <?php endforeach; ?>
+
+                    <?php else: ?>
+
+                        <p>Nenhum usuário cadastrado</p>
 
                     <?php endif; ?>
 

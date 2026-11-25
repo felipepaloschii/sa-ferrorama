@@ -1198,3 +1198,66 @@ textarea:focus,
     text-align: center;
     max-width: 520px;
 }
+
+.tabela-sensores-grade {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .cabecalho-sensores-grade,
+        .linha-sensores-grade {
+            display: grid !important;
+            grid-template-columns: 55px 1.4fr 1fr 1.4fr 1.5fr 0.8fr 75px 85px 80px !important;
+            align-items: center !important;
+            gap: 12px !important;
+            width: 100%;
+            min-width: 1250px;
+            box-sizing: border-box;
+            padding: 14px 16px !important;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .cabecalho-sensores-grade {
+            color: var(--bg-dark);
+            background: var(--accent-light);
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .linha-sensores-grade {
+            min-height: 68px;
+            background: var(--surface-card);
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.15s;
+        }
+
+        .linha-sensores-grade:hover {
+            background: #f8fafc;
+        }
+
+        .linha-sensores-grade > span,
+        .cabecalho-sensores-grade > span {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .acoes-sensores-grade {
+            display: flex !important;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .acoes-sensores-grade a {
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .tabela-sensores-grade {
+                overflow-x: auto;
+            }
+        }

@@ -1,5 +1,4 @@
 
-
 <?php
 
 // inclui o arquivo que verifica se o usuario esta conectado e e administrador
@@ -23,30 +22,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // recebe a senha enviada pelo formulario
     $senha = $_POST['senha'] ?? '';
 
+    // recebe o cep e remove espacos do inicio e do final
+    $cep = trim($_POST['cep'] ?? '');
+
     // recebe o tipo de usuario selecionado
     $tipo = $_POST['tipo'] ?? '';
 
-    // empty verifica se algum campo esta vazio
-    // || significa OU, entao basta um campo estar vazio
+    // verifica se os campos obrigatorios estao vazios
     if (empty($email) || empty($senha) || empty($tipo)) {
 
-        // informa que todos os campos precisam ser preenchidos
+        // informa que todos os campos obrigatorios precisam ser preenchidos
         $erro = 'Preencha todos os campos.';
 
-    // strlen conta os caracteres da senha
+    // verifica se o email possui um formato valido
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+        // informa que o email e invalido
+        $erro = 'Informe um e-mail válido.';
+
     // verifica se a senha possui menos de 8 caracteres
     } elseif (strlen($senha) < 8) {
 
         // informa que a senha precisa ter no minimo 8 caracteres
         $erro = 'A senha deve ter no mínimo 8 caracteres.';
 
+    // verifica se o cep foi preenchido e possui um formato invalido
+    } elseif ($cep !== '' && !preg_match('/^[0-9]{5}-?[0-9]{3}$/', $cep)) {
+
+        // informa que o cep precisa ter 8 numeros
+        $erro = 'Informe um CEP válido no formato 00000-000.';
+
+    // verifica se o tipo informado e permitido
+    } elseif (!in_array($tipo, ['administrador', 'funcionario'], true)) {
+
+        // informa que o tipo de usuario e invalido
+        $erro = 'Selecione um tipo de usuário válido.';
+
     } else {
+
+        // remove o hifen do cep para padronizar o valor recebido
+        $cep = str_replace('-', '', $cep);
+
+        // adiciona o hifen depois dos cinco primeiros numeros
+        if ($cep !== '') {
+            $cep = substr($cep, 0, 5) . '-' . substr($cep, 5, 3);
+        } else {
+            // utiliza null caso o cep nao tenha sido preenchido
+            $cep = null;
+        }
 
         // consulta o banco pra verificar se o email ja esta cadastrado
         // o ? sera substituido pelo email no bind_param
         $verificar = "SELECT id_usuario FROM usuario WHERE email = ?";
 
-        // prepare prepara a consulta pra receber valores com seguranca
+        // prepara a consulta pra receber valores com seguranca
         $stmt = $conexao->prepare($verificar);
 
         // verifica se a consulta foi preparada corretamente
@@ -62,8 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // recebe o resultado da consulta
             $resultado = $stmt->get_result();
 
-            // num_rows informa quantos registros foram encontrados
-            // > 0 verifica se ja existe um usuario com esse email
+            // verifica se o email ja esta cadastrado
             if ($resultado->num_rows > 0) {
 
                 // informa que o email ja esta cadastrado
@@ -74,9 +102,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             } else {
 
+                // protege a senha utilizando o algoritmo de hash do php
+                $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+
                 // cria o comando pra inserir um novo usuario
                 // os ? serao substituidos pelos valores enviados no bind_param
-                $sql = "INSERT INTO usuario (email, senha, tipo) VALUES (?, ?, ?)";
+                $sql = "INSERT INTO usuario (email, senha, cep, tipo) VALUES (?, ?, ?, ?)";
 
                 // prepara a consulta de cadastro
                 $stmt2 = $conexao->prepare($sql);
@@ -84,17 +115,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // verifica se a consulta foi preparada corretamente
                 if ($stmt2) {
 
-                    // associa email, senha e tipo aos tres ? da consulta
-                    // s indica que os tres valores sao strings
+                    // associa email, senha, cep e tipo aos quatro ? da consulta
+                    // s indica que todos os valores sao strings
                     $stmt2->bind_param(
-                        "sss",
+                        "ssss",
                         $email,
-                        $senha,
+                        $senhaHash,
+                        $cep,
                         $tipo
                     );
 
                     // executa o cadastro no banco de dados
                     if ($stmt2->execute()) {
+
+                        // encerra a consulta e libera os recursos utilizados
+                        $stmt2->close();
+
+                        // encerra a consulta de verificacao
+                        $stmt->close();
 
                         // redireciona pra tela de usuarios depois do cadastro
                         header('Location: tela-home-usuario.php');
@@ -199,7 +237,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php if ($mensagem != '') { ?>
 
                 <p style="color: green; font-weight: bold;">
-                    <?php echo htmlspecialchars($mensagem); ?>
+                    <?php echo htmlspecialchars($mensagem, ENT_QUOTES, 'UTF-8'); ?>
                 </p>
 
             <?php } ?>
@@ -207,7 +245,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php if ($erro != '') { ?>
 
                 <div class="<?= $tipoErro === 'duplicado' ? 'erro-duplicado' : 'aviso-cadastro falha' ?>">
-                    <?php echo htmlspecialchars($erro); ?>
+                    <?php echo htmlspecialchars($erro, ENT_QUOTES, 'UTF-8'); ?>
                 </div>
 
             <?php } ?>
@@ -228,7 +266,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             type="email"
                             name="email"
                             class="input-nome_sensorsensor"
-                            value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+                            value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+
+                    </div>
+
+                    <div class="grupo-nome_sensor-sensor">
+
+                        <label class="nome_sensor-sensor">
+                            CEP
+                        </label>
+
+                        <input
+                            type="text"
+                            name="cep"
+                            class="input-nome_sensorsensor"
+                            maxlength="9"
+                            placeholder="00000-000"
+                            value="<?= htmlspecialchars($_POST['cep'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 
                     </div>
 
@@ -285,8 +339,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <button
                         type="submit"
-                        class="botao-salvar-trem"
-                        onclick="window.location.href='tela-home-usuario.php'">
+                        class="botao-salvar-trem">
 
                         Salvar usuário
 

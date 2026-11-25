@@ -1,31 +1,41 @@
 
 <?php
 
-// verifica se a sessao ainda nao foi iniciada
-// session_status verifica o estado atual da sessao
-// !== verifica se o estado e diferente de PHP_SESSION_ACTIVE
+// verifica se a sessão ainda não foi iniciada
+// session_status verifica o estado atual da sessão
+// !== verifica se o estado é diferente de PHP_SESSION_ACTIVE
 if (session_status() !== PHP_SESSION_ACTIVE) {
 
-    // inicia a sessao pra acessar os dados do usuario
+    // inicia a sessão pra acessar os dados do usuário
     session_start();
 }
 
-// isset verifica se a variavel existe e nao possui valor null
-// ! inverte a verificacao
-// || significa OU, verificando se algum dos dados esta faltando
+// isset verifica se a variável existe e não possui valor null
+// ! inverte a verificação
+// || significa OU, verificando se algum dos dados está faltando
 if (!isset($_SESSION['id_usuario']) || !isset($_SESSION['tipo'])) {
 
-    // redireciona pra tela de login caso o usuario nao esteja conectado
+    // redireciona pra tela de login caso o usuário não esteja conectado
     header('Location: ../usuario/tela-login.php');
 
-    // encerra a execucao depois do redirecionamento
+    // encerra a execução depois do redirecionamento
     exit;
 }
 
-// inclui o arquivo de conexao com o banco de dados
+// ?? verifica se o valor existe e não é null
+// caso contrário, utiliza uma string vazia como valor padrão
+$tipoUsuario = $_SESSION['tipo'] ?? '';
+
+// === compara o valor e o tipo da variável
+// ? : funciona como um if e else
+$identificacao = $tipoUsuario === 'administrador'
+    ? 'Administrador'
+    : 'Funcionário';
+
+// inclui o arquivo de conexão com o banco de dados
 require_once '../../infra/conexao.php';
 
-// verifica se o tipo do usuario conectado e administrador
+// verifica se o tipo do usuário conectado é administrador
 // === compara o valor e o tipo ao mesmo tempo
 $administrador = $_SESSION['tipo'] === 'administrador';
 
@@ -62,9 +72,9 @@ if ($resultado) {
         // adiciona os dados do sensor ao array
         $sensores[] = $sensor;
 
-        // strtolower transforma o texto em letras minusculas
-        // trim remove espacos do inicio e do final
-        // === verifica se o status e exatamente igual a ativo
+        // strtolower transforma o texto em letras minúsculas
+        // trim remove espaços do início e do final
+        // === verifica se o status é exatamente igual a ativo
         if (strtolower(trim($sensor['status_inicial'])) === 'ativo') {
 
             // ++ aumenta a quantidade de sensores ativos em 1
@@ -86,91 +96,52 @@ if ($resultado) {
 
     <link rel="stylesheet" href="../../assets/style/style.css">
 
-    <style>
-        /* TABELA EXCLUSIVA DE SENSORES */
-
-        .tabela-sensores-grade {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        .cabecalho-sensores-grade,
-        .linha-sensores-grade {
-            display: grid !important;
-            grid-template-columns: 55px 1.4fr 1fr 1.4fr 1.5fr 0.8fr 75px 85px 80px !important;
-            align-items: center !important;
-            gap: 12px !important;
-            width: 100%;
-            min-width: 1250px;
-            box-sizing: border-box;
-            padding: 14px 16px !important;
-            font-size: 13px;
-            white-space: nowrap;
-        }
-
-        .cabecalho-sensores-grade {
-            color: var(--bg-dark);
-            background: var(--accent-light);
-            border-radius: var(--radius-sm);
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .linha-sensores-grade {
-            min-height: 68px;
-            background: var(--surface-card);
-            border-bottom: 1px solid var(--border-color);
-            transition: background 0.15s;
-        }
-
-        .linha-sensores-grade:hover {
-            background: #f8fafc;
-        }
-
-        .linha-sensores-grade > span,
-        .cabecalho-sensores-grade > span {
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .acoes-sensores-grade {
-            display: flex !important;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 6px;
-            white-space: nowrap;
-        }
-
-        .acoes-sensores-grade a {
-            flex-shrink: 0;
-        }
-
-        @media (max-width: 768px) {
-            .tabela-sensores-grade {
-                overflow-x: auto;
-            }
-        }
-    </style>
 </head>
 
 <body>
 
 <header class="barra-superior">
+
     <h1>PIA Enterprise</h1>
 
     <aside class="menu-lateral">
+
         <nav>
+
             <a href="../../index.php">Dashboard</a>
+
             <a class="ativo" href="tela-home-sensor.php">Sensores</a>
+
             <a href="../trem/lista_trem.php">Trens</a>
+
             <a href="../rotas/tela-home-rotas.php">Rotas</a>
 
             <?php if ($administrador): ?>
                 <a href="../usuario/tela-home-usuario.php">Usuários</a>
             <?php endif; ?>
+
+            <div class="menu-conta">
+
+                <button type="button" class="botao-conta" onclick="toggleConta()">
+
+                    <?= htmlspecialchars($identificacao, ENT_QUOTES, 'UTF-8'); ?>
+
+                    <span class="seta-conta">▼</span>
+
+                </button>
+
+                <div class="dropdown-conta" id="dropdownConta">
+
+                    <a href="../logout/logout.php">Sair da conta</a>
+
+                </div>
+
+            </div>
+
         </nav>
+
     </aside>
+
 </header>
 
 <main class="area-principal">
@@ -179,7 +150,6 @@ if ($resultado) {
 
         <div>
             <h1 class="titulo-sensores">Listagem de Sensores</h1>
-
         </div>
 
         <div class="topo-lista-sensores">
@@ -223,33 +193,56 @@ if ($resultado) {
 
                     <div class="linha-sensores-grade">
 
-                        <span><?= e($sensor['id']) ?></span>
+                        <span>
+                            <?= htmlspecialchars($sensor['id'], ENT_QUOTES, 'UTF-8'); ?>
+                        </span>
 
-                        <span><?= e($sensor['nome_sensor']) ?></span>
+                        <span>
+                            <?= htmlspecialchars($sensor['nome_sensor'], ENT_QUOTES, 'UTF-8'); ?>
+                        </span>
 
-                        <span><?= e($sensor['tipo_sensor']) ?></span>
+                        <span>
+                            <?= htmlspecialchars($sensor['tipo_sensor'], ENT_QUOTES, 'UTF-8'); ?>
+                        </span>
 
-                        <span><?= e($sensor['localizacao']) ?></span>
+                        <span>
+                            <?= htmlspecialchars($sensor['localizacao'], ENT_QUOTES, 'UTF-8'); ?>
+                        </span>
 
                         <span>
                             <?php if (!empty($sensor['nome_rota'])): ?>
-                                <?= e($sensor['nome_rota']) ?>
-                                (<?= e($sensor['codigo_rota']) ?>)
+
+                                <?= htmlspecialchars($sensor['nome_rota'], ENT_QUOTES, 'UTF-8'); ?>
+
+                                (<?= htmlspecialchars($sensor['codigo_rota'], ENT_QUOTES, 'UTF-8'); ?>)
+
                             <?php else: ?>
+
                                 Sem rota associada
+
                             <?php endif; ?>
                         </span>
 
-                        <span><?= e($sensor['unidade_medida']) ?></span>
-
-                        <span><?= e($sensor['limite_alerta']) ?></span>
+                        <span>
+                            <?= htmlspecialchars($sensor['unidade_medida'], ENT_QUOTES, 'UTF-8'); ?>
+                        </span>
 
                         <span>
+                            <?= htmlspecialchars($sensor['limite_alerta'], ENT_QUOTES, 'UTF-8'); ?>
+                        </span>
+
+                        <span>
+
                             <?php if (strtolower(trim($sensor['status_inicial'])) === 'ativo'): ?>
+
                                 <span class="status ativo">Ativo</span>
+
                             <?php else: ?>
+
                                 <span class="status inativo">Inativo</span>
+
                             <?php endif; ?>
+
                         </span>
 
                         <?php if ($administrador): ?>
@@ -257,14 +250,14 @@ if ($resultado) {
                             <span class="acoes-sensores-grade">
 
                                 <a
-                                    href="tela-edit-sensor.php?id=<?= (int) $sensor['id'] ?>"
+                                    href="tela-edit-sensor.php?id=<?= (int) $sensor['id']; ?>"
                                     class="botao-editar"
                                     title="Editar">
                                     E
                                 </a>
 
                                 <a
-                                    href="tela-excluir-sensor.php?id=<?= (int) $sensor['id'] ?>"
+                                    href="tela-excluir-sensor.php?id=<?= (int) $sensor['id']; ?>"
                                     class="botao-excluir"
                                     title="Excluir">
                                     D

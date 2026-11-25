@@ -11,6 +11,7 @@ CREATE TABLE usuario (
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(100) NOT NULL UNIQUE,
     senha VARCHAR(100) NOT NULL,
+    cep VARCHAR(9) NULL,
     tipo ENUM('administrador', 'funcionario')
         NOT NULL DEFAULT 'funcionario'
 );

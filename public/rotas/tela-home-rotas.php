@@ -1,20 +1,33 @@
 
 <?php
 
+// verifica se a sessão já está iniciada e inicia caso necessário
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
+// verifica se o usuário está logado e possui as informações necessárias na sessão
 if (
     !isset($_SESSION['id_usuario']) ||
     !isset($_SESSION['tipo'])
 ) {
+    // redireciona para a tela de login caso não esteja conectado
     header('Location: ../usuario/tela-login.php');
     exit;
 }
 
+// inclui o arquivo responsável pela conexão com o banco de dados
 require_once '../../infra/conexao.php';
 
+// verifica o tipo de usuário conectado
+$tipoUsuario = $_SESSION['tipo'] ?? '';
+
+// define o texto que aparece no menu da conta
+$identificacao = $tipoUsuario === 'administrador'
+    ? 'Administrador'
+    : 'Funcionário';
+
+// busca as rotas e o nome do trem relacionado a cada uma
 $resultado = mysqli_query(
     $conexao,
     "SELECT rotas.*, trem.nome_trem
@@ -42,16 +55,33 @@ $resultado = mysqli_query(
     <header class="barra-superior">
         <h1>PIA Enterprise</h1>
 
-        <nav class="navegacao-principal">
-            <a href="../../index.php">Dashboard</a>
-            <a href="../sensor/tela-home-sensor.php">Sensores</a>
-            <a href="../trem/lista_trem.php">Trens</a>
-            <a class="ativo" href="tela-home-rotas.php">Rotas</a>
+        <aside class="menu-lateral">
+            <nav>
+                <a href="../../index.php">Dashboard</a>
+                <a href="../sensor/tela-home-sensor.php">Sensores</a>
+                <a href="../trem/lista_trem.php">Trens</a>
+                <a class="ativo" href="tela-home-rotas.php">Rotas</a>
 
-            <?php if ($_SESSION['tipo'] === 'administrador'): ?>
-                <a href="../usuario/tela-home-usuario.php">Usuários</a>
-            <?php endif; ?>
-        </nav>
+                <?php if ($tipoUsuario === 'administrador'): ?>
+                    <a href="../usuario/tela-home-usuario.php">Usuários</a>
+                <?php endif; ?>
+
+                <div class="menu-conta">
+                    <button
+                        type="button"
+                        class="botao-conta"
+                        onclick="toggleConta()"
+                    >
+                        <?= htmlspecialchars($identificacao, ENT_QUOTES, 'UTF-8'); ?>
+                        <span class="seta-conta">▼</span>
+                    </button>
+
+                    <div class="dropdown-conta" id="dropdownConta">
+                        <a href="../logout/logout.php">Sair da conta</a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
     </header>
 
     <main class="area-principal">
@@ -62,7 +92,7 @@ $resultado = mysqli_query(
                 Listagem de rotas
             </h2>
 
-            <?php if ($_SESSION['tipo'] === 'administrador'): ?>
+            <?php if ($tipoUsuario === 'administrador'): ?>
 
                 <a
                     class="botao-novo-sensor botao-novo-trem"
@@ -89,7 +119,7 @@ $resultado = mysqli_query(
                     <span>Distância</span>
                     <span>Status</span>
 
-                    <?php if ($_SESSION['tipo'] === 'administrador'): ?>
+                    <?php if ($tipoUsuario === 'administrador'): ?>
                         <span>Ações</span>
                     <?php endif; ?>
 
@@ -102,29 +132,31 @@ $resultado = mysqli_query(
                         <div class="linha-tabela colunas-rotas">
 
                             <span>
-                                <?= htmlspecialchars($rota['id_rota']) ?>
+                                <?= htmlspecialchars($rota['id_rota'], ENT_QUOTES, 'UTF-8') ?>
                             </span>
 
                             <span>
-                                <?= htmlspecialchars($rota['nome_rota']) ?>
+                                <?= htmlspecialchars($rota['nome_rota'], ENT_QUOTES, 'UTF-8') ?>
                             </span>
 
                             <span>
                                 <?= htmlspecialchars(
-                                    $rota['nome_trem'] ?? $rota['modelo_trem']
+                                    $rota['nome_trem'] ?? $rota['modelo_trem'],
+                                    ENT_QUOTES,
+                                    'UTF-8'
                                 ) ?>
                             </span>
 
                             <span>
-                                <?= htmlspecialchars($rota['tempo_estimado']) ?>
+                                <?= htmlspecialchars($rota['tempo_estimado'], ENT_QUOTES, 'UTF-8') ?>
                             </span>
 
                             <span>
-                                <?= htmlspecialchars($rota['codigo']) ?>
+                                <?= htmlspecialchars($rota['codigo'], ENT_QUOTES, 'UTF-8') ?>
                             </span>
 
                             <span>
-                                <?= htmlspecialchars($rota['distancia']) ?> km
+                                <?= htmlspecialchars($rota['distancia'], ENT_QUOTES, 'UTF-8') ?> km
                             </span>
 
                             <span>
@@ -145,7 +177,7 @@ $resultado = mysqli_query(
 
                             </span>
 
-                            <?php if ($_SESSION['tipo'] === 'administrador'): ?>
+                            <?php if ($tipoUsuario === 'administrador'): ?>
 
                                 <span class="acoes">
 
@@ -159,7 +191,6 @@ $resultado = mysqli_query(
                                         href="tela_exclusão-rotas.php?id=<?= (int) $rota['id_rota'] ?>"
                                         class="botao-excluir"
                                         aria-label="Excluir rota"
-                                        
                                     >D</a>
 
                                 </span>

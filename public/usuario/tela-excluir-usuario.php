@@ -1,13 +1,78 @@
 
-
-<
 <?php
+
+// inclui o arquivo que verifica se o usuario esta conectado e e administrador
+require_once '../../infra/verificar-admin.php';
+
+// inclui o arquivo de conexao com o banco de dados
+require_once '../../infra/conexao.php';
+
+// cria uma variavel vazia pra guardar mensagens de erro
+$erro = '';
+
+// verifica se o id foi enviado pela url ou pelo formulario
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // recebe o id enviado pelo formulario
+    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+
+} else {
+
+    // recebe o id enviado pela url
+    $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+}
+
+// verifica se o id e valido
+if (!$id || $id <= 0) {
+
+    // volta pra listagem se o id for invalido
+    header('Location: tela-home-usuario.php');
+    exit;
+}
+
+// consulta os dados do usuario selecionado
+$sql = "SELECT * FROM usuario WHERE id_usuario = ?";
+
+// prepara a consulta pra receber o id com seguranca
+$stmt = $conexao->prepare($sql);
+
+// verifica se a consulta foi preparada corretamente
+if (!$stmt) {
+    die('Erro ao preparar a consulta do usuário.');
+}
+
+// associa o id ao parametro da consulta
+// i indica que o valor e inteiro
+$stmt->bind_param("i", $id);
+
+// executa a consulta no banco de dados
+$stmt->execute();
+
+// recebe o resultado da consulta
+$resultado = $stmt->get_result();
+
+// verifica se o usuario existe
+if ($resultado->num_rows == 0) {
+
+    // encerra a consulta
+    $stmt->close();
+
+    // volta pra listagem se o usuario nao existir
+    header('Location: tela-home-usuario.php');
+    exit;
+}
+
+// guarda os dados do usuario em um array
+$usuario = $resultado->fetch_assoc();
+
+// encerra a consulta
+$stmt->close();
 
 // verifica se o formulario foi enviado pelo metodo POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // verifica se o administrador esta tentando excluir a propria conta
-    if ($id == $_SESSION['id_usuario']) {
+    if ((int) $id === (int) $_SESSION['id_usuario']) {
 
         // impede a exclusao da propria conta
         $erro = 'Você não pode excluir sua própria conta.';
@@ -15,8 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
 
         // prepara o comando SQL pra excluir o usuario pelo id
-        $exclusao = mysqli_prepare(
-            $conexao,
+        $exclusao = $conexao->prepare(
             'DELETE FROM usuario WHERE id_usuario = ?'
         );
 
@@ -25,20 +89,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // associa o id ao marcador da consulta
             // i indica que o valor e um numero inteiro
-            mysqli_stmt_bind_param(
-                $exclusao,
-                'i',
-                $id
-            );
+            $exclusao->bind_param("i", $id);
 
             // executa a exclusao no banco de dados
-            if (mysqli_stmt_execute($exclusao)) {
+            if ($exclusao->execute()) {
 
                 // verifica se algum registro foi excluido
-                if (mysqli_stmt_affected_rows($exclusao) > 0) {
+                if ($exclusao->affected_rows > 0) {
 
                     // encerra a consulta
-                    mysqli_stmt_close($exclusao);
+                    $exclusao->close();
 
                     // redireciona pra listagem depois da exclusao
                     header('Location: tela-home-usuario.php');
@@ -47,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // encerra a consulta e libera os recursos
-            mysqli_stmt_close($exclusao);
+            $exclusao->close();
 
             // informa que nao foi possivel excluir o usuario
             $erro = 'Não foi possível excluir este usuário.';
@@ -61,7 +121,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
-
 
 <!DOCTYPE html>
 
@@ -88,10 +147,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="estrutura-dashboard">
 
         <header class="barra-superior">
+
             <h1>PIA Enterprise</h1>
 
             <aside class="menu-lateral">
+
                 <nav>
+
                     <a href="../../index.php">Dashboard</a>
                     <a href="../sensor/tela-home-sensor.php">Sensores</a>
                     <a href="../trem/lista_trem.php">Trens</a>
@@ -100,8 +162,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'administrador'): ?>
                         <a class="ativo" href="tela-home-usuario.php">Usuários</a>
                     <?php endif; ?>
+
                 </nav>
+
             </aside>
+
         </header>
 
         <main class="area-principal">
@@ -125,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     class="botao-voltar-sensores"
                     onclick="window.location.href='tela-home-usuario.php'">
 
-                     Voltar para usuários
+                    Voltar para usuários
 
                 </button>
 
@@ -153,15 +218,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <span>
                         ID:
-                        <?= e($usuario['id_usuario']) ?>
+                        <?= htmlspecialchars((string) $usuario['id_usuario'], ENT_QUOTES, 'UTF-8') ?>
                     </span>
 
                     <br>
 
                     <span>
                         E-mail:
-                    <?= htmlspecialchars($usuario['email'], ENT_QUOTES, 'UTF-8') ?>                    
-                </span>
+                        <?= htmlspecialchars($usuario['email'], ENT_QUOTES, 'UTF-8') ?>
+                    </span>
+
+                    <br>
+
+                    <span>
+                        CEP:
+                        <?= htmlspecialchars($usuario['cep'] ?? 'Não informado', ENT_QUOTES, 'UTF-8') ?>
+                    </span>
 
                     <br>
 
@@ -170,6 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <?php
 
+                        // verifica o tipo de usuario pra mostrar o nome correspondente
                         if ($usuario['tipo'] === 'administrador') {
 
                             echo 'Administrador';
@@ -180,7 +253,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         } else {
 
-                            echo e($usuario['tipo']);
+                            // mostra o tipo caso seja diferente dos valores conhecidos
+                            echo htmlspecialchars($usuario['tipo'], ENT_QUOTES, 'UTF-8');
                         }
 
                         ?>
@@ -192,7 +266,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php if ($erro !== ''): ?>
 
                     <p class="erro-excluir-sensor">
-                        <?= e($erro) ?>
+                        <?= htmlspecialchars($erro, ENT_QUOTES, 'UTF-8') ?>
                     </p>
 
                 <?php endif; ?>
@@ -206,7 +280,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input
                             type="hidden"
                             name="id"
-                            value="<?= e($id) ?>">
+                            value="<?= htmlspecialchars((string) $id, ENT_QUOTES, 'UTF-8') ?>">
 
                         <button
                             class="botao-confirmar-exclusao"
