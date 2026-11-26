@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             } else {
 
-                $erro = 'Não foi possível excluir a rota. Verifique se existe algum trem associado.';
+                $erro = 'Não foi possível excluir a rota. Verifique se existe algum trem ou sensor associado.';
             }
 
             // Fecha o comando SQL
