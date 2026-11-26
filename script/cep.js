@@ -1,89 +1,63 @@
+(function () {
+    var campoCep = document.getElementById("cep");
+    var mensagem = document.getElementById("cep-mensagem");
+    var logradouro = document.getElementById("logradouro");
+    var bairro = document.getElementById("bairro");
+    var cidade = document.getElementById("cidade");
+    var uf = document.getElementById("uf");
 
-const campoCep = document.getElementById("cep");
-const mensagemCep = document.getElementById("cep-mensagem");
+    // se a pagina nao tiver os campos, nao faz nada
+    if (!campoCep || !mensagem || !logradouro || !bairro || !cidade || !uf) {
+        return;
+    }
 
-const camposEndereco = {
-    logradouro: document.getElementById("logradouro"),
-    bairro: document.getElementById("bairro"),
-    cidade: document.getElementById("cidade"),
-    uf: document.getElementById("uf")
-};
+    function limpar() {
+        logradouro.value = "";
+        bairro.value = "";
+        cidade.value = "";
+        uf.value = "";
+    }
 
-// verifica se os elementos existem na pagina
-if (campoCep && mensagemCep) {
+    function buscar() {
+        var cep = campoCep.value.replace(/\D/g, "").slice(0, 8);
 
-    // consulta automaticamente quando o cep tiver oito numeros
-    campoCep.addEventListener("input", async function () {
+        campoCep.value = cep.length > 5 ? cep.slice(0, 5) + "-" + cep.slice(5) : cep;
 
-        // remove caracteres que nao sejam numeros
-        const cep = campoCep.value.replace(/\D/g, "");
-
-        // aguarda o usuario terminar de digitar
-        if (cep.length !== 8) {
-            limparEndereco();
-            mensagemCep.textContent = "";
+        if (cep.length < 8) {
+            limpar();
+            mensagem.textContent = "";
             return;
         }
 
-        // evita consultar novamente o mesmo cep
-        if (campoCep.dataset.consultado === cep) {
-            return;
-        }
+        mensagem.textContent = "Consultando CEP...";
 
-        // registra o cep que esta sendo consultado
-        campoCep.dataset.consultado = cep;
+        fetch("https://viacep.com.br/ws/" + cep + "/json/")
+            .then(function (r) { return r.json(); })
+            .then(function (dados) {
+                if (campoCep.value.replace(/\D/g, "") !== cep) {
+                    return;
+                }
+                if (dados.erro) {
+                    limpar();
+                    mensagem.textContent = "CEP não encontrado.";
+                    return;
+                }
+                logradouro.value = dados.logradouro || "";
+                bairro.value = dados.bairro || "";
+                cidade.value = dados.localidade || "";
+                uf.value = dados.uf || "";
+                mensagem.textContent = "Endereço preenchido.";
+            })
+            .catch(function () {
+                limpar();
+                mensagem.textContent = "Não foi possível consultar o CEP.";
+            });
+    }
 
-        // informa que a consulta esta acontecendo
-        mensagemCep.textContent = "Consultando CEP...";
+    campoCep.addEventListener("input", buscar);
 
-        try {
-
-            // consulta a API ViaCEP
-            const resposta = await fetch("https://viacep.com.br/ws/" + cep + "/json/");
-
-            // verifica se a requisicao funcionou
-            if (!resposta.ok) {
-                throw new Error("Falha na consulta");
-            }
-
-            // transforma a resposta em objeto
-            const dados = await resposta.json();
-
-            // verifica se o cep foi encontrado
-            if (dados.erro) {
-                limparEndereco();
-                mensagemCep.textContent = "CEP não encontrado.";
-                return;
-            }
-
-            // preenche os campos de endereco
-            camposEndereco.logradouro.value = dados.logradouro || "";
-            camposEndereco.bairro.value = dados.bairro || "";
-            camposEndereco.cidade.value = dados.localidade || "";
-            camposEndereco.uf.value = dados.uf || "";
-
-            // informa que o endereco foi preenchido
-            mensagemCep.textContent = "Endereço preenchido.";
-
-        } catch (erro) {
-
-            // permite tentar consultar novamente
-            campoCep.dataset.consultado = "";
-
-            mensagemCep.textContent =
-                "Não foi possível consultar o CEP. Verifique sua conexão.";
-        }
-    });
-}
-
-// funcao para limpar os campos de endereco
-function limparEndereco() {
-
-    Object.values(camposEndereco).forEach(function (campo) {
-
-        if (campo) {
-            campo.value = "";
-        }
-
-    });
-}
+    // se a pagina abrir com CEP completo e sem endereco, busca sozinho
+    if (campoCep.value.replace(/\D/g, "").length === 8 && logradouro.value === "") {
+        buscar();
+    }
+})();

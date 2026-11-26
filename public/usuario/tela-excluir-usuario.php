@@ -1,4 +1,3 @@
-
 <?php
 
 // inclui o arquivo que verifica se o usuario esta conectado e e administrador
@@ -67,6 +66,29 @@ $usuario = $resultado->fetch_assoc();
 
 // encerra a consulta
 $stmt->close();
+
+// monta o endereco completo pra mostrar na tela
+$partesEndereco = [];
+
+if (!empty($usuario['logradouro'])) {
+    $partesEndereco[] = $usuario['logradouro'];
+}
+
+if (!empty($usuario['bairro'])) {
+    $partesEndereco[] = $usuario['bairro'];
+}
+
+if (!empty($usuario['cidade'])) {
+    $cidadeUf = $usuario['cidade'];
+
+    if (!empty($usuario['uf'])) {
+        $cidadeUf .= ' - ' . $usuario['uf'];
+    }
+
+    $partesEndereco[] = $cidadeUf;
+}
+
+$enderecoCompleto = $partesEndereco ? implode(', ', $partesEndereco) : 'Não informado';
 
 // verifica se o formulario foi enviado pelo metodo POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -202,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     class="icone-excluir-sensor"
                     aria-hidden="true">
 
-                    🗑
+            
 
                 </div>
 
@@ -233,6 +255,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <span>
                         CEP:
                         <?= htmlspecialchars($usuario['cep'] ?? 'Não informado', ENT_QUOTES, 'UTF-8') ?>
+                    </span>
+
+                    <br>
+
+                    <span>
+                        Endereço:
+                        <?= htmlspecialchars($enderecoCompleto, ENT_QUOTES, 'UTF-8') ?>
                     </span>
 
                     <br>

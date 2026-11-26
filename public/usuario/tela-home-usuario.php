@@ -1,4 +1,3 @@
-
 <?php
 
 // require_once inclui o arquivo de verificação de administrador apenas uma vez
@@ -30,7 +29,7 @@ $usuario = [];
 // FROM indica de qual tabela os dados serão buscados
 // ORDER BY organiza os resultados pelo id_usuario
 // DESC coloca os usuários mais recentes primeiro
-$sql = "SELECT id_usuario, email, cep, tipo
+$sql = "SELECT id_usuario, email, cep, logradouro, bairro, cidade, uf, tipo
         FROM usuario
         ORDER BY id_usuario DESC";
 
@@ -46,6 +45,30 @@ if ($resultado) {
     // fetch_assoc transforma cada linha em um array associativo
     // cada coluna pode ser acessada pelo nome, como id_usuario, email, cep e tipo
     while ($linha = $resultado->fetch_assoc()) {
+
+        // monta o endereco completo juntando as partes que existem
+        $partesEndereco = [];
+
+        if (!empty($linha['logradouro'])) {
+            $partesEndereco[] = $linha['logradouro'];
+        }
+
+        if (!empty($linha['bairro'])) {
+            $partesEndereco[] = $linha['bairro'];
+        }
+
+        if (!empty($linha['cidade'])) {
+            $cidadeUf = $linha['cidade'];
+
+            if (!empty($linha['uf'])) {
+                $cidadeUf .= ' - ' . $linha['uf'];
+            }
+
+            $partesEndereco[] = $cidadeUf;
+        }
+
+        // implode junta os itens do array separando por virgula
+        $linha['endereco'] = $partesEndereco ? implode(', ', $partesEndereco) : 'Não informado';
 
         // [] adiciona a linha atual no final do array usuario
         // assim todos os usuários encontrados ficam armazenados pra serem exibidos no HTML
@@ -174,11 +197,12 @@ if ($resultado) {
 
                 <div class="tabela-sensores">
 
-                    <div class="cabecalho-tabela">
+                    <div class="cabecalho-tabela colunas-usuarios">
 
                         <span>ID</span>
                         <span>E-mail</span>
                         <span>CEP</span>
+                        <span>Endereço</span>
                         <span>Tipo</span>
                         <span>Ações</span>
 
@@ -188,7 +212,7 @@ if ($resultado) {
 
                         <?php foreach ($usuario as $linhaUsuario): ?>
 
-                            <div class="linha-tabela">
+                            <div class="linha-tabela colunas-usuarios">
 
                                 <span>
                                     <?= htmlspecialchars($linhaUsuario['id_usuario'], ENT_QUOTES, 'UTF-8'); ?>
@@ -200,6 +224,10 @@ if ($resultado) {
 
                                 <span>
                                     <?= htmlspecialchars($linhaUsuario['cep'] ?? 'Não informado', ENT_QUOTES, 'UTF-8'); ?>
+                                </span>
+
+                                <span title="<?= htmlspecialchars($linhaUsuario['endereco'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <?= htmlspecialchars($linhaUsuario['endereco'], ENT_QUOTES, 'UTF-8'); ?>
                                 </span>
 
                                 <span>

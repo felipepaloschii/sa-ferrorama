@@ -1327,3 +1327,25 @@ textarea:focus,
                 overflow-x: auto;
             }
         }
+
+        /* tabela de usuarios (com coluna de endereco) */
+.cabecalho-tabela.colunas-usuarios,
+.linha-tabela.colunas-usuarios {
+    grid-template-columns: 50px minmax(150px, 1.3fr) 100px minmax(220px, 2fr) 110px 90px;
+}
+
+.colunas-usuarios > span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.colunas-usuarios > span.acoes {
+    overflow: visible;
+}
+
+@media (max-width: 900px) {
+    .colunas-usuarios {
+        min-width: 850px;
+    }
+}

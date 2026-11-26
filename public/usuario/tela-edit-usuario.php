@@ -1,5 +1,6 @@
-
 <?php
+ob_start();
+mysqli_report(MYSQLI_REPORT_OFF);
 
 // inclui o arquivo que verifica se o usuario esta conectado e e administrador
 require_once '../../infra/verificar-admin.php';
@@ -17,8 +18,6 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
     // volta pra listagem se o id for invalido
     header('Location: tela-home-usuario.php');
-
-    // encerra a execucao
     exit;
 }
 
@@ -37,7 +36,6 @@ if (!$stmt) {
 }
 
 // associa o id ao ? da consulta
-// i indica que o valor e inteiro
 $stmt->bind_param("i", $id);
 
 // executa a consulta no banco de dados
@@ -49,13 +47,10 @@ $resultado = $stmt->get_result();
 // verifica se o usuario foi encontrado
 if ($resultado->num_rows == 0) {
 
-    // encerra a consulta
     $stmt->close();
 
     // volta pra listagem se o usuario nao existir
     header('Location: tela-home-usuario.php');
-
-    // encerra a execucao
     exit;
 }
 
@@ -69,7 +64,6 @@ $stmt->close();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // recebe o email e remove espacos do inicio e do final
-    // ?? utiliza uma string vazia caso o campo nao exista ou seja null
     $email = trim($_POST['email'] ?? '');
 
     // recebe a nova senha
@@ -78,88 +72,87 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // recebe o cep e remove espacos do inicio e do final
     $cep = trim($_POST['cep'] ?? '');
 
+    // recebe os dados de endereco preenchidos pelo cep
+    $logradouro = trim($_POST['logradouro'] ?? '');
+    $bairro = trim($_POST['bairro'] ?? '');
+    $cidade = trim($_POST['cidade'] ?? '');
+    $uf = strtoupper(trim($_POST['uf'] ?? ''));
+
     // recebe o tipo de usuario selecionado
     $tipo = $_POST['tipo'] ?? '';
 
     // verifica se o email e o tipo estao vazios
     if (empty($email) || empty($tipo)) {
 
-        // informa que os campos obrigatorios precisam ser preenchidos
         $erro = 'Preencha o e-mail e o tipo de usuário.';
 
     // verifica se o email possui um formato valido
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-        // informa que o email e invalido
         $erro = 'Informe um e-mail válido.';
 
     // verifica se a nova senha possui menos de 8 caracteres
     } elseif ($senha !== '' && strlen($senha) < 8) {
 
-        // informa que a senha precisa ter no minimo 8 caracteres
         $erro = 'A nova senha deve ter no mínimo 8 caracteres.';
 
     // verifica se o cep foi preenchido e possui um formato invalido
     } elseif ($cep !== '' && !preg_match('/^[0-9]{5}-?[0-9]{3}$/', $cep)) {
 
-        // informa que o cep precisa ter 8 numeros
         $erro = 'Informe um CEP válido no formato 00000-000.';
 
     // verifica se o tipo informado e permitido
     } elseif (!in_array($tipo, ['administrador', 'funcionario'], true)) {
 
-        // informa que o tipo de usuario e invalido
         $erro = 'Selecione um tipo de usuário válido.';
+
+    // verifica se o cep foi informado mas o endereco nao foi encontrado
+    } elseif ($cep !== '' && ($logradouro === '' || $cidade === '' || $uf === '')) {
+
+        $erro = 'Consulte um CEP válido antes de salvar o usuário.';
 
     } else {
 
         // remove o hifen do cep para padronizar o valor recebido
         $cep = str_replace('-', '', $cep);
 
-        // adiciona o hifen depois dos cinco primeiros numeros
         if ($cep !== '') {
+
+            // adiciona o hifen depois dos cinco primeiros numeros
             $cep = substr($cep, 0, 5) . '-' . substr($cep, 5, 3);
+
         } else {
 
             // utiliza null caso o cep nao tenha sido preenchido
             $cep = null;
+            $logradouro = null;
+            $bairro = null;
+            $cidade = null;
+            $uf = null;
         }
 
         // verifica se o email ja pertence a outro usuario
         $verificar = "SELECT id_usuario FROM usuario WHERE email = ? AND id_usuario != ?";
 
-        // prepara a consulta de verificacao
         $stmt = $conexao->prepare($verificar);
 
-        // verifica se a consulta foi preparada corretamente
         if ($stmt) {
 
-            // associa o email e o id aos parametros da consulta
-            // s representa string e i representa inteiro
             $stmt->bind_param("si", $email, $id);
-
-            // executa a consulta
             $stmt->execute();
-
-            // recebe o resultado
             $resultadoEmail = $stmt->get_result();
 
             // verifica se o email ja esta sendo utilizado
             if ($resultadoEmail->num_rows > 0) {
 
-                // informa que o email ja esta cadastrado
                 $erro = 'Este e-mail já está cadastrado.';
-
-                // identifica o tipo de erro
                 $tipoErro = 'duplicado';
             }
 
-            // encerra a consulta
             $stmt->close();
 
         } else {
 
-            // informa que ocorreu um erro na verificacao
             $erro = 'Erro ao verificar o e-mail.';
         }
 
@@ -172,47 +165,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // protege a nova senha utilizando hash
                 $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
-                // cria a consulta para atualizar todos os dados incluindo a senha
-                $sql = "UPDATE usuario SET email = ?, senha = ?, cep = ?, tipo = ? WHERE id_usuario = ?";
+                // atualiza todos os dados incluindo a senha
+                $sql = "UPDATE usuario
+                        SET email = ?, senha = ?, cep = ?, logradouro = ?, bairro = ?, cidade = ?, uf = ?, tipo = ?
+                        WHERE id_usuario = ?";
 
-                // prepara a consulta de atualizacao
                 $stmt = $conexao->prepare($sql);
 
-                // verifica se a consulta foi preparada corretamente
                 if ($stmt) {
 
-                    // associa os valores aos parametros da consulta
-                    // os quatro primeiros valores sao strings e o ultimo e inteiro
-                    $stmt->bind_param("ssssi", $email, $senhaHash, $cep, $tipo, $id);
+                    $stmt->bind_param(
+                        "ssssssssi",
+                        $email,
+                        $senhaHash,
+                        $cep,
+                        $logradouro,
+                        $bairro,
+                        $cidade,
+                        $uf,
+                        $tipo,
+                        $id
+                    );
                 }
 
             } else {
 
-                // cria a consulta sem alterar a senha atual
-                $sql = "UPDATE usuario SET email = ?, cep = ?, tipo = ? WHERE id_usuario = ?";
+                // atualiza sem alterar a senha atual
+                $sql = "UPDATE usuario
+                        SET email = ?, cep = ?, logradouro = ?, bairro = ?, cidade = ?, uf = ?, tipo = ?
+                        WHERE id_usuario = ?";
 
-                // prepara a consulta de atualizacao
                 $stmt = $conexao->prepare($sql);
 
-                // verifica se a consulta foi preparada corretamente
                 if ($stmt) {
 
-                    // associa email, cep, tipo e id aos parametros
-                    // s representa string e i representa inteiro
-                    $stmt->bind_param("sssi", $email, $cep, $tipo, $id);
+                    $stmt->bind_param(
+                        "sssssssi",
+                        $email,
+                        $cep,
+                        $logradouro,
+                        $bairro,
+                        $cidade,
+                        $uf,
+                        $tipo,
+                        $id
+                    );
                 }
             }
 
             // verifica se a consulta foi preparada e executada corretamente
             if (isset($stmt) && $stmt && $stmt->execute()) {
 
-                // encerra a consulta
                 $stmt->close();
 
                 // redireciona pra listagem depois de salvar as alteracoes
                 header('Location: tela-home-usuario.php');
-
-                // encerra a execucao
                 exit;
             }
 
@@ -223,19 +230,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // mostra uma mensagem caso nao consiga atualizar o usuario
             if ($erro === '') {
-                $erro = 'Não foi possível atualizar o usuário.';
+                $erro = 'Não foi possível atualizar o usuário: ' . $conexao->error;
             }
         }
     }
 
-    // mantém os dados digitados no formulario caso ocorra algum erro
+    // mantem os dados digitados no formulario caso ocorra algum erro
     $usuario['email'] = $email;
     $usuario['cep'] = $cep;
+    $usuario['logradouro'] = $logradouro;
+    $usuario['bairro'] = $bairro;
+    $usuario['cidade'] = $cidade;
+    $usuario['uf'] = $uf;
     $usuario['tipo'] = $tipo;
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -347,11 +357,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         <input
                             type="text"
+                            id="cep"
                             name="cep"
                             class="input-nome_sensorsensor"
                             maxlength="9"
                             placeholder="00000-000"
                             value="<?= htmlspecialchars($usuario['cep'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+
+                        <p id="cep-mensagem"></p>
+
+                    </div>
+
+                </div>
+
+                <div class="linha-campos-formulario">
+
+                    <div class="grupo-nome_sensor-sensor">
+
+                        <label class="nome_sensor-sensor">
+                            Logradouro
+                        </label>
+
+                        <input
+                            type="text"
+                            id="logradouro"
+                            name="logradouro"
+                            class="input-nome_sensorsensor"
+                            readonly
+                            value="<?= htmlspecialchars($usuario['logradouro'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+
+                    </div>
+
+                    <div class="grupo-nome_sensor-sensor">
+
+                        <label class="nome_sensor-sensor">
+                            Bairro
+                        </label>
+
+                        <input
+                            type="text"
+                            id="bairro"
+                            name="bairro"
+                            class="input-nome_sensorsensor"
+                            readonly
+                            value="<?= htmlspecialchars($usuario['bairro'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+
+                    </div>
+
+                </div>
+
+                <div class="linha-campos-formulario">
+
+                    <div class="grupo-nome_sensor-sensor">
+
+                        <label class="nome_sensor-sensor">
+                            Cidade
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cidade"
+                            name="cidade"
+                            class="input-nome_sensorsensor"
+                            readonly
+                            value="<?= htmlspecialchars($usuario['cidade'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+
+                    </div>
+
+                    <div class="grupo-nome_sensor-sensor">
+
+                        <label class="nome_sensor-sensor">
+                            Estado
+                        </label>
+
+                        <input
+                            type="text"
+                            id="uf"
+                            name="uf"
+                            class="input-nome_sensorsensor"
+                            readonly
+                            value="<?= htmlspecialchars($usuario['uf'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 
                     </div>
 
@@ -431,6 +516,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </section>
 
     </main>
+
+    <script src="../../script/cep.js?v=3"></script>
 
 </body>
 
