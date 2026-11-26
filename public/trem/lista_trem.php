@@ -1,24 +1,43 @@
 
 <?php
 
+// session_status() verifica se já existe uma sessão ativa no PHP
+// Se não existir, session_start() inicia uma nova sessão para conseguir acessar os dados do usuário
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
+// isset() verifica se uma variável existe e não possui valor null
+// Aqui estamos conferindo se o usuário possui um ID e um tipo de conta salvos na sessão
+// O || significa OU, então se uma das duas informações estiver faltando, o acesso será bloqueado
 if (
     !isset($_SESSION['id_usuario']) ||
     !isset($_SESSION['tipo'])
 ) {
+    // header() redireciona o usuário para outra página
+    // Nesse caso, volta para a tela de login porque não existe uma sessão válida
     header('Location: ../usuario/tela-login.php');
     exit;
 }
 
+// require_once inclui o arquivo de conexão com o banco de dados apenas uma vez
+// O ../../ volta duas pastas para encontrar a pasta infra
 require_once '../../infra/conexao.php';
 
+// $_SESSION['tipo'] guarda o tipo de conta do usuário que está conectado
+// === compara se o valor é exatamente igual a 'administrador'
+// O resultado será true ou false, dependendo do tipo de usuário
 $administrador = $_SESSION['tipo'] === 'administrador';
 
+// Guarda o tipo de usuário em uma variável para utilizar no cabeçalho
+// ?? significa que se o valor não existir ou for null, será utilizado um texto vazio
+$tipoUsuario = $_SESSION['tipo'] ?? '';
+
+// Guarda o nome da tabela do banco de dados que será utilizada na consulta
 $tabela = 'trem';
 
+// Cria um array com os nomes das colunas da tabela trem
+// Isso facilita acessar os campos sem precisar escrever o nome da coluna várias vezes
 $col = [
     'id'         => 'id',
     'nome'       => 'nome_trem',
@@ -30,6 +49,8 @@ $col = [
     'codigo'     => 'codigo',
 ];
 
+// Cria um array para transformar os valores do status do banco em textos mais fáceis de entender
+// Por exemplo, quando o banco retorna 'operacao', a página mostra 'Em operação'
 $rotulosStatus = [
     'operacao'   => 'Em operação',
     'parado'     => 'Parado',
@@ -37,15 +58,30 @@ $rotulosStatus = [
     'inativo'    => 'Inativo',
 ];
 
+// SELECT busca as informações dos trens no banco de dados
+// trem.* significa que serão selecionadas todas as colunas da tabela trem
+// LEFT JOIN permite buscar também o email do usuário responsável pelo trem
+// Mesmo que o trem não tenha um usuário responsável, ele continuará aparecendo na listagem
+// AS usuario_responsavel cria um apelido para o campo usuario.email
+// ON define a condição que relaciona as duas tabelas usando o ID do usuário
+// ORDER BY trem.id organiza os resultados pelo ID do trem
 $sql = "SELECT trem.*, usuario.email AS usuario_responsavel
         FROM `$tabela` AS trem
         LEFT JOIN usuario
             ON trem.id_usuario = usuario.id_usuario
         ORDER BY trem.id";
 
+// mysqli_query() envia a consulta SQL para o banco de dados através da conexão
+// O resultado da consulta fica guardado na variável $resultado
 $resultado = mysqli_query($conexao, $sql);
 
+// Se a consulta apresentar algum erro, die() interrompe a página e mostra a mensagem
+if (!$resultado) {
+    die('Erro ao consultar os trens: ' . mysqli_error($conexao));
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -56,74 +92,6 @@ $resultado = mysqli_query($conexao, $sql);
     <title>Listagem de Trens</title>
 
     <link rel="stylesheet" href="../../assets/style/style.css">
-
-    <style>
-        .colunas-trens {
-            display: grid;
-            grid-template-columns:
-                60px
-                minmax(130px, 1.3fr)
-                minmax(130px, 1.2fr)
-                minmax(150px, 1.4fr)
-                minmax(110px, 0.9fr);
-            align-items: center;
-            gap: 12px;
-        }
-
-        .colunas-trens.admin {
-            grid-template-columns:
-                50px
-                minmax(120px, 1.1fr)
-                minmax(120px, 1fr)
-                minmax(130px, 1.2fr)
-                minmax(150px, 1.2fr)
-                minmax(110px, 0.9fr)
-                minmax(120px, 1fr);
-        }
-
-        .cabecalho-tabela.colunas-trens {
-            text-align: center;
-        }
-
-        .linha-tabela.colunas-trens {
-            min-height: 82px;
-            text-align: center;
-        }
-
-        .linha-tabela.colunas-trens > span {
-            min-width: 0;
-            overflow-wrap: anywhere;
-        }
-
-        .linha-tabela.colunas-trens .acoes {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .linha-tabela.colunas-trens .botao-editar,
-        .linha-tabela.colunas-trens .botao-excluir {
-            margin: 0;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-
-        @media (max-width: 900px) {
-            .colunas-trens {
-                min-width: 850px;
-            }
-
-            .colunas-trens.admin {
-                min-width: 1050px;
-            }
-
-            .painel-lista-trens {
-                overflow-x: auto;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -142,6 +110,18 @@ $resultado = mysqli_query($conexao, $sql);
                     <a href="../usuario/tela-home-usuario.php">Usuários</a>
                 <?php endif; ?>
             </nav>
+
+            <div class="caixa-usuario">
+
+                <span class="tipo-usuario">
+                    <?= $tipoUsuario === 'administrador' ? 'Administrador' : 'Funcionário' ?>
+                </span>
+
+                <a class="botao-logout" href="../logout/logout.php">
+                    Sair
+                </a>
+
+            </div>
         </aside>
     </header>
 
@@ -185,45 +165,63 @@ $resultado = mysqli_query($conexao, $sql);
 
                 </div>
 
-                <?php if ($resultado && mysqli_num_rows($resultado) > 0): ?>
+                <?php
+                // mysqli_num_rows() conta quantas linhas foram retornadas pela consulta
+                // Se for maior que zero, significa que existe pelo menos um trem cadastrado
+                if (mysqli_num_rows($resultado) > 0):
+                ?>
 
-                    <?php while ($trem = mysqli_fetch_assoc($resultado)): ?>
+                    <?php
+                    // mysqli_fetch_assoc() pega uma linha do resultado e transforma em um array associativo
+                    // Isso permite acessar cada informação pelo nome da coluna, como nome_trem ou status
+                    // while repete o bloco enquanto ainda existirem trens para mostrar
+                    while ($trem = mysqli_fetch_assoc($resultado)):
+                    ?>
 
                         <?php
+                        // Pega o status do trem utilizando a chave correspondente no array $col
+                        // ?? significa que se o campo não existir ou estiver null, será utilizado um texto vazio
                         $statusBanco = $trem[$col['status']] ?? '';
 
+                        // isset() verifica se o status existe dentro do array de rótulos
+                        // Se existir, utiliza o próprio status como classe CSS
+                        // Caso contrário, utiliza 'inativo'
                         $classeStatus = isset($rotulosStatus[$statusBanco])
                             ? $statusBanco
                             : 'inativo';
 
+                        // Busca o texto correspondente ao status
+                        // ?? utiliza o próprio valor do banco caso não exista um rótulo cadastrado
                         $textoStatus = $rotulosStatus[$statusBanco] ?? $statusBanco;
                         ?>
 
                         <div class="linha-tabela colunas-trens <?= $administrador ? 'admin' : '' ?>">
 
                             <span>
-                                <?= htmlspecialchars($trem[$col['id']] ?? '') ?>
+                                <?= htmlspecialchars($trem[$col['id']] ?? '', ENT_QUOTES, 'UTF-8') ?>
                             </span>
 
                             <span>
-                                <?= htmlspecialchars($trem[$col['nome']] ?? '') ?><br>
+                                <?= htmlspecialchars($trem[$col['nome']] ?? '', ENT_QUOTES, 'UTF-8') ?><br>
                                 <small>
-                                    <?= htmlspecialchars($trem[$col['codigo']] ?? '') ?>
+                                    <?= htmlspecialchars($trem[$col['codigo']] ?? '', ENT_QUOTES, 'UTF-8') ?>
                                 </small>
                             </span>
 
                             <span>
-                                <?= htmlspecialchars($trem[$col['modelo']] ?? '') ?><br>
+                                <?= htmlspecialchars($trem[$col['modelo']] ?? '', ENT_QUOTES, 'UTF-8') ?><br>
                                 <small>
-                                    <?= htmlspecialchars($trem[$col['ano']] ?? '') ?>
+                                    <?= htmlspecialchars($trem[$col['ano']] ?? '', ENT_QUOTES, 'UTF-8') ?>
                                 </small>
                             </span>
 
                             <span>
-                                <?= htmlspecialchars($trem[$col['local']] ?? '') ?><br>
+                                <?= htmlspecialchars($trem[$col['local']] ?? '', ENT_QUOTES, 'UTF-8') ?><br>
                                 <small>
                                     <?= htmlspecialchars(
-                                        (string)(float)($trem[$col['capacidade']] ?? 0)
+                                        (string)(float)($trem[$col['capacidade']] ?? 0),
+                                        ENT_QUOTES,
+                                        'UTF-8'
                                     ) ?>
                                 </small>
                             </span>
@@ -231,14 +229,16 @@ $resultado = mysqli_query($conexao, $sql);
                             <?php if ($administrador): ?>
                                 <span>
                                     <?= htmlspecialchars(
-                                        $trem['usuario_responsavel'] ?? 'Não informado'
+                                        $trem['usuario_responsavel'] ?? 'Não informado',
+                                        ENT_QUOTES,
+                                        'UTF-8'
                                     ) ?>
                                 </span>
                             <?php endif; ?>
 
                             <span>
-                                <span class="status status-trem <?= htmlspecialchars($classeStatus) ?>">
-                                    <?= htmlspecialchars($textoStatus) ?>
+                                <span class="status status-trem <?= htmlspecialchars($classeStatus, ENT_QUOTES, 'UTF-8') ?>">
+                                    <?= htmlspecialchars($textoStatus, ENT_QUOTES, 'UTF-8') ?>
                                 </span>
                             </span>
 

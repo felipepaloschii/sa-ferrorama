@@ -1261,3 +1261,69 @@ textarea:focus,
                 overflow-x: auto;
             }
         }
+
+         .colunas-trens {
+            display: grid;
+            grid-template-columns:
+                60px
+                minmax(130px, 1.3fr)
+                minmax(130px, 1.2fr)
+                minmax(150px, 1.4fr)
+                minmax(110px, 0.9fr);
+            align-items: center;
+            gap: 12px;
+        }
+
+        .colunas-trens.admin {
+            grid-template-columns:
+                50px
+                minmax(120px, 1.1fr)
+                minmax(120px, 1fr)
+                minmax(130px, 1.2fr)
+                minmax(150px, 1.2fr)
+                minmax(110px, 0.9fr)
+                minmax(120px, 1fr);
+        }
+
+        .cabecalho-tabela.colunas-trens {
+            text-align: center;
+        }
+
+        .linha-tabela.colunas-trens {
+            min-height: 82px;
+            text-align: center;
+        }
+
+        .linha-tabela.colunas-trens > span {
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .linha-tabela.colunas-trens .acoes {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .linha-tabela.colunas-trens .botao-editar,
+        .linha-tabela.colunas-trens .botao-excluir {
+            margin: 0;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+            .colunas-trens {
+                min-width: 850px;
+            }
+
+            .colunas-trens.admin {
+                min-width: 1050px;
+            }
+
+            .painel-lista-trens {
+                overflow-x: auto;
+            }
+        }
