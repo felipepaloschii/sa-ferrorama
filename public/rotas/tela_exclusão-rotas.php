@@ -1,3 +1,4 @@
+
 <?php
 
 // Verifica se o usuário é administrador e conecta ao banco de dados
@@ -48,37 +49,58 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     } else {
 
-        // Comando SQL para excluir a rota pelo ID
-        $sql = "DELETE FROM rotas WHERE id_rota = ? AND id_trem IS NULL";
+        // Verifica se existem sensores vinculados à rota
+        $sql_verificar = "SELECT COUNT(*) AS total FROM sensor WHERE id_rota = ?";
 
-        // Prepara o comando de exclusão
-        $stmt = $conexao->prepare($sql);
+        $stmt_verificar = $conexao->prepare($sql_verificar);
+        $stmt_verificar->bind_param("i", $id);
+        $stmt_verificar->execute();
 
-        if ($stmt) {
+        // Guarda o resultado da verificação
+        $resultado_verificar = $stmt_verificar->get_result();
+        $dados = $resultado_verificar->fetch_assoc();
 
-            $stmt->bind_param("i", $id);
+        $stmt_verificar->close();
 
-            // Executa a exclusão e verifica se algum registro foi removido
-            if ($stmt->execute() && $stmt->affected_rows > 0) {
+        // Impede a exclusão caso existam sensores associados
+        if ($dados['total'] > 0) {
 
-                $stmt->close();
-
-                // Volta para a página principal das rotas
-                header('Location: tela-home-rotas.php');
-                exit;
-
-            } else {
-
-                $erro = 'Não foi possível excluir a rota. Verifique se existe algum trem ou sensor associado.';
-            }
-
-            // Fecha o comando SQL
-            $stmt->close();
+            $erro = 'Não é possível excluir esta rota, pois existem sensores vinculados a ela.';
 
         } else {
 
-            // Informa caso não seja possível preparar a exclusão
-            $erro = 'Erro ao preparar a exclusão da rota.';
+            // Comando SQL para excluir a rota pelo ID
+            $sql = "DELETE FROM rotas WHERE id_rota = ? AND id_trem IS NULL";
+
+            // Prepara o comando de exclusão
+            $stmt = $conexao->prepare($sql);
+
+            if ($stmt) {
+
+                $stmt->bind_param("i", $id);
+
+                // Executa a exclusão e verifica se algum registro foi removido
+                if ($stmt->execute() && $stmt->affected_rows > 0) {
+
+                    $stmt->close();
+
+                    // Volta para a página principal das rotas
+                    header('Location: tela-home-rotas.php');
+                    exit;
+
+                } else {
+
+                    $erro = 'Não foi possível excluir a rota. Verifique se existe algum trem ou sensor associado.';
+                }
+
+                // Fecha o comando SQL
+                $stmt->close();
+
+            } else {
+
+                // Informa caso não seja possível preparar a exclusão
+                $erro = 'Erro ao preparar a exclusão da rota.';
+            }
         }
     }
 }
