@@ -1,5 +1,4 @@
 
-
 <?php
 
 // inclui o arquivo que verifica se o usuario esta conectado e e administrador
@@ -104,21 +103,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $unidade_medida = trim($_POST['unidade_medida'] ?? '');
 
     // recebe o limite de alerta informado no formulario
-    $limite_alerta = $_POST['limite_alerta'] ?? '';
+    $limite_alerta = trim($_POST['limite_alerta'] ?? '');
 
     // recebe o status inicial do sensor
     $status_inicial = $_POST['status_inicial'] ?? '';
 
     // recebe a descricao e remove espacos extras
     $descricao = trim($_POST['descricao'] ?? '');
-
-    // cria um array com os tipos de sensor permitidos no cadastro
-    $tiposPermitidos = [
-        'temperatura',
-        'velocidade',
-        'vibração',
-        'localização'
-    ];
 
     // considera a rota valida inicialmente
     $rotaExiste = true;
@@ -170,16 +161,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // verifica se os campos obrigatorios foram preenchidos corretamente
     // || significa OU, entao qualquer condicao verdadeira gera um erro
-    // in_array verifica se o tipo e o status estao nas listas permitidas
-    // o true faz a comparacao considerando tambem o tipo do valor
     // is_numeric verifica se o limite informado e um numero
+    // in_array verifica se o status esta entre os valores permitidos
+    // true faz a comparacao considerando tambem o tipo do valor
     if (
         $nome_sensor === '' ||
-        !in_array($tipo_sensor, $tiposPermitidos, true) ||
+        $tipo_sensor === '' ||
         $localizacao === '' ||
         !$rotaExiste ||
         $unidade_medida === '' ||
-        !is_numeric($limite_alerta) ||
+        ($limite_alerta !== '' && !is_numeric($limite_alerta)) ||
         !in_array($status_inicial, ['Ativo', 'Inativo'], true)
     ) {
 
@@ -189,7 +180,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
 
         // (float) transforma o limite de alerta em um numero decimal
-        $limite_alerta = (float) $limite_alerta;
+        // se o campo estiver vazio, utiliza zero
+        $limite_alerta = $limite_alerta === '' ? 0 : (float) $limite_alerta;
 
         // cria o comando pra atualizar os dados do sensor
         // cada ? sera substituido pelos valores enviados no bind_param
@@ -269,7 +261,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -319,7 +310,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php if ($erro !== ''): ?>
         <div class="erro-excluir-sensor">
-            <?= e($erro) ?>
+            <?= htmlspecialchars($erro, ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
 
@@ -339,7 +330,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         id="nome_sensor"
                         name="nome_sensor"
                         class="campo-edicao-trem"
-                        value="<?= e($sensor['nome_sensor']) ?>"
+                        value="<?= htmlspecialchars($sensor['nome_sensor'], ENT_QUOTES, 'UTF-8') ?>"
                         required>
                 </div>
 
@@ -348,32 +339,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         Tipo do sensor<span class="obrigatorio">*</span>
                     </label>
 
-                    <select
+                    <input
+                        type="text"
                         id="tipo_sensor"
                         name="tipo_sensor"
                         class="campo-edicao-trem"
+                        value="<?= htmlspecialchars($sensor['tipo_sensor'], ENT_QUOTES, 'UTF-8') ?>"
                         required>
-
-                        <option value="">Selecione</option>
-
-                        <?php
-                        $tipos = [
-                            'temperatura' => 'Temperatura',
-                            'velocidade' => 'Velocidade',
-                            'vibração' => 'Vibração',
-                            'localização' => 'Localização'
-                        ];
-                        ?>
-
-                        <?php foreach ($tipos as $valor => $nome): ?>
-                            <option
-                                value="<?= e($valor) ?>"
-                                <?= $sensor['tipo_sensor'] === $valor ? 'selected' : '' ?>>
-                                <?= e($nome) ?>
-                            </option>
-                        <?php endforeach; ?>
-
-                    </select>
                 </div>
 
                 <div class="grupo-campo-trem">
@@ -386,7 +358,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         id="localizacao"
                         name="localizacao"
                         class="campo-edicao-trem"
-                        value="<?= e($sensor['localizacao']) ?>"
+                        value="<?= htmlspecialchars($sensor['localizacao'], ENT_QUOTES, 'UTF-8') ?>"
                         required>
                 </div>
 
@@ -410,8 +382,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 value="<?= (int) $rota['id_rota'] ?>"
                                 <?= ((string) ($sensor['id_rota'] ?? '') === (string) $rota['id_rota']) ? 'selected' : '' ?>>
 
-                                <?= e($rota['nome_rota']) ?>
-                                (<?= e($rota['codigo']) ?>)
+                                <?= htmlspecialchars($rota['nome_rota'], ENT_QUOTES, 'UTF-8') ?>
+                                (<?= htmlspecialchars($rota['codigo'], ENT_QUOTES, 'UTF-8') ?>)
 
                             </option>
                         <?php endforeach; ?>
@@ -429,7 +401,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         id="unidade_medida"
                         name="unidade_medida"
                         class="campo-edicao-trem"
-                        value="<?= e($sensor['unidade_medida']) ?>"
+                        value="<?= htmlspecialchars($sensor['unidade_medida'], ENT_QUOTES, 'UTF-8') ?>"
                         required>
                 </div>
 
@@ -444,8 +416,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         id="limite_alerta"
                         name="limite_alerta"
                         class="campo-edicao-trem"
-                        value="<?= e($sensor['limite_alerta']) ?>"
-                        required>
+                        value="<?= htmlspecialchars((string) $sensor['limite_alerta'], ENT_QUOTES, 'UTF-8') ?>">
                 </div>
 
             </div>
@@ -493,7 +464,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <textarea
                         id="descricao"
                         name="descricao"
-                        class="campo-edicao-trem textarea-descricao-sensor"><?= e($sensor['descricao']) ?></textarea>
+                        class="campo-edicao-trem textarea-descricao-sensor"><?= htmlspecialchars($sensor['descricao'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
                 </div>
 
             </div>

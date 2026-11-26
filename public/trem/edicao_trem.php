@@ -1,62 +1,62 @@
+
 <?php
+
+// Inicia a sessão caso ainda não esteja ativa
+
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
+// Verifica se o usuário logado é administrador e conecta ao banco de dados
+
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
 
-// input_input() Lé um valor de fora (URL, form) e valida.
-// INPUT_GET pega da URL (?id=5)
-// FILTER_VALIDADE_INT só aceita se for um número inteiro
-// se o valor for invalido (por exepmlo: ?id=abc), o resultado é false ou null
-
+// filter_input() lê um valor de fora (URL ou formulário) e valida.
+// INPUT_GET pega o valor enviado pela URL (?id=5).
+// FILTER_VALIDATE_INT verifica se o valor é um número inteiro.
+// Se o valor for inválido, retorna false ou null.
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-// variáveis para mensaem de erro, se estão vazias é porque não tem erro por enquanto
+// Variáveis para mensagens de erro
 
 $erro = '';
 $tipoErro = '';
 
-// Recupera o ID enviado pelo formulário
-// Quando o formulário é enviado com o método POST, o id não vem pela URL, vem por um campo escondido (<input type="hidden" name="id">) lá no HTML,
-// Então se for por POST, o id lido é o INPUT_POST e sobrescreve o valor
+// Recupera o ID enviado pelo formulário.
+// Quando o formulário é enviado pelo método POST, o ID vem de um campo escondido.
+// Nesse caso, o valor recebido pelo POST substitui o valor recebido pela URL.
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 }
 
-// Se o id não existe, é inválido ou é menor que 1, não tem o que editar, 
-// então redireiona para a lista de trens e para o script com o "exit".
+// Se o ID não existe, é inválido ou é menor que 1,
+// redireciona para a lista de trens e interrompe o código.
 
 if (!$id || $id < 1) {
     header('Location: lista_trem.php');
     exit;
 }
 
-// // Busca os usuários disponíveis
-// O [] começa vazio, e é preenchido se a consulta funcionar
+// Busca os usuários disponíveis
 
 $usuarios = [];
-
-// Consulta simples(sem os valores vindos do usuário), então não precisa de prepare. 
-// Traz id, e-mail e tipo, ordenados pelo email assim como no cadastro.
 
 $resultadoUsuarios = $conexao->query(
     "SELECT id_usuario, email, tipo FROM usuario ORDER BY email"
 );
 
-// Se a consulta deu certo, transofrma o resultado em um array PHP.
-// MYSQLI_ASSOC faz cada linha virar algo tipo:
-//  ['id_usuario' => 'email' => 'teste@.com' => 'administrador']
+// Se a consulta deu certo, transforma o resultado em um array PHP.
+// MYSQLI_ASSOC organiza cada linha usando os nomes das colunas como índices.
 
 if ($resultadoUsuarios) {
     $usuarios = $resultadoUsuarios->fetch_all(MYSQLI_ASSOC);
 }
 
-// // Busca os dados do trem
-// Usa prepared statement, explicado na tela de cadastro
+// Busca os dados atuais do trem.
+// O prepared statement utiliza ? no lugar do valor recebido pela URL.
 
 $consulta = $conexao->prepare(
     "SELECT nome_trem, modelo_trem, localizacao_i, codigo,
@@ -65,52 +65,68 @@ $consulta = $conexao->prepare(
      WHERE id = ?"
 );
 
-// Liga o valor de $id ao "?", o "i" significa que é um número inteiro
+// bind_param() coloca o ID no lugar do ?.
+// O "i" significa que o valor é um número inteiro.
 
 $consulta->bind_param("i", $id);
 
-// Faz a consulta(query) no banco
+// Executa a consulta no banco de dados.
 
 $consulta->execute();
 
-// Pega o resultadoe transofrma a primeira liunha em um array associativo.
-// Exemplo: $trem['nome_trem'], $trem['codigo'] etc.
-// Se não tiver um tem com esse id, o $trem fica como null/false
+// get_result() recupera o resultado da consulta.
+// fetch_assoc() transforma a primeira linha em um array associativo.
 
 $resultado = $consulta->get_result();
 $trem = $resultado->fetch_assoc();
 
-// Libera as funções da consulta
+// Libera os recursos da consulta.
 
 $consulta->close();
 
-// Se não achou o trem ou seja o id não existe no banco, volta para a lista
+// Se não encontrou o trem, volta para a lista.
 
 if (!$trem) {
     header('Location: lista_trem.php');
     exit;
 }
 
-// Atualiza os dados
+// Atualiza os dados somente quando o formulário é enviado.
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // trim() remove os espaços sobrando no começo e fim do texto.
-    // "?? ''" singinfica que o campo não existir, use um texto vazio.
+    // trim() remove os espaços sobrando no começo e no fim do texto.
+    // ?? significa que, se o campo não existir, será utilizado um texto vazio.
 
     $trem['nome_trem'] = trim($_POST['nome_trem'] ?? '');
     $trem['modelo_trem'] = trim($_POST['modelo_trem'] ?? '');
     $trem['localizacao_i'] = trim($_POST['localizacao_i'] ?? '');
     $trem['codigo'] = trim($_POST['codigo'] ?? '');
-    $trem['capacidade'] = trim($_POST['capacidade'] ?? '');
-    $trem['ano'] = trim($_POST['ano'] ?? '');
+
+    // Guarda os valores originais para validar antes de converter.
+
+    $capacidadeOriginal = trim($_POST['capacidade'] ?? '');
+    $anoOriginal = trim($_POST['ano'] ?? '');
+
     $trem['status'] = $_POST['status'] ?? '';
 
-    // No caso de usuário resonsável, é OPCIONAL.
-    // -Campo vazio -> o trem fica sem responsável (null = NULL no banco).
-    // - Campo cheio -> Converte para inteiro, se não foi número válido, 
-    // fillter_var devolve false
-    // Permite deixar o trem sem usuário associado
+    // is_numeric() verifica se a capacidade é um número.
+    // (float) converte o valor para decimal.
+
+    $trem['capacidade'] = is_numeric($capacidadeOriginal)
+        ? (float) $capacidadeOriginal
+        : 0;
+
+    // filter_var() verifica se o ano é um número inteiro válido.
+    // Se não for válido, retorna false.
+
+    $anoValido = filter_var($anoOriginal, FILTER_VALIDATE_INT);
+
+    $trem['ano'] = $anoOriginal;
+
+    // O usuário responsável é OPCIONAL.
+    // Se o campo estiver vazio, guarda null (NULL no banco).
+    // Se estiver preenchido, verifica se o valor é um número inteiro.
 
     $usuarioSelecionado = trim($_POST['id_usuario'] ?? '');
 
@@ -125,169 +141,199 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Lista dos únicos valores aceitos para o status do trem.
 
-
     $statusValidos = ['operacao', 'parado', 'manutencao', 'inativo'];
 
-    // Aqui é a VALIDAÇÃO DOS CAMPOS
-    // Se qualquer condição foi verdadeira, os dados são inválidos. 
-    // O navegador já usa required para validar, mas isso não é seguro sozinho, pois tem como burlar o HTML
-    // Então o servidor valida novamente
+    // Faz a validação dos campos.
+    // O servidor precisa validar novamente porque o required do HTML pode ser burlado.
+    // || significa OU, então basta uma condição ser verdadeira para os dados serem inválidos.
 
     if (
         $trem['nome_trem'] === '' ||
         $trem['modelo_trem'] === '' ||
         $trem['localizacao_i'] === '' ||
         $trem['codigo'] === '' ||
-        $trem['capacidade'] === '' ||
-        $trem['ano'] === '' ||
-        !is_numeric($trem['capacidade']) ||
+        !is_numeric($capacidadeOriginal) ||
+        $trem['capacidade'] <= 0 ||
 
-        // preg_match com /^\d{4}$/ confere se o ano tem EXATAMENTE 4 dígitos.
-        // Por exemplo, se eu colocar "2025" passa, mas "25" ou "dois mil e vinte", não passa.
+        // preg_match() verifica se o ano possui exatamente 4 dígitos.
 
-        !preg_match('/^\d{4}$/', $trem['ano']) ||
+        !preg_match('/^\d{4}$/', $anoOriginal) ||
+        $anoValido === false ||
+        $anoValido < 1900 ||
+        $anoValido > (int) date('Y') + 1 ||
 
-        // Status precisa estar na lista de permitidos
-        // (o "true" ativa a comparação estrita, que compara também o tipo do valor).
+        // in_array() verifica se o status está na lista permitida.
+        // O true ativa a comparação estrita.
 
         !in_array($trem['status'], $statusValidos, true) ||
 
-        // Se o usuário escolheu alguém, mas o valor não é um número válido.
+        // Se o usuário selecionou alguém, verifica se o valor é um inteiro válido.
 
-        ($usuarioSelecionado !== '' && $trem['id_usuario'] === false)
+        (
+            $usuarioSelecionado !== '' &&
+            ($trem['id_usuario'] === false || $trem['id_usuario'] < 1)
+        )
     ) {
         $erro = 'Preencha todos os campos com valores válidos.';
         $tipoErro = 'normal';
+
     } else {
 
-        // Serve para CONFERIR se o usuário escolhido existe no banco.
-        // Começa assumindo que existe(true), só consulta no banco só adm escolher algum usuario
+        // Começa assumindo que o usuário existe.
+        // Se o administrador não selecionou ninguém, não precisa consultar o banco.
 
         $usuarioExiste = true;
 
-        // Confere o usuário somente se algum foi selecionado
+        // Verifica o usuário somente se algum foi selecionado.
 
         if ($trem['id_usuario'] !== null) {
+
+            // Prepara uma consulta para verificar se o usuário existe.
+
             $verifica = $conexao->prepare(
                 "SELECT id_usuario FROM usuario WHERE id_usuario = ?"
             );
 
+            // bind_param() associa o ID ao ?.
+            // O "i" significa inteiro.
+
             $verifica->bind_param("i", $trem['id_usuario']);
+
+            // Executa a consulta.
+
             $verifica->execute();
 
-            // store_result() guarda o resultado na memória para contar as linhas que retornam
+            // store_result() guarda o resultado na memória para contar as linhas retornadas.
 
             $verifica->store_result();
 
-
-            // se voltou 1 linha pelo menos, o user existe.
+            // Se voltou pelo menos uma linha, significa que o usuário existe.
 
             $usuarioExiste = $verifica->num_rows > 0;
+
+            // Libera os recursos da consulta.
+
             $verifica->close();
         }
 
+        // Se o usuário não existe, mostra uma mensagem de erro.
+
         if (!$usuarioExiste) {
+
             $erro = 'Selecione um usuário responsável válido.';
             $tipoErro = 'normal';
+
         } else {
 
-            // Atualizar o trem no banco(UPDATE)
-            // Cada "?" vai ser trocado por um valor, na mesma ordem.
-            // O "WHERE id = ?" é ESSENCIAL: garante que só o trem escolhido seja alterado.
-            // Sem ele, todos os trens seriam modificados.
+            // Verifica se o código já pertence a outro trem.
+            // O id <> ? ignora o próprio trem que está sendo editado.
 
-            $sql = "UPDATE trem SET
-                        nome_trem = ?,
-                        modelo_trem = ?,
-                        localizacao_i = ?,
-                        codigo = ?,
-                        capacidade = ?,
-                        ano = ?,
-                        status = ?,
-                        id_usuario = ?
-                    WHERE id = ?";
-
-            $atualizacao = $conexao->prepare($sql);
-
-            // bind_param(): liga as variáveis aos 9 "?" do UPDATE.
-            // A string "ssssdssii" informa o tipo de cada valor, em ordem, por exemplo "int, string, decimal".
-
-            $atualizacao->bind_param(
-                "ssssdssii",
-                $trem['nome_trem'],
-                $trem['modelo_trem'],
-                $trem['localizacao_i'],
-                $trem['codigo'],
-                $trem['capacidade'],
-                $trem['ano'],
-                $trem['status'],
-                $trem['id_usuario'],
-                $id
+            $verificaCodigo = $conexao->prepare(
+                "SELECT id FROM trem WHERE codigo = ? AND id <> ?"
             );
 
-            // try tenta execuar e se o banco devolver um erro, cai no "catch" avisando antes de quebrar a página
+            // Associa o código e o ID do trem à consulta.
+            // "s" significa texto e "i" significa inteiro.
 
+            $verificaCodigo->bind_param("si", $trem['codigo'], $id);
 
-            try {
+            // Executa a consulta e guarda o resultado.
 
-                // Sucesso, manda o usuario para a lista de trens
+            $verificaCodigo->execute();
+            $verificaCodigo->store_result();
 
+            // Se voltou alguma linha, o código já pertence a outro trem.
 
-                if ($atualizacao->execute()) {
+            $codigoExiste = $verificaCodigo->num_rows > 0;
 
-                    // Sucesso, manda o usuario para a lista de trens
+            // Libera os recursos da consulta.
+
+            $verificaCodigo->close();
+
+            if ($codigoExiste) {
+
+                $erro = 'Esse código já está cadastrado em outro trem. Informe um código diferente.';
+                $tipoErro = 'duplicado';
+
+            } else {
+
+                // SQL de atualização.
+                // Cada ? será substituído por um valor na mesma ordem.
+                // O WHERE id = ? garante que somente o trem selecionado seja alterado.
+
+                $sql = "UPDATE trem SET
+                            nome_trem = ?,
+                            modelo_trem = ?,
+                            localizacao_i = ?,
+                            codigo = ?,
+                            capacidade = ?,
+                            ano = ?,
+                            status = ?,
+                            id_usuario = ?
+                        WHERE id = ?";
+
+                // Prepara o comando de atualização.
+
+                $atualizacao = $conexao->prepare($sql);
+
+                if ($atualizacao) {
+
+                    // Converte o ano para inteiro depois de validar.
+
+                    $ano = (int) $anoValido;
+
+                    // bind_param() associa os valores aos 9 ? do UPDATE.
+                    // s = texto, d = decimal e i = inteiro.
+                    // O id_usuario pode receber null porque a associação é opcional.
+
+                    $atualizacao->bind_param(
+                        "ssssdisii",
+                        $trem['nome_trem'],
+                        $trem['modelo_trem'],
+                        $trem['localizacao_i'],
+                        $trem['codigo'],
+                        $trem['capacidade'],
+                        $ano,
+                        $trem['status'],
+                        $trem['id_usuario'],
+                        $id
+                    );
+
+                    // Executa a atualização no banco.
+
+                    if ($atualizacao->execute()) {
+
+                        // Se deu certo, libera os recursos e volta para a lista.
+
+                        $atualizacao->close();
+
+                        header('Location: lista_trem.php');
+                        exit;
+
+                    } else {
+
+                        // Se a atualização falhou, mostra uma mensagem de erro.
+
+                        $erro = 'Não foi possível salvar as alterações. Tente novamente.';
+                        $tipoErro = 'normal';
+                    }
+
+                    // Libera os recursos do comando UPDATE.
 
                     $atualizacao->close();
-                    header('Location: lista_trem.php');
 
-                    // exit: interrompe o script para nada mais rodar depois do redirecionamento.
-
-                    exit;
-                }
-
-                // Se execute() devolveu false, mostra uma mensagem genérica.
-
-                $erro = 'Não foi possível salvar as alterações. Tente novamente.';
-                $tipoErro = 'normal';
-            } catch (mysqli_sql_exception $e) {
-
-                // O código de erro 1062 quer dizer "entrada duplicada", a coluna "código" é UNIQUE(não pode se repetir) e já tem um trem com esse código
-
-                if ($e->getCode() === 1062) {
-                    $erro = 'Esse código já está cadastrado em outro trem. Informe um código diferente.';
-
-                    // Marca o tipo para usar um estilo visual específico.
-
-                    $tipoErro = 'duplicado';
                 } else {
 
-                    // Qualquer outro erro do banco recebe mensagem genérica.
+                    // Se não conseguiu preparar a consulta, mostra uma mensagem de erro.
 
-
-                    $erro = 'Não foi possível salvar as alterações. Tente novamente.';
+                    $erro = 'Não foi possível preparar a atualização.';
                     $tipoErro = 'normal';
                 }
             }
-
-             // Libera os recursos do comando UPDATE (só chega aqui se NÃO houve sucesso, pois no sucesso o script já terminou no exit).
-
-            $atualizacao->close();
         }
     }
 }
 
-// Essa função serve para neutralizar caracteres especiais de um texto (como <> " ') antes de mostrar no HTML, protege contra XSS,
-// um ataque que aluém grava o código malicioso em um campo para que ele rode no navegador de outras pessoas.
-// - (string) $valor: converte qualquer valor (número, null) em texto.
-//     - ENT_QUOTES: também converte aspas simples e duplas.
-//     - 'UTF-8': codificação correta para acentos.
-// Mesmo estando declarada aqui embaixo, ela pode ser usada no HTML porque
-// o PHP lê funções declaradas no nível principal do arquivo antes de rodar.
-
-function e($valor)
-{
-    return htmlspecialchars((string) $valor, ENT_QUOTES, 'UTF-8');
-}
 ?>
 
 <!DOCTYPE html>
@@ -331,17 +377,18 @@ function e($valor)
             </div>
 
             <br>
+
             <section class="painel-formulario-trem">
 
                 <?php if ($erro !== ''): ?>
                     <p class="<?= $tipoErro === 'duplicado' ? 'erro-duplicado' : 'aviso-edicao-trem' ?>">
-                        <?= e($erro) ?>
+                        <?= htmlspecialchars($erro, ENT_QUOTES, 'UTF-8') ?>
                     </p>
                 <?php endif; ?>
 
-                <form method="post" action="edicao_trem.php?id=<?= e($id) ?>">
+                <form method="post" action="edicao_trem.php?id=<?= htmlspecialchars((string) $id, ENT_QUOTES, 'UTF-8') ?>">
 
-                    <input type="hidden" name="id" value="<?= e($id) ?>">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars((string) $id, ENT_QUOTES, 'UTF-8') ?>">
 
                     <div class="grade-formulario-trem">
 
@@ -352,7 +399,7 @@ function e($valor)
 
                             <input class="campo-edicao-trem" type="text"
                                 id="nome_trem" name="nome_trem" maxlength="100"
-                                value="<?= e($trem['nome_trem']) ?>" required>
+                                value="<?= htmlspecialchars($trem['nome_trem'], ENT_QUOTES, 'UTF-8') ?>" required>
                         </div>
 
                         <div class="grupo-campo-trem">
@@ -362,7 +409,7 @@ function e($valor)
 
                             <input class="campo-edicao-trem" type="text"
                                 id="modelo_trem" name="modelo_trem" maxlength="100"
-                                value="<?= e($trem['modelo_trem']) ?>" required>
+                                value="<?= htmlspecialchars($trem['modelo_trem'], ENT_QUOTES, 'UTF-8') ?>" required>
                         </div>
 
                         <div class="grupo-campo-trem">
@@ -372,7 +419,7 @@ function e($valor)
 
                             <input class="campo-edicao-trem" type="text"
                                 id="localizacao_i" name="localizacao_i" maxlength="150"
-                                value="<?= e($trem['localizacao_i']) ?>" required>
+                                value="<?= htmlspecialchars($trem['localizacao_i'], ENT_QUOTES, 'UTF-8') ?>" required>
                         </div>
 
                         <div class="grupo-campo-trem">
@@ -382,7 +429,7 @@ function e($valor)
 
                             <input class="campo-edicao-trem" type="text"
                                 id="codigo" name="codigo" maxlength="30"
-                                value="<?= e($trem['codigo']) ?>" required>
+                                value="<?= htmlspecialchars($trem['codigo'], ENT_QUOTES, 'UTF-8') ?>" required>
                         </div>
 
                         <div class="grupo-campo-trem">
@@ -401,7 +448,7 @@ function e($valor)
                                 <?php foreach ($usuarios as $u): ?>
                                     <option value="<?= (int) $u['id_usuario'] ?>"
                                         <?= ((int) $trem['id_usuario'] === (int) $u['id_usuario']) ? 'selected' : '' ?>>
-                                        <?= e($u['email']) ?>
+                                        <?= htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8') ?>
                                         (<?= $u['tipo'] === 'administrador' ? 'Admin' : 'Funcionário' ?>)
                                     </option>
                                 <?php endforeach; ?>
@@ -446,7 +493,7 @@ function e($valor)
 
                             <input class="campo-edicao-trem" type="number"
                                 id="capacidade" name="capacidade" min="0" step="0.01"
-                                value="<?= e($trem['capacidade']) ?>" required>
+                                value="<?= htmlspecialchars((string) $trem['capacidade'], ENT_QUOTES, 'UTF-8') ?>" required>
                         </div>
 
                         <div class="grupo-campo-trem campo-ano-trem">
@@ -456,7 +503,7 @@ function e($valor)
 
                             <input class="campo-edicao-trem" type="text"
                                 id="ano" name="ano" maxlength="4" pattern="[0-9]{4}"
-                                value="<?= e($trem['ano']) ?>" required>
+                                value="<?= htmlspecialchars((string) $trem['ano'], ENT_QUOTES, 'UTF-8') ?>" required>
                         </div>
 
                     </div>

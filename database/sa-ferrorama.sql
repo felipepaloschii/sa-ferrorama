@@ -1,4 +1,3 @@
-
 DROP DATABASE IF EXISTS sa_ferrorama_db;
 
 CREATE DATABASE sa_ferrorama_db
@@ -31,7 +30,7 @@ CREATE TABLE trem (
     CONSTRAINT fk_trem_usuario
         FOREIGN KEY (id_usuario)
         REFERENCES usuario(id_usuario)
-        ON DELETE SET NULL
+        ON DELETE RESTRICT
         ON UPDATE CASCADE
 );
 
@@ -42,7 +41,8 @@ CREATE TABLE rotas (
     tempo_estimado VARCHAR(50) NOT NULL,
     codigo VARCHAR(50) NOT NULL UNIQUE,
     distancia DECIMAL(10,2) NOT NULL,
-    status ENUM('Ativa', 'Inativa') NOT NULL DEFAULT 'Ativa',
+    status ENUM('Ativa', 'Inativa')
+        NOT NULL DEFAULT 'Ativa',
     id_trem INT NULL,
 
     CONSTRAINT fk_rota_trem

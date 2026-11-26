@@ -1,129 +1,83 @@
 <?php
 
-// Verifica se o usuário é administrador e conecta ao banco de dados.
+// Verifica se o usuário é administrador e conecta ao banco de dados
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
 
-// Variável para armazenar mensagens de erro.
+// Variável para armazenar mensagens de erro
 $erro = '';
 
-// Verifica se o ID da rota foi informado corretamente pela URL.
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+// Verifica se o ID da rota foi informado corretamente pela URL
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+// Se o ID for inválido, volta para a página principal
+if (!$id || $id < 1) {
     header('Location: tela-home-rotas.php');
     exit;
 }
 
-// Guarda o ID da rota.
-$id = (int) $_GET['id'];
-
-// Busca os dados da rota no banco de dados.
+// Busca os dados da rota no banco de dados
 $sql = "SELECT * FROM rotas WHERE id_rota = ?";
 
 $stmt = $conexao->prepare($sql);
 $stmt->bind_param("i", $id);
 $stmt->execute();
 
+// Guarda o resultado da consulta
 $resultado = $stmt->get_result();
 
-// Verifica se a rota existe.
-if ($resultado->num_rows == 0) {
+// Verifica se a rota existe
+if ($resultado->num_rows === 0) {
     $stmt->close();
     header('Location: tela-home-rotas.php');
     exit;
 }
 
-// Armazena os dados da rota encontrada.
+// Armazena os dados da rota encontrada
 $rota = $resultado->fetch_assoc();
 $stmt->close();
 
-// Verifica se o formulário de exclusão foi enviado.
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Verifica se o formulário de exclusão foi enviado
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $rotaEmUso = false;
+    // Verifica se existe um trem associado à rota
+    if ($rota['id_trem'] !== null) {
 
-    // Verifica se existe um trem associado à rota.
-    $idTrem = (int) ($rota['id_trem'] ?? 0);
+        // Impede a exclusão caso exista um trem associado
+        $erro = 'Não é possível excluir esta rota, pois existe um trem vinculado a ela.';
 
-    if ($idTrem > 0) {
+    } else {
 
-        // Procura o trem relacionado à rota.
-        $sql = "SELECT id FROM trem WHERE id = ? LIMIT 1";
+        // Comando SQL para excluir a rota pelo ID
+        $sql = "DELETE FROM rotas WHERE id_rota = ? AND id_trem IS NULL";
 
-        $stmt = $conexao->prepare($sql);
-        $stmt->bind_param("i", $idTrem);
-        $stmt->execute();
-
-        $resultadoTrem = $stmt->get_result();
-
-        // Se encontrar um trem, impede a exclusão da rota.
-        if ($resultadoTrem->num_rows > 0) {
-            $rotaEmUso = true;
-            $erro = 'Não é possível excluir esta rota, pois existe um trem vinculado a ela.';
-        }
-
-        $stmt->close();
-    }
-
-    // Verifica se existe algum sensor associado à rota.
-    if (!$rotaEmUso) {
-
-        $sql = "SELECT id FROM sensor WHERE id_rota = ? LIMIT 1";
-
-        $stmt = $conexao->prepare($sql);
-
-        if ($stmt) {
-
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-
-            $resultadoSensor = $stmt->get_result();
-
-            // Se encontrar um sensor, impede a exclusão da rota.
-            if ($resultadoSensor->num_rows > 0) {
-                $rotaEmUso = true;
-                $erro = 'Não é possível excluir esta rota, pois existe um sensor vinculado a ela.';
-            }
-
-            $stmt->close();
-
-        } else {
-
-            // Informa caso ocorra um erro na consulta dos sensores.
-            $erro = 'Erro ao verificar os sensores associados à rota.';
-            $rotaEmUso = true;
-        }
-    }
-
-    // Permite excluir a rota somente se não houver associações.
-    if (!$rotaEmUso) {
-
-        // Comando SQL para excluir a rota pelo ID.
-        $sql = "DELETE FROM rotas WHERE id_rota = ?";
-
+        // Prepara o comando de exclusão
         $stmt = $conexao->prepare($sql);
 
         if ($stmt) {
 
             $stmt->bind_param("i", $id);
 
-            // Executa a exclusão e verifica se algum registro foi removido.
+            // Executa a exclusão e verifica se algum registro foi removido
             if ($stmt->execute() && $stmt->affected_rows > 0) {
 
                 $stmt->close();
 
-                // Volta para a página principal das rotas.
+                // Volta para a página principal das rotas
                 header('Location: tela-home-rotas.php');
                 exit;
 
             } else {
 
-                $erro = 'Não foi possível excluir a rota.';
+                $erro = 'Não foi possível excluir a rota. Verifique se existe algum trem associado.';
             }
 
+            // Fecha o comando SQL
             $stmt->close();
 
         } else {
 
+            // Informa caso não seja possível preparar a exclusão
             $erro = 'Erro ao preparar a exclusão da rota.';
         }
     }
@@ -179,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 class="botao-voltar-sensores"
                 onclick="window.location.href='tela-home-rotas.php'">
 
-                 Voltar para rotas
+                Voltar para rotas
 
             </button>
 
@@ -188,7 +142,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <section class="painel-excluir-sensor">
 
             <div class="icone-excluir-sensor">
-                🗑
+                
             </div>
 
             <h2>
@@ -203,45 +157,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <span>
                     Nome:
-                    <?= htmlspecialchars($rota['nome_rota']); ?>
+                    <?= htmlspecialchars($rota['nome_rota'], ENT_QUOTES, 'UTF-8'); ?>
                 </span>
                 <br>
 
                 <span>
                     Modelo do trem:
-                    <?= htmlspecialchars($rota['modelo_trem']); ?>
+                    <?= htmlspecialchars($rota['modelo_trem'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
                 </span>
                 <br>
 
                 <span>
                     Código:
-                    <?= htmlspecialchars($rota['codigo']); ?>
+                    <?= htmlspecialchars($rota['codigo'], ENT_QUOTES, 'UTF-8'); ?>
                 </span>
                 <br>
 
                 <span>
                     Tempo estimado:
-                    <?= htmlspecialchars($rota['tempo_estimado']); ?>
+                    <?= htmlspecialchars($rota['tempo_estimado'], ENT_QUOTES, 'UTF-8'); ?>
                 </span>
                 <br>
 
                 <span>
                     Distância:
-                    <?= htmlspecialchars($rota['distancia']); ?> km
+                    <?= htmlspecialchars((string) $rota['distancia'], ENT_QUOTES, 'UTF-8'); ?> km
                 </span>
                 <br>
 
                 <span>
                     Status:
-                    <?= htmlspecialchars($rota['status']); ?>
+                    <?= htmlspecialchars($rota['status'], ENT_QUOTES, 'UTF-8'); ?>
                 </span>
 
             </div>
 
-            <?php if ($erro != ''): ?>
+            <?php if ($erro !== ''): ?>
 
                 <p class="erro-excluir-sensor">
-                    <?= htmlspecialchars($erro); ?>
+                    <?= htmlspecialchars($erro, ENT_QUOTES, 'UTF-8'); ?>
                 </p>
 
             <?php endif; ?>

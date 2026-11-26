@@ -1,45 +1,44 @@
+
 <?php
+
+// Inicia a sessão caso ainda não esteja ativa
+
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
+// Verifica se o usuário logado é administrador e conecta ao banco de dados
+
 require_once '../../infra/verificar-admin.php';
 require_once '../../infra/conexao.php';
 
-// input_input() Lé um valor de fora (URL, form) e valida.
-// INPUT_GET pega da URL (?id=5)
-// FILTER_VALIDADE_INT só aceita se for um número inteiro
-// se o valor for invalido (por exepmlo: ?id=abc), o resultado é false ou null
+// filter_input() lê um valor de fora (URL ou formulário) e valida.
+// INPUT_GET pega o valor enviado pela URL (?id=5).
+// FILTER_VALIDATE_INT verifica se o valor é um número inteiro.
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-// variáveis para mensaem de erro, se estão vazias é porque não tem erro por enquanto
+// Variáveis para mensagens de erro
 
 $erro = '';
 $trem = null;
 
-// Recupera o ID enviado pelo formulário
-// Quando o formulário é enviado com o método POST, o id não vem pela URL, vem por um campo escondido (<input type="hidden" name="id">) lá no HTML,
-// Então se for por POST, o id lido é o INPUT_POST e sobrescreve o valor
-
+// Recupera o ID enviado pelo formulário.
+// Se o formulário for enviado por POST, o ID vem do campo escondido.
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 }
 
-// Se o id não existe, é inválido ou é menor que 1, não tem o que editar, 
-// então redireiona para a lista de trens e para o script com o "exit".
+// Se o ID for inválido ou menor que 1, volta para a lista.
 
 if (!$id || $id < 1) {
     header('Location: lista_trem.php');
     exit;
 }
 
-// A consulta usa JOIN para juntar duas tabelas:
-//     - "trem t": apelido "t" para a tabela de trens.
-//     - LEFT JOIN: traz o trem mesmo que ele não tenha um usuário associado.
-//     (nesse caso, email vem vazio), com um JOIN normaç, trens sem responsável não iriam aparecer.
-// Busca os dados do trem e o usuário responsável.
+// Busca os dados do trem e o e-mail do usuário responsável.
+// LEFT JOIN permite encontrar o trem mesmo sem usuário associado.
 
 $consulta = $conexao->prepare(
     'SELECT
@@ -58,23 +57,22 @@ $consulta = $conexao->prepare(
     WHERE t.id = ?'
 );
 
-// Se o prepare falhou, interrompe tudo com uma mensagem die() e mostra imediatamente o texto na tela.
+// Se não conseguiu preparar a consulta, interrompe o código.
 
 if (!$consulta) {
     die('Erro ao consultar o trem.');
 }
 
-// Liga o valor de $id ao "?", o "i" significa que é um número inteiro
+// Associa o ID ao ?.
+// O "i" significa inteiro.
 
 $consulta->bind_param('i', $id);
 
-// Executa a consulta no banco.
+// Executa a consulta.
 
 $consulta->execute();
 
-// Pega o resultado e transforma a primeira linha em um array associativo.
-// Exemplo: $dadosTrem['nome_trem'], $dadosTrem['email'] etc.
-// Se nçao tiver um trem com esse id. $dadosTrem fica como null/false
+// Recupera os dados encontrados.
 
 $resultado = $consulta->get_result();
 $dadosTrem = $resultado->fetch_assoc();
@@ -83,17 +81,14 @@ $dadosTrem = $resultado->fetch_assoc();
 
 $consulta->close();
 
-// Se não achou o trem (id que não existe no banco), volta para a lista.
+// Se não encontrou o trem, volta para a lista.
 
 if (!$dadosTrem) {
     header('Location: lista_trem.php');
     exit;
 }
 
-// Oganizar os dados em uma array mais legível.
-// Copia os dados do banco para o array $trem, usando nomes mais curtos e claros
-// (ex.: 'nome_trem' vira 'nome', 'localizacao_i' vira 'localizacao').
-// É esse array $trem que o HTML usa lá embaixo.
+// Organiza os dados em um array mais simples para utilizar no HTML.
 
 $trem = [
     'id' => $dadosTrem['id'],
@@ -108,94 +103,96 @@ $trem = [
     'email' => $dadosTrem['email']
 ];
 
-// Exclusão (só acontece quando o botão foi clicado, via POST)
-// Se a página foi apenas aberta (GET), tudo dentro deste bloco é ignorado.
+// A exclusão só acontece quando o formulário é enviado por POST.
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // REGRA DE NEGÓCIO: se o trem tem um usuário responsável (id_usuario
-    // preenchido), a exclusão é BLOQUEADA e uma mensagem é exibida.
-    // empty() considera vazio: null, 0, '' e false.
+    // Verifica se existem rotas associadas ao trem.
+    // A tabela rotas utiliza id_trem para relacionar uma rota ao trem.
+    // Se existir alguma rota, a exclusão será bloqueada.
 
-    if (!empty($trem['id_usuario'])) {
+    $verificaRotas = $conexao->prepare(
+        'SELECT id_rota FROM rotas WHERE id_trem = ? LIMIT 1'
+    );
 
-        $erro = 'Este trem não pode ser excluído, pois está atribuído a um usuário responsável.';
+    // Associa o ID do trem à consulta.
+
+    $verificaRotas->bind_param('i', $id);
+
+    // Executa a consulta.
+
+    $verificaRotas->execute();
+
+    // Guarda o resultado para verificar se existe alguma rota.
+
+    $verificaRotas->store_result();
+
+    // Se retornar alguma linha, existe uma rota associada.
+
+    $possuiRotas = $verificaRotas->num_rows > 0;
+
+    // Libera os recursos da consulta.
+
+    $verificaRotas->close();
+
+    // Se o trem possuir rotas, impede a exclusão.
+
+    if ($possuiRotas) {
+
+        $erro = 'Este trem não pode ser excluído, pois possui uma ou mais rotas associadas.';
+
     } else {
 
-        // Prepara o comando DELETE. O "WHERE id = ?" é ESSENCIAL: 
-        // garante que só o trem escolhido seja apagado. Sem ele, os trens seriam apagados
+        // Se não possuir rotas, prepara o comando para excluir o trem.
+        // O WHERE id = ? garante que somente o trem selecionado será excluído.
 
         $exclusao = $conexao->prepare(
             'DELETE FROM trem WHERE id = ?'
         );
 
-        // Se o prepare() funcionou ($exclusao não é false)
-
+        // Verifica se o comando foi preparado corretamente.
 
         if ($exclusao) {
 
-            // Liga o id ao "?" (tipo "i" = inteiro).
-
+            // Associa o ID ao comando DELETE.
 
             $exclusao->bind_param('i', $id);
 
-            // Executa o DELETE. Considera sucesso somente se:
-            //   1) execute() deu certo e
-            //   2) affected_rows > 0, ou seja, pelo menos 1 linha foi mesmo apagada (confirma que o trem existia e foi removido).
+            // Executa a exclusão e verifica se algum registro foi removido.
 
             if ($exclusao->execute() && $exclusao->affected_rows > 0) {
 
-                // Sucesso, fecha os comandos e volta para a lista de trens.
+                // Libera os recursos antes de redirecionar.
 
                 $exclusao->close();
 
+                // Volta para a lista de trens após a exclusão.
+
                 header('Location: lista_trem.php');
-
-                // exit: interrompe o script para nada mais rodar depois do redirecionamento.
-
                 exit;
+
             } else {
 
-                // Não apagou. Um motivo comum: o trem está ligado a outras tabelas (ex.: rotas)
-                // e o banco impede a exclusão por causa da chave estrangeira (foreign key).
+                // Exibe uma mensagem caso não consiga excluir o registro.
 
-                $erro = 'Não foi possível excluir este trem. Verifique se existem rotas ou registros vinculados a ele.';
+                $erro = 'Não foi possível excluir este trem. Verifique se existem registros vinculados a ele.';
             }
 
-            // Libera os recursos do comando DELETE
-            // (só chega aqui se NÃO houve sucesso, pois no sucesso o script já terminou no exit).
+            // Libera os recursos do comando DELETE.
 
             $exclusao->close();
+
         } else {
 
-            // O próprio prepare() falhou (ex.: tabela inexistente).
-
+            // Exibe uma mensagem caso não consiga preparar a exclusão.
 
             $erro = 'Erro ao processar a exclusão no banco de dados.';
         }
     }
 }
 
-// Essa função serve para neutralizar caracteres especiais de um texto (como <> " ') antes de mostrar no HTML, protege contra XSS,
-// um ataque que aluém grava o código malicioso em um campo para que ele rode no navegador de outras pessoas.
-// - (string) $valor: converte qualquer valor (número, null) em texto.
-//     - ENT_QUOTES: também converte aspas simples e duplas.
-//     - 'UTF-8': codificação correta para acentos.
-// Mesmo estando declarada aqui embaixo, ela pode ser usada no HTML porque
-// o PHP lê funções declaradas no nível principal do arquivo antes de rodar.
-
-function e($valor)
-{
-    return htmlspecialchars(
-        (string) ($valor ?? ''),
-        ENT_QUOTES,
-        'UTF-8'
-    );
-}
-
-// No banco, o status é guardado como código técnico (ex.: "operacao").
-// Este array converte cada código no texto bonito que o usuário vê na tela
-// (ex.: "Em operação").
+// O banco guarda o status como um código técnico.
+// Este array transforma os códigos em textos que aparecem na tela.
 
 $rotulosStatus = [
     'operacao' => 'Em operação',
@@ -283,8 +280,6 @@ $rotulosStatus = [
 
         <section class="painel-excluir-sensor">
 
-
-
             <h2>
                 Tem certeza que deseja excluir este trem?
             </h2>
@@ -297,46 +292,47 @@ $rotulosStatus = [
 
                 <div>
                     <strong>Nome:</strong>
-                    <?= e($trem['nome']) ?>
+                    <?= htmlspecialchars($trem['nome'], ENT_QUOTES, 'UTF-8') ?>
                 </div>
 
                 <div>
                     <strong>Modelo:</strong>
-                    <?= e($trem['modelo']) ?>
+                    <?= htmlspecialchars($trem['modelo'], ENT_QUOTES, 'UTF-8') ?>
                 </div>
 
                 <div>
                     <strong>Usuário responsável:</strong>
                     <?= !empty($trem['email'])
-                        ? e($trem['email'])
+                        ? htmlspecialchars($trem['email'], ENT_QUOTES, 'UTF-8')
                         : 'Nenhum usuário atribuído' ?>
                 </div>
 
                 <div>
                     <strong>Localização:</strong>
-                    <?= e($trem['localizacao']) ?>
+                    <?= htmlspecialchars($trem['localizacao'], ENT_QUOTES, 'UTF-8') ?>
                 </div>
 
                 <div>
                     <strong>Código:</strong>
-                    <?= e($trem['codigo']) ?>
+                    <?= htmlspecialchars($trem['codigo'], ENT_QUOTES, 'UTF-8') ?>
                 </div>
 
                 <div>
                     <strong>Capacidade:</strong>
-                    <?= e($trem['capacidade']) ?>
+                    <?= htmlspecialchars((string) $trem['capacidade'], ENT_QUOTES, 'UTF-8') ?>
                 </div>
 
                 <div>
                     <strong>Ano:</strong>
-                    <?= e($trem['ano']) ?>
+                    <?= htmlspecialchars((string) $trem['ano'], ENT_QUOTES, 'UTF-8') ?>
                 </div>
 
                 <div>
                     <strong>Status:</strong>
-                    <?= e(
-                        $rotulosStatus[$trem['status']]
-                            ?? $trem['status']
+                    <?= htmlspecialchars(
+                        $rotulosStatus[$trem['status']] ?? $trem['status'],
+                        ENT_QUOTES,
+                        'UTF-8'
                     ) ?>
                 </div>
 
@@ -344,20 +340,19 @@ $rotulosStatus = [
 
             <?php if ($erro !== ''): ?>
                 <div class="erro-excluir-sensor">
-                    <?= e($erro) ?>
+                    <?= htmlspecialchars($erro, ENT_QUOTES, 'UTF-8') ?>
                 </div>
             <?php endif; ?>
 
             <div class="botoes-excluir-sensor">
 
                 <form
-                    method="POST"
-                    action="exclusao_trem.php">
-
+                method="POST"
+                action="exclusao_trem.php">
                     <input
                         type="hidden"
                         name="id"
-                        value="<?= e($id) ?>">
+                        value="<?= htmlspecialchars((string) $id, ENT_QUOTES, 'UTF-8') ?>">
 
                     <button
                         class="botao-confirmar-exclusao"

@@ -10,7 +10,7 @@ require_once '../../infra/conexao.php';
 // cria uma variavel vazia pra armazenar mensagens de erro
 $erro = '';
 
-// filter_input recebe e valida um dado enviado pelo formulario ou pela URL
+// filter_input recebe e valida um dado enviado pela URL
 // INPUT_GET indica que o dado sera recebido pela URL
 // FILTER_VALIDATE_INT verifica se o valor e um numero inteiro valido
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -142,7 +142,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -192,8 +191,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <section class="painel-excluir-sensor">
 
-    
-
         <h2>
             Tem certeza que deseja excluir este sensor?
         </h2>
@@ -205,17 +202,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="informacoes-sensor-excluir">
 
             <span>
-                Nome: <?= e($sensor['nome_sensor']) ?>
+                Nome: <?= htmlspecialchars($sensor['nome_sensor'], ENT_QUOTES, 'UTF-8') ?>
             </span>
             <br>
 
             <span>
-                Tipo: <?= e($sensor['tipo_sensor']) ?>
+                Tipo: <?= htmlspecialchars($sensor['tipo_sensor'], ENT_QUOTES, 'UTF-8') ?>
             </span>
             <br>
 
             <span>
-                Localização: <?= e($sensor['localizacao']) ?>
+                Localização: <?= htmlspecialchars($sensor['localizacao'], ENT_QUOTES, 'UTF-8') ?>
             </span>
             <br>
 
@@ -223,8 +220,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 Rota associada:
 
                 <?php if (!empty($sensor['id_rota'])): ?>
-                    <?= e($sensor['nome_rota']) ?>
-                    (<?= e($sensor['codigo_rota']) ?>)
+                    <?= htmlspecialchars($sensor['nome_rota'], ENT_QUOTES, 'UTF-8') ?>
+                    (<?= htmlspecialchars($sensor['codigo_rota'], ENT_QUOTES, 'UTF-8') ?>)
                 <?php else: ?>
                     Sem rota associada
                 <?php endif; ?>
@@ -232,14 +229,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <br>
 
             <span>
-                Status: <?= e($sensor['status_inicial']) ?>
+                Status: <?= htmlspecialchars($sensor['status_inicial'], ENT_QUOTES, 'UTF-8') ?>
             </span>
 
         </div>
 
         <?php if ($erro !== ''): ?>
             <p class="erro-excluir-sensor">
-                <?= e($erro) ?>
+                <?= htmlspecialchars($erro, ENT_QUOTES, 'UTF-8') ?>
             </p>
         <?php endif; ?>
 
@@ -261,3 +258,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </body>
 </html>
+            

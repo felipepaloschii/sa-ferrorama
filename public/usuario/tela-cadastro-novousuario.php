@@ -16,14 +16,19 @@ $tipoErro = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // recebe o email e remove espacos do inicio e do final
-    // ?? utiliza uma string vazia caso o campo nao exista ou seja null
     $email = trim($_POST['email'] ?? '');
 
     // recebe a senha enviada pelo formulario
     $senha = $_POST['senha'] ?? '';
 
-    // recebe o cep e remove espacos do inicio e do final
-    $cep = trim($_POST['cep'] ?? '');
+    // recebe o cep e remove caracteres que nao sejam numeros
+    $cep = preg_replace('/\D/', '', $_POST['cep'] ?? '');
+
+    // recebe os dados de endereco enviados pelo formulario
+    $logradouro = trim($_POST['logradouro'] ?? '');
+    $bairro = trim($_POST['bairro'] ?? '');
+    $cidade = trim($_POST['cidade'] ?? '');
+    $uf = strtoupper(trim($_POST['uf'] ?? ''));
 
     // recebe o tipo de usuario selecionado
     $tipo = $_POST['tipo'] ?? '';
@@ -31,48 +36,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // verifica se os campos obrigatorios estao vazios
     if (empty($email) || empty($senha) || empty($tipo)) {
 
-        // informa que todos os campos obrigatorios precisam ser preenchidos
-        $erro = 'Preencha todos os campos.';
+        $erro = 'Preencha todos os campos obrigatórios.';
 
     // verifica se o email possui um formato valido
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-        // informa que o email e invalido
         $erro = 'Informe um e-mail válido.';
 
     // verifica se a senha possui menos de 8 caracteres
     } elseif (strlen($senha) < 8) {
 
-        // informa que a senha precisa ter no minimo 8 caracteres
         $erro = 'A senha deve ter no mínimo 8 caracteres.';
 
-    // verifica se o cep foi preenchido e possui um formato invalido
-    } elseif ($cep !== '' && !preg_match('/^[0-9]{5}-?[0-9]{3}$/', $cep)) {
+    // verifica se o cep possui um formato invalido
+    } elseif ($cep !== '' && !preg_match('/^[0-9]{8}$/', $cep)) {
 
-        // informa que o cep precisa ter 8 numeros
         $erro = 'Informe um CEP válido no formato 00000-000.';
 
     // verifica se o tipo informado e permitido
     } elseif (!in_array($tipo, ['administrador', 'funcionario'], true)) {
 
-        // informa que o tipo de usuario e invalido
         $erro = 'Selecione um tipo de usuário válido.';
+
+    // verifica se o cep foi informado mas o endereco nao foi encontrado
+    } elseif ($cep !== '' && ($logradouro === '' || $cidade === '' || $uf === '')) {
+
+        $erro = 'Consulte um CEP válido antes de cadastrar o usuário.';
 
     } else {
 
-        // remove o hifen do cep para padronizar o valor recebido
-        $cep = str_replace('-', '', $cep);
-
-        // adiciona o hifen depois dos cinco primeiros numeros
+        // formata o cep com hifen
         if ($cep !== '') {
+
             $cep = substr($cep, 0, 5) . '-' . substr($cep, 5, 3);
+
         } else {
+
             // utiliza null caso o cep nao tenha sido preenchido
             $cep = null;
+            $logradouro = null;
+            $bairro = null;
+            $cidade = null;
+            $uf = null;
         }
 
         // consulta o banco pra verificar se o email ja esta cadastrado
-        // o ? sera substituido pelo email no bind_param
         $verificar = "SELECT id_usuario FROM usuario WHERE email = ?";
 
         // prepara a consulta pra receber valores com seguranca
@@ -82,7 +90,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt) {
 
             // associa o email ao ? da consulta
-            // s indica que o valor enviado e uma string
             $stmt->bind_param("s", $email);
 
             // executa a consulta no banco de dados
@@ -94,10 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // verifica se o email ja esta cadastrado
             if ($resultado->num_rows > 0) {
 
-                // informa que o email ja esta cadastrado
                 $erro = 'Este e-mail já está cadastrado.';
-
-                // identifica o tipo de erro
                 $tipoErro = 'duplicado';
 
             } else {
@@ -106,8 +110,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
                 // cria o comando pra inserir um novo usuario
-                // os ? serao substituidos pelos valores enviados no bind_param
-                $sql = "INSERT INTO usuario (email, senha, cep, tipo) VALUES (?, ?, ?, ?)";
+                $sql = "INSERT INTO usuario
+                        (email, senha, cep, logradouro, bairro, cidade, uf, tipo)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
                 // prepara a consulta de cadastro
                 $stmt2 = $conexao->prepare($sql);
@@ -115,23 +120,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // verifica se a consulta foi preparada corretamente
                 if ($stmt2) {
 
-                    // associa email, senha, cep e tipo aos quatro ? da consulta
-                    // s indica que todos os valores sao strings
+                    // associa os oito valores aos oito ? da consulta
                     $stmt2->bind_param(
-                        "ssss",
+                        "ssssssss",
                         $email,
                         $senhaHash,
                         $cep,
+                        $logradouro,
+                        $bairro,
+                        $cidade,
+                        $uf,
                         $tipo
                     );
 
                     // executa o cadastro no banco de dados
                     if ($stmt2->execute()) {
 
-                        // encerra a consulta e libera os recursos utilizados
+                        // encerra as consultas e libera os recursos utilizados
                         $stmt2->close();
-
-                        // encerra a consulta de verificacao
                         $stmt->close();
 
                         // redireciona pra tela de usuarios depois do cadastro
@@ -139,18 +145,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         // encerra a execucao depois do redirecionamento
                         exit;
+
+                    } else {
+
+                        // informa o erro ocorrido durante o cadastro
+                        $erro = 'Não foi possível cadastrar o usuário: ' . $stmt2->error;
+
                     }
 
                     // encerra a consulta e libera os recursos utilizados
                     $stmt2->close();
 
-                    // informa que nao foi possivel realizar o cadastro
-                    $erro = 'Não foi possível cadastrar o usuário.';
-
                 } else {
 
-                    // informa que ocorreu um erro ao preparar o cadastro
-                    $erro = 'Erro ao preparar o cadastro do usuário.';
+                    $erro = 'Erro ao preparar o cadastro do usuário: ' . $conexao->error;
                 }
             }
 
@@ -159,8 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         } else {
 
-            // informa que ocorreu um erro ao preparar a verificacao do email
-            $erro = 'Erro ao verificar o e-mail.';
+            $erro = 'Erro ao verificar o e-mail: ' . $conexao->error;
         }
     }
 }
@@ -168,7 +175,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!DOCTYPE html>
-
 <html lang="pt-br">
 
 <head>
@@ -251,6 +257,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php } ?>
 
             <form
+                id="form-cep"
                 class="formulario-cadastro-sensor"
                 method="POST">
 
@@ -266,6 +273,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             type="email"
                             name="email"
                             class="input-nome_sensorsensor"
+                            required
                             value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 
                     </div>
@@ -278,11 +286,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         <input
                             type="text"
+                            id="cep"
                             name="cep"
                             class="input-nome_sensorsensor"
                             maxlength="9"
                             placeholder="00000-000"
                             value="<?= htmlspecialchars($_POST['cep'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+
+                        <p id="cep-mensagem"></p>
+
+                    </div>
+
+                </div>
+
+                <div class="linha-campos-formulario">
+
+                    <div class="grupo-nome_sensor-sensor">
+
+                        <label class="nome_sensor-sensor">
+                            Logradouro
+                        </label>
+
+                        <input
+                            type="text"
+                            id="logradouro"
+                            name="logradouro"
+                            class="input-nome_sensorsensor"
+                            readonly
+                            value="<?= htmlspecialchars($_POST['logradouro'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+
+                    </div>
+
+                    <div class="grupo-nome_sensor-sensor">
+
+                        <label class="nome_sensor-sensor">
+                            Bairro
+                        </label>
+
+                        <input
+                            type="text"
+                            id="bairro"
+                            name="bairro"
+                            class="input-nome_sensorsensor"
+                            readonly
+                            value="<?= htmlspecialchars($_POST['bairro'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+
+                    </div>
+
+                </div>
+
+                <div class="linha-campos-formulario">
+
+                    <div class="grupo-nome_sensor-sensor">
+
+                        <label class="nome_sensor-sensor">
+                            Cidade
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cidade"
+                            name="cidade"
+                            class="input-nome_sensorsensor"
+                            readonly
+                            value="<?= htmlspecialchars($_POST['cidade'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+
+                    </div>
+
+                    <div class="grupo-nome_sensor-sensor">
+
+                        <label class="nome_sensor-sensor">
+                            Estado
+                        </label>
+
+                        <input
+                            type="text"
+                            id="uf"
+                            name="uf"
+                            class="input-nome_sensorsensor"
+                            readonly
+                            value="<?= htmlspecialchars($_POST['uf'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 
                     </div>
 
@@ -299,7 +382,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input
                             type="password"
                             name="senha"
-                            class="input-nome_sensorsensor">
+                            class="input-nome_sensorsensor"
+                            required>
 
                     </div>
 
@@ -311,11 +395,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         <select
                             name="tipo"
-                            class="select-tipo-sensor">
+                            class="select-tipo-sensor"
+                            required>
 
-                            <option value="">
-                                Selecione
-                            </option>
+                            <option value="">Selecione</option>
 
                             <option value="administrador"
                                 <?= ($_POST['tipo'] ?? '') === 'administrador' ? 'selected' : '' ?>>
@@ -361,6 +444,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </section>
 
     </main>
+
+    <script src="../../script/cep.js"></script>
 
 </body>
 
