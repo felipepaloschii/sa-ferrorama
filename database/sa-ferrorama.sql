@@ -1,4 +1,3 @@
-
 -- Remove o banco de dados anterior, caso exista
 DROP DATABASE IF EXISTS sa_ferrorama_db;
 
@@ -32,13 +31,16 @@ CREATE TABLE trem (
     modelo_trem VARCHAR(100) NOT NULL,
     localizacao_i VARCHAR(150) NOT NULL,
     codigo VARCHAR(50) NOT NULL UNIQUE,
-    capacidade INT NOT NULL,
+    capacidade DECIMAL(10,2) NOT NULL,
     ano INT NOT NULL,
     status ENUM('operacao', 'parado', 'manutencao', 'inativo') NOT NULL DEFAULT 'operacao',
     id_usuario INT NULL,
 
-    FOREIGN KEY (id_usuario)
-    REFERENCES usuario(id_usuario)
+    CONSTRAINT fk_trem_usuario
+        FOREIGN KEY (id_usuario)
+        REFERENCES usuario(id_usuario)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
 
@@ -50,11 +52,14 @@ CREATE TABLE rotas (
     tempo_estimado VARCHAR(50) NOT NULL,
     codigo VARCHAR(50) NOT NULL UNIQUE,
     distancia DECIMAL(10,2) NOT NULL,
-    status VARCHAR(50) NOT NULL,
+    status ENUM('Ativa', 'Inativa') NOT NULL DEFAULT 'Ativa',
     id_trem INT NULL,
 
-    FOREIGN KEY (id_trem)
-    REFERENCES trem(id)
+    CONSTRAINT fk_rota_trem
+        FOREIGN KEY (id_trem)
+        REFERENCES trem(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
 
@@ -65,11 +70,14 @@ CREATE TABLE sensor (
     tipo_sensor VARCHAR(100) NOT NULL,
     localizacao VARCHAR(150) NOT NULL,
     unidade_medida VARCHAR(50) NOT NULL,
-    limite_alerta DECIMAL(10,2) NULL,
+    limite_alerta DECIMAL(10,2) NOT NULL,
     status_inicial VARCHAR(50) NOT NULL,
     descricao TEXT NULL,
     id_rota INT NULL,
 
-    FOREIGN KEY (id_rota)
-    REFERENCES rotas(id_rota)
+    CONSTRAINT fk_sensor_rota
+        FOREIGN KEY (id_rota)
+        REFERENCES rotas(id_rota)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
