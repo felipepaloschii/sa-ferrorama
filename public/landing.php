@@ -28,12 +28,7 @@
                     Acessar o sistema
                 </a>
 
-                <a class="botao-landing botao-secundario"
-                   href="cep.php"
-                   target="_blank"
-                   rel="noopener">
-                    Consultar CEP
-                </a>
+            
             </div>
         </section>
 
